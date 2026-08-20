@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách & Phân Chia Phiên Trực Huynh Trưởng</title>
+    <title>Quản Lý & Phân Chia Phiên Trực Huynh Trưởng</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện Google Identity Services & JWT Decode -->
+    <!-- Google Identity Services & JWT Decode -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
@@ -34,7 +34,7 @@
             margin: 0 auto;
         }
 
-        /* TOP NAVIGATION & AUTH BAR */
+        /* AUTH BAR */
         .auth-bar {
             display: flex;
             justify-content: space-between;
@@ -58,10 +58,11 @@
         }
 
         .user-avatar-mini {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
+            border: 1px solid #0D47A1;
         }
 
         .role-tag {
@@ -78,7 +79,8 @@
         .auth-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn-auth-action {
@@ -97,7 +99,6 @@
         }
         .btn-auth-action:hover { background: #1565C0; }
         .btn-logout { background: #546e7a; }
-        .btn-logout:hover { background: #37474f; }
 
         /* TABS */
         .tab-menu {
@@ -134,7 +135,7 @@
             color: #0D47A1;
             font-size: 26px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-transform: uppercase;
             text-shadow: 0 2px 6px rgba(255, 255, 255, 0.95);
         }
@@ -227,9 +228,35 @@
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
         /* BẢNG PHIÊN TRỰC (DARK THEME) */
-        .duty-container {
-            max-width: 550px;
+        .duty-wrapper {
+            max-width: 600px;
             margin: 0 auto;
+        }
+
+        .week-selector-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-weight: bold;
+            color: #0D47A1;
+        }
+
+        .week-selector-card select {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #90caf9;
+            font-size: 14px;
+            font-weight: bold;
+            color: #0D47A1;
+            outline: none;
+        }
+
+        .duty-container {
             background: #121212;
             border-radius: 16px;
             padding: 24px;
@@ -237,22 +264,33 @@
             color: #f1f1f1;
         }
 
-        .duty-group { margin-bottom: 24px; }
-        .duty-group-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #2d2d2d;
-            padding-bottom: 6px;
+        .duty-header-info {
+            text-align: center;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+            border-bottom: 1px dashed #333;
         }
 
-        .duty-title { font-size: 18px; font-weight: 700; color: #ffffff; }
+        .duty-header-info h2 {
+            font-size: 20px;
+            color: #64b5f6;
+            margin-bottom: 4px;
+        }
+
+        .duty-group { margin-bottom: 24px; }
+        .duty-title { 
+            font-size: 17px; 
+            font-weight: 700; 
+            color: #ffffff; 
+            margin-bottom: 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #2d2d2d;
+        }
 
         .duty-item {
             display: flex;
             align-items: center;
-            padding: 7px 0;
+            padding: 8px 0;
             font-size: 15px;
             line-height: 1.4;
         }
@@ -265,27 +303,20 @@
             cursor: pointer;
         }
 
-        .duty-label-time { font-weight: 500; color: #e0e0e0; min-width: 80px; }
+        .duty-label-time { font-weight: 500; color: #e0e0e0; min-width: 90px; }
         .duty-label-person { font-weight: 400; color: #ffffff; flex-grow: 1; }
 
         .duty-action-btn {
-            background: none;
+            background: #1e88e5;
             border: none;
-            color: #90caf9;
+            color: #ffffff;
             cursor: pointer;
-            font-size: 13px;
-            padding: 2px 6px;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            transition: 0.2s;
         }
-        .duty-action-btn:hover { text-decoration: underline; }
-
-        .admin-group-box {
-            background: #1e1e1e;
-            padding: 10px 14px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: #cfd8dc;
-        }
+        .duty-action-btn:hover { background: #1565c0; }
 
         /* MODALS */
         .modal-overlay {
@@ -309,11 +340,14 @@
         .modal-card {
             background: #ffffff;
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             padding: 22px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-card h3 {
@@ -333,33 +367,66 @@
             font-size: 14px;
         }
 
-        .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+        /* DANH SÁCH THÀNH VIÊN ĐỂ BẤM CHỌN */
+        .member-pick-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 8px;
+            max-height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .member-pick-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .member-pick-item:hover {
+            background: #e3f2fd;
+        }
+
+        .member-pick-item.selected {
+            background: #bbdefb;
+            border: 1px solid #1976d2;
+            font-weight: bold;
+            color: #0d47a1;
+        }
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 8px; }
         .btn-modal { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .btn-save { background: #0D47A1; color: #fff; }
         .btn-cancel { background: #e0e0e0; color: #333; }
 
-        .leader-list-box {
-            max-height: 140px;
+        /* DANH SÁCH TÍCH CHỌN CHO ADMIN CHIA NHÓM */
+        .admin-assign-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            max-height: 240px;
             overflow-y: auto;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
+            padding: 6px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            padding: 8px;
-            margin-top: 8px;
-            font-size: 13px;
         }
-        .leader-item {
+
+        .admin-assign-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 4px 6px;
-            border-bottom: 1px solid #eee;
-        }
-        .btn-delete-leader {
-            color: #d32f2f;
-            background: none;
-            border: none;
-            cursor: pointer;
+            gap: 8px;
+            font-size: 13px;
+            padding: 4px;
         }
     </style>
 </head>
@@ -376,10 +443,12 @@
                 </div>
             </div>
             <div class="auth-actions">
-                <button id="adminManageLeaderBtn" class="btn-auth-action" style="display:none; background:#2e7d32;" onclick="moModalCapQuyenLeader()">
-                    <i class="fa-solid fa-user-plus"></i> Cấp quyền Trưởng nhóm
+                <!-- NÚT DÀNH RIÊNG CHO ADMIN -->
+                <button id="adminManageBtn" class="btn-auth-action" style="display:none; background:#2e7d32;" onclick="moModalAdminChiaNhom()">
+                    <i class="fa-solid fa-users-gear"></i> Admin: Chia 4 Nhóm & Trưởng nhóm
                 </button>
                 
+                <!-- NÚT ĐĂNG NHẬP GOOGLE -->
                 <div id="googleBtnContainer"></div>
                 <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
                     <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
@@ -389,7 +458,7 @@
 
         <!-- TAB NAVIGATION -->
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="chuyenTab('tab-ds')"><i class="fa-solid fa-address-book"></i> Danh Sách</button>
+            <button class="tab-btn active" onclick="chuyenTab('tab-ds')"><i class="fa-solid fa-address-book"></i> Danh Sách HT</button>
             <button class="tab-btn" onclick="chuyenTab('tab-truc')"><i class="fa-solid fa-calendar-check"></i> Phân Chia Phiên Trực</button>
         </div>
 
@@ -405,184 +474,329 @@
 
         <!-- TAB 2: LỊCH PHÂN CHIA PHIÊN TRỰC -->
         <div id="tab-truc" class="view-section">
-            <h1 class="header-title">Lịch Phân Phiên Trực Tuần</h1>
-            <div class="duty-container" id="dutyContent"></div>
-        </div>
-    </div>
+            <h1 class="header-title">Lịch Phân Phiên Trực</h1>
 
-    <!-- MODAL PHÂN CÔNG CA TRỰC -->
-    <div class="modal-overlay" id="modalDutyEdit">
-        <div class="modal-card">
-            <h3>Phân Công Phiên Trực</h3>
-            <div class="form-group">
-                <label>Buổi / Ca trực:</label>
-                <input type="text" id="editDutyTime" readonly style="background:#eee;">
-            </div>
-            <div class="form-group">
-                <label>Người phụ trách:</label>
-                <input type="text" id="editDutyPerson" placeholder="Nhập tên Huynh Trưởng trực">
-            </div>
-            <div class="modal-actions">
-                <button class="btn-modal btn-cancel" onclick="dongModalById('modalDutyEdit')">Hủy</button>
-                <button class="btn-modal btn-save" onclick="luuPhienTruc()">Lưu ca trực</button>
+            <div class="duty-wrapper">
+                <!-- THANH CHỌN TUẦN TRỰC CỦA NHÓM NÀO -->
+                <div class="week-selector-card">
+                    <span><i class="fa-solid fa-clock-rotate-left"></i> Tuần trực hiện tại:</span>
+                    <select id="currentGroupWeekSelect" onchange="doiTuanTruc()">
+                        <option value="1">Tuần: Nhóm 1 Trực</option>
+                        <option value="2">Tuần: Nhóm 2 Trực</option>
+                        <option value="3">Tuần: Nhóm 3 Trực</option>
+                        <option value="4">Tuần: Nhóm 4 Trực</option>
+                    </select>
+                </div>
+
+                <!-- BẢNG PHIÊN TRỰC DARK THEME -->
+                <div class="duty-container" id="dutyContent"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL QUẢN LÝ THÀNH VIÊN NHÓM (ADMIN) -->
-    <div class="modal-overlay" id="modalAdminGroup">
+    <!-- MODAL PHÂN CÔNG PHIÊN TRỰC CHO NHÓM TRƯỞNG (CHỌN TÊN THÀNH VIÊN) -->
+    <div class="modal-overlay" id="modalDutyPick">
         <div class="modal-card">
-            <h3>Quản Lý Thành Viên Nhóm (Admin)</h3>
-            <div class="form-group">
-                <label>Chọn Nhóm phụ trách:</label>
-                <select id="adminGroupSelect" onchange="hienThiThanhVienNhomAdmin()">
-                    <option value="0">Trực Máy</option>
-                    <option value="1">Đọc Sách</option>
-                    <option value="2">Giúp Lễ</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Danh sách thành viên (cách nhau bởi dấu phẩy):</label>
-                <input type="text" id="adminGroupMembers" placeholder="Duy Lữ, Thảo Vy, Duy Tân...">
-            </div>
-            <div class="modal-actions">
-                <button class="btn-modal btn-cancel" onclick="dongModalById('modalAdminGroup')">Hủy</button>
-                <button class="btn-modal btn-save" onclick="luuThanhVienNhomAdmin()">Lưu nhóm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL CẤP QUYỀN TRƯỞNG NHÓM (ADMIN) -->
-    <div class="modal-overlay" id="modalLeaderAuth">
-        <div class="modal-card">
-            <h3>Cấp Tài Khoản Trưởng Nhóm</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 12px; text-align: center;">
-                Nhập địa chỉ Gmail của Trưởng nhóm để cấp quyền.
+            <h3 id="pickModalTitle">Phân Công Ca Trực</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">
+                Nhấp vào tên các thành viên trong nhóm để chọn (có thể chọn 1 hoặc nhiều người):
             </p>
-            <div class="form-group">
-                <label>Email Google của Trưởng nhóm:</label>
-                <input type="email" id="leaderEmailInput" placeholder="vi-du@gmail.com">
+            
+            <div class="member-pick-list" id="memberPickListContainer">
+                <!-- Danh sách thành viên nhóm sẽ load ở đây -->
             </div>
-            <div class="form-group">
-                <label>Phân quyền quản lý Nhóm:</label>
-                <select id="leaderGroupSelect">
-                    <option value="ALL">Tất cả các nhóm</option>
-                    <option value="Trực Máy">Trực Máy</option>
-                    <option value="Đọc Sách">Đọc Sách</option>
-                    <option value="Giúp Lễ">Giúp Lễ</option>
-                </select>
-            </div>
-            <button class="btn-modal btn-save" style="width: 100%; margin-bottom: 12px;" onclick="themTaiKhoanLeader()">Cấp quyền</button>
 
-            <label style="font-size: 13px; font-weight: bold; color: #333;">Danh sách Trưởng nhóm đã cấp:</label>
-            <div class="leader-list-box" id="leaderListBox"></div>
+            <div class="form-group">
+                <label>Đã chọn:</label>
+                <input type="text" id="selectedPersonResult" placeholder="Chưa chọn thành viên nào" readonly>
+            </div>
 
             <div class="modal-actions">
-                <button class="btn-modal btn-cancel" onclick="dongModalById('modalLeaderAuth')">Đóng</button>
+                <button class="btn-modal btn-cancel" onclick="dongModalById('modalDutyPick')">Hủy</button>
+                <button class="btn-modal btn-save" onclick="luuPhanCongCaTruc()">Xác nhận phân công</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADMIN CHIA 4 NHÓM & GÁN GMAIL NHÓM TRƯỞNG -->
+    <div class="modal-overlay" id="modalAdminGroups">
+        <div class="modal-card" style="max-width: 550px;">
+            <h3>Admin: Quản Lý 4 Nhóm & Nhóm Trưởng</h3>
+            
+            <div class="form-group">
+                <label>Chọn Nhóm cần thiết lập:</label>
+                <select id="adminSelectGroupTab" onchange="taiThongTinNhomAdmin()">
+                    <option value="1">Nhóm 1</option>
+                    <option value="2">Nhóm 2</option>
+                    <option value="3">Nhóm 3</option>
+                    <option value="4">Nhóm 4</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Gmail của Nhóm trưởng:</label>
+                <input type="email" id="adminLeaderEmailInput" placeholder="nhomtruong@gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label>Tích chọn thành viên thuộc Nhóm này:</label>
+                <div class="admin-assign-grid" id="adminHTCheckList">
+                    <!-- Checkbox toàn bộ Huynh Trưởng -->
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" onclick="dongModalById('modalAdminGroups')">Đóng</button>
+                <button class="btn-modal btn-save" onclick="luuThongTinNhomAdmin()">Lưu thiết lập nhóm</button>
             </div>
         </div>
     </div>
 
     <script>
-        // GOOGLE CLIENT ID
+        // ================= CẤU HÌNH GOOGLE OAUTH =================
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         
-        // THAY BẰNG EMAIL GMAIL ADMIN CHÍNH CỦA BẠN
+        // EMAIL CỦA SUPER ADMIN TOÀN QUYỀN (Thay bằng Gmail của bạn)
         const SUPER_ADMIN_EMAIL = "htam00521@gmail.com"; 
 
+        // DANH SÁCH TẤT CẢ HUYNH TRƯỞNG & DỰ TRƯỞNG
         const danhSachGoc = [
             { thanhHoTen: "Patriciô Nguyễn Thiên Ân", chucVu: "Trưởng Huynh Trưởng - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "21/01/2004", sdt: "0395800581", hinhAnhUrl: "thienan" },
             { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", chucVu: "Phó Huynh Trưởng, Thủ Quỹ - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "25/02/2005", sdt: "0921786312", hinhAnhUrl: "hieutam" },
-            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "18/01/2012", sdt: "0326271470", hinhAnhUrl: "duylu" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Tân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "29/01/2008", sdt: "0896416291", hinhAnhUrl: "duytan" },
-            { thanhHoTen: "Maria Sơn Thị Thảo Vy", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "04/06/2010", sdt: "0374246153", hinhAnhUrl: "sonvy" },
-            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "01/01/2011", sdt: "0773913619", hinhAnhUrl: "haihuynh" },
-            { thanhHoTen: "Matta Nguyễn Phương Thảo My", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "07/02/2012", sdt: "0338158231", hinhAnhUrl: "thaomy" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "06/11/2011", sdt: "0949344205", hinhAnhUrl: "singuyen" },
-            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "30/06/2012", sdt: "0326395940", hinhAnhUrl: "honghai" },
+            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", chucVu: "Trưởng Ban Sinh Hoạt - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "30/03/2007", sdt: "0834577510", hinhAnhUrl: "kieuvy" },
+            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", chucVu: "Trưởng Ban Y Tế - Ban Điều Hành", cap: "Huynh Trưởng Cấp 1", ngaySinh: "21/06/2008", sdt: "0343351327", hinhAnhUrl: "phuongnam" },
+            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", chucVu: "Trưởng Ban Phụng Vụ - Ban Điều Hành", cap: "Huynh Trưởng Cấp 1", ngaySinh: "20/09/2010", sdt: "0366548104", hinhAnhUrl: "yennhu" },
+            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", chucVu: "Trưởng Ban Kỹ Thuật, Lao Động - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "08/05/2009", sdt: "0346328816", hinhAnhUrl: "hieunghia" },
+            { thanhHoTen: "Phêrô Đoàn Minh Phát", chucVu: "Trưởng Ban Truyền Thông - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "16/03/2009", sdt: "0364521171", hinhAnhUrl: "minhphat" },
+            { thanhHoTen: "Matta Trương Thị Diễm Hương", chucVu: "Thư Ký - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "16/06/2009", sdt: "0349356330", hinhAnhUrl: "diemhuong" },
+            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", chucVu: "Trưởng ngành Ấu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "06/04/2010", sdt: "0343481454", hinhAnhUrl: "thinhdat" },
+            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", chucVu: "Trưởng ngành Ấu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "10/02/2010", sdt: "0338595144", hinhAnhUrl: "phuongha" },
+            { thanhHoTen: "Têrêsa Trần Thanh Uyên", chucVu: "Trưởng ngành Ấu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "12/09/2009", sdt: "0357667730", hinhAnhUrl: "thanhuyen" },
+            { thanhHoTen: "Maria Nguyễn Bảo Thy", chucVu: "Trưởng ngành Ấu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "09/11/2008", sdt: "0349735441", hinhAnhUrl: "baothy" },
+            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", chucVu: "Trưởng ngành Thiếu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "12/09/2009", sdt: "0385966649", hinhAnhUrl: "hongchau" },
             { thanhHoTen: "Maria Diệp Thanh Thoảng", chucVu: "Trưởng ngành Thiếu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "25/07/2008", sdt: "0948673652", hinhAnhUrl: "thanhthoang" },
-            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "17/03/2011", sdt: "0332183247", hinhAnhUrl: "huonggiang" },
             { thanhHoTen: "Phêrô Nguyễn Minh Vũ", chucVu: "Trưởng ngành Thiếu", cap: "Huynh Trưởng Cấp 2", ngaySinh: "02/03/2009", sdt: "0382961153", hinhAnhUrl: "minhvu" },
+            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", chucVu: "Trưởng ngành Nghĩa", cap: "Huynh Trưởng Cấp 2", ngaySinh: "21/10/2006", sdt: "0337383298", hinhAnhUrl: "ngoctram" },
+            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", chucVu: "Trưởng ngành Nghĩa", cap: "Huynh Trưởng Cấp 2", ngaySinh: "23/02/2007", sdt: "0792394746", hinhAnhUrl: "hongyen" },
+            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "02/07/2007", sdt: "0396462484", hinhAnhUrl: "camhuong" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Tân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "29/01/2008", sdt: "0896416291", hinhAnhUrl: "duytan" },
+            { thanhHoTen: "Phêrô Trần Tấn Tài", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "16/05/2008", sdt: "0396191605", hinhAnhUrl: "tantai" },
             { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "07/07/2008", sdt: "0972756505", hinhAnhUrl: "tienkhoa" },
-            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/10/2011", sdt: "0704964207", hinhAnhUrl: "thaihao" }
+            { thanhHoTen: "Giuse Nguyễn Phúc Khang", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "03/11/2008", sdt: "0368902575", hinhAnhUrl: "phuckhang" },
+            { thanhHoTen: "Maria Hứa Thanh Thảo", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "22/06/2009", sdt: "0972546881", hinhAnhUrl: "huathao2" },
+            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "11/03/2009", sdt: "0799320036", hinhAnhUrl: "giahan" },
+            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "02/01/2010", sdt: "0345204809", hinhAnhUrl: "hoanguyen" },
+            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "24/02/2010", sdt: "0983525538", hinhAnhUrl: "nhattam" },
+            { thanhHoTen: "Maria Trương Anh Phong Nhi", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "05/04/2010", sdt: "0363673929", hinhAnhUrl: "phongnhi1" },
+            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "12/05/2010", sdt: "0987974107", hinhAnhUrl: "huyvu" },
+            { thanhHoTen: "Maria Sơn Thị Thảo Vy", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "04/06/2010", sdt: "0374246153", hinhAnhUrl: "sonvy" },
+            { thanhHoTen: "Raymonđô Trương Công Hậu", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "28/07/2010", sdt: "0358319506", hinhAnhUrl: "conghau" },
+            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "01/01/2011", sdt: "0773913619", hinhAnhUrl: "haihuynh" },
+            { thanhHoTen: "Matta Nguyễn Yến Lan", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "02/01/2011", sdt: "0769640742", hinhAnhUrl: "yenlan" },
+            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/01/2011", sdt: "0382530494", hinhAnhUrl: "tuonglam" },
+            { thanhHoTen: "Phêrô Lê Minh Tiến", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "19/02/2011", sdt: "0966908232", hinhAnhUrl: "minhtien" },
+            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "17/03/2011", sdt: "0332183247", hinhAnhUrl: "huonggiang" },
+            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "06/11/2011", sdt: "0949344205", hinhAnhUrl: "singuyen" },
+            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/10/2011", sdt: "0704964207", hinhAnhUrl: "thaihao" },
+            { thanhHoTen: "Maria Trần Huỳnh Trâm", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/10/2011", sdt: "0704964207", hinhAnhUrl: "huynhtram" },
+            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "15/04/2011", sdt: "0765993928", hinhAnhUrl: "ngoctan" },
+            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "10/05/2011", sdt: "0963981148", hinhAnhUrl: "nguyenthaovy" },
+            { thanhHoTen: "Maria Nguyễn Như Thùy", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "15/07/2011", sdt: "0395382387", hinhAnhUrl: "nhuthuy" },
+            { thanhHoTen: "Maria Nguyễn Kiều Duyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "03/08/2011", sdt: "0797852698", hinhAnhUrl: "kieuduyen" },
+            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "08/08/2011", sdt: "0932471359", hinhAnhUrl: "ngochan" },
+            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "12/09/2011", sdt: "0785801705", hinhAnhUrl: "nguyenkhang" },
+            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "19/10/2011", sdt: "0909107132", hinhAnhUrl: "andy" },
+            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "27/10/2011", sdt: "0369902728", hinhAnhUrl: "nhattrung" },
+            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "07/01/2012", sdt: "0966265200", hinhAnhUrl: "quanglac" },
+            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "18/01/2012", sdt: "0326271470", hinhAnhUrl: "duylu" },
+            { thanhHoTen: "Matta Nguyễn Phương Thảo My", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "07/02/2012", sdt: "0338158231", hinhAnhUrl: "thaomy" },
+            { thanhHoTen: "Giuse Nguyễn Thái Sơn", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "13/03/2012", sdt: "0365656063", hinhAnhUrl: "thaison" },
+            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "10/05/2012", sdt: "0345344063", hinhAnhUrl: "datphu" },
+            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "30/06/2012", sdt: "0326395940", hinhAnhUrl: "honghai" },
+            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "01/07/2012", sdt: "0355749059", hinhAnhUrl: "giahuy" },
+            { thanhHoTen: "Maria Trần Thị Kiều Trang", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "04/09/2012", sdt: "0385627732", hinhAnhUrl: "kieutrang" },
+            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "22/09/2012", sdt: "0586075828", hinhAnhUrl: "tramanh" },
+            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", chucVu: "Dự Trưởng", cap: "Dự Trưởng", ngaySinh: "11/10/2012", sdt: "0907037009", hinhAnhUrl: "huyentran" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", chucVu: "HT", cap: "Huynh Trưởng Cấp 2", ngaySinh: "17/03/2008", sdt: "0814657029", hinhAnhUrl: "duynguyen" }
         ];
 
-        const defaultDutyData = [
-            {
-                groupName: "Trực Máy",
-                members: ["Duy Lữ", "Thảo Vy", "Duy Tân", "Hoàng Anh", "Hải Huỳnh", "Thảo My", "Sĩ Nguyên"],
-                slots: [
-                    { time: "CN lễ 3", person: "Duy Lữ", done: false },
-                    { time: "Thứ 2", person: "Thảo Vy", done: false },
-                    { time: "Thứ 3", person: "Duy Tân", done: false },
-                    { time: "Thứ 4", person: "Hoàng Anh", done: false },
-                    { time: "Thứ 5", person: "Hải Huỳnh", done: false },
-                    { time: "Thứ 6", person: "Thảo My", done: false },
-                    { time: "Thứ 7", person: "Sĩ Nguyên", done: false }
-                ]
-            },
-            {
-                groupName: "Đọc Sách",
-                members: ["Hồng Hải", "Sĩ Nguyên", "Hoàng Anh", "Thanh Thoảng", "Hương Giang"],
-                slots: [
-                    { time: "CN lễ nhì", person: "Hồng Hải - Sĩ Nguyên", done: false },
-                    { time: "CN lễ 3", person: "Hoàng Anh - Thanh Thoảng", done: false },
-                    { time: "Thứ 4", person: "Hương Giang", done: false }
-                ]
-            },
-            {
-                groupName: "Giúp Lễ",
-                members: ["Minh Vũ", "Tiến Khoa", "Duy Lữ", "Thái Hào"],
-                slots: [
-                    { time: "CN", person: "Minh Vũ - Tiến Khoa", done: false },
-                    { time: "Thứ 4", person: "Duy Lữ - Thái Hào", done: false }
-                ]
-            }
-        ];
+        // KHỞI TẠO 4 NHÓM BAN ĐẦU
+        const defaultGroupsData = {
+            1: { leaderEmail: "", members: ["Duy Lữ", "Thảo Vy", "Duy Tân", "Hoàng Anh", "Hải Huỳnh", "Thảo My", "Sĩ Nguyên", "Hồng Hải", "Thanh Thoảng", "Hương Giang", "Minh Vũ", "Tiến Khoa", "Thái Hào"] },
+            2: { leaderEmail: "", members: ["Thiên Ân", "Hiếu Tâm", "Kiều Vy", "Phương Nam", "Yến Như", "Hiếu Nghĩa"] },
+            3: { leaderEmail: "", members: ["Minh Phát", "Diễm Hương", "Thịnh Đạt", "Phương Hà", "Thanh Uyên", "Bảo Thy"] },
+            4: { leaderEmail: "", members: ["Hồng Châu", "Ngọc Trâm", "Hồng Yến", "Cẩm Hướng", "Tấn Tài", "Phúc Khang"] }
+        };
 
-        let leaderAccounts = JSON.parse(localStorage.getItem("ht_leader_accounts")) || [];
-        let currentUser = JSON.parse(localStorage.getItem("ht_current_user")) || {
+        // KHỞI TẠO LỊCH TRỰC THEO 4 TUẦN CỦA 4 NHÓM
+        const defaultDutyData = {
+            1: [
+                {
+                    category: "Trực Máy",
+                    slots: [
+                        { time: "CN lễ 3", person: "Duy Lữ", done: false },
+                        { time: "Thứ 2", person: "Thảo Vy", done: false },
+                        { time: "Thứ 3", person: "Duy Tân", done: false },
+                        { time: "Thứ 4", person: "Hoàng Anh", done: false },
+                        { time: "Thứ 5", person: "Hải Huỳnh", done: false },
+                        { time: "Thứ 6", person: "Thảo My", done: false },
+                        { time: "Thứ 7", person: "Sĩ Nguyên", done: false }
+                    ]
+                },
+                {
+                    category: "Đọc Sách",
+                    slots: [
+                        { time: "CN lễ nhì", person: "Hồng Hải - Sĩ Nguyên", done: false },
+                        { time: "CN lễ 3", person: "Hoàng Anh - Thanh Thoảng", done: false },
+                        { time: "Thứ 4", person: "Hương Giang", done: false }
+                    ]
+                },
+                {
+                    category: "Giúp Lễ",
+                    slots: [
+                        { time: "CN", person: "Minh Vũ - Tiến Khoa", done: false },
+                        { time: "Thứ 4", person: "Duy Lữ - Thái Hào", done: false }
+                    ]
+                }
+            ],
+            2: [
+                {
+                    category: "Trực Máy",
+                    slots: [
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 2", person: "Chưa phân công", done: false },
+                        { time: "Thứ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false },
+                        { time: "Thứ 5", person: "Chưa phân công", done: false },
+                        { time: "Thứ 6", person: "Chưa phân công", done: false },
+                        { time: "Thứ 7", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Đọc Sách",
+                    slots: [
+                        { time: "CN lễ nhì", person: "Chưa phân công", done: false },
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Giúp Lễ",
+                    slots: [
+                        { time: "CN", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                }
+            ],
+            3: [
+                {
+                    category: "Trực Máy",
+                    slots: [
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 2", person: "Chưa phân công", done: false },
+                        { time: "Thứ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false },
+                        { time: "Thứ 5", person: "Chưa phân công", done: false },
+                        { time: "Thứ 6", person: "Chưa phân công", done: false },
+                        { time: "Thứ 7", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Đọc Sách",
+                    slots: [
+                        { time: "CN lễ nhì", person: "Chưa phân công", done: false },
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Giúp Lễ",
+                    slots: [
+                        { time: "CN", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                }
+            ],
+            4: [
+                {
+                    category: "Trực Máy",
+                    slots: [
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 2", person: "Chưa phân công", done: false },
+                        { time: "Thứ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false },
+                        { time: "Thứ 5", person: "Chưa phân công", done: false },
+                        { time: "Thứ 6", person: "Chưa phân công", done: false },
+                        { time: "Thứ 7", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Đọc Sách",
+                    slots: [
+                        { time: "CN lễ nhì", person: "Chưa phân công", done: false },
+                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                },
+                {
+                    category: "Giúp Lễ",
+                    slots: [
+                        { time: "CN", person: "Chưa phân công", done: false },
+                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                    ]
+                }
+            ]
+        };
+
+        // LOAD DỮ LIỆU TỪ LOCALSTORAGE
+        let groupsData = JSON.parse(localStorage.getItem("ht_groups_4")) || defaultGroupsData;
+        let dutyAllWeeks = JSON.parse(localStorage.getItem("ht_duty_weeks")) || defaultDutyData;
+        let selectedWeekGroup = 1;
+
+        let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {
             name: "Khách",
             email: "",
             picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-            role: "viewer",
-            managedGroup: null
+            role: "viewer", // 'admin' | 'leader' | 'viewer'
+            leaderOfGroup: null // 1 | 2 | 3 | 4 | null
         };
 
-        let dutySchedule = JSON.parse(localStorage.getItem("ht_duty_data")) || defaultDutyData;
-        let selectedDuty = { groupIdx: null, slotIdx: null };
+        let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
+        // ================= XỬ LÝ ĐĂNG NHẬP GOOGLE =================
         function handleCredentialResponse(response) {
             try {
-                const responsePayload = jwt_decode(response.credential);
-                const userEmail = responsePayload.email.toLowerCase();
+                const payload = jwt_decode(response.credential);
+                const email = payload.email.toLowerCase();
 
                 let role = "viewer";
-                let managedGroup = null;
+                let leaderOfGroup = null;
 
-                if (userEmail === SUPER_ADMIN_EMAIL.toLowerCase()) {
+                if (email === SUPER_ADMIN_EMAIL.toLowerCase()) {
                     role = "admin";
                 } else {
-                    const leader = leaderAccounts.find(acc => acc.email.toLowerCase() === userEmail);
-                    if (leader) {
-                        role = "leader";
-                        managedGroup = leader.group;
+                    for (let g = 1; g <= 4; g++) {
+                        if (groupsData[g].leaderEmail && groupsData[g].leaderEmail.toLowerCase() === email) {
+                            role = "leader";
+                            leaderOfGroup = g;
+                            break;
+                        }
                     }
                 }
 
                 currentUser = {
-                    name: responsePayload.name,
-                    email: userEmail,
-                    picture: responsePayload.picture,
+                    name: payload.name,
+                    email: email,
+                    picture: payload.picture,
                     role: role,
-                    managedGroup: managedGroup
+                    leaderOfGroup: leaderOfGroup
                 };
 
-                localStorage.setItem("ht_current_user", JSON.stringify(currentUser));
+                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
                 capNhatGiaoDienQuyen();
-                alert(`Đăng nhập thành công! Quyền: ${currentUser.role === 'admin' ? 'Admin' : (currentUser.role === 'leader' ? 'Trưởng nhóm (' + currentUser.managedGroup + ')' : 'Người xem')}`);
-            } catch (err) {
-                console.error("Lỗi xác thực Google:", err);
+                alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : (role === 'leader' ? 'Trưởng Nhóm ' + leaderOfGroup : 'Người Xem')}`);
+            } catch (e) {
+                console.error("Lỗi Google Auth:", e);
             }
         }
 
@@ -607,9 +821,9 @@
                 email: "",
                 picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
                 role: "viewer",
-                managedGroup: null
+                leaderOfGroup: null
             };
-            localStorage.removeItem("ht_current_user");
+            localStorage.removeItem("ht_user_session");
             capNhatGiaoDienQuyen();
             alert("Đã đăng xuất!");
         }
@@ -621,7 +835,7 @@
             const badge = document.getElementById("roleBadge");
             const googleBtn = document.getElementById("googleBtnContainer");
             const logoutBtn = document.getElementById("logoutBtn");
-            const adminBtn = document.getElementById("adminManageLeaderBtn");
+            const adminBtn = document.getElementById("adminManageBtn");
 
             badge.className = "role-tag";
 
@@ -631,7 +845,7 @@
                 adminBtn.style.display = "inline-flex";
             } else if (currentUser.role === "leader") {
                 badge.classList.add("role-leader");
-                badge.innerText = `Trưởng nhóm ${currentUser.managedGroup === 'ALL' ? '' : '(' + currentUser.managedGroup + ')'}`;
+                badge.innerText = `Trưởng Nhóm ${currentUser.leaderOfGroup}`;
                 adminBtn.style.display = "none";
             } else {
                 badge.classList.add("role-viewer");
@@ -650,50 +864,54 @@
             hienThiPhienTruc();
         }
 
+        // ================= HIỂN THỊ PHIÊN TRỰC =================
+        function doiTuanTruc() {
+            selectedWeekGroup = parseInt(document.getElementById("currentGroupWeekSelect").value);
+            hienThiPhienTruc();
+        }
+
         function hienThiPhienTruc() {
             const container = document.getElementById("dutyContent");
             container.innerHTML = "";
 
-            dutySchedule.forEach((group, gIdx) => {
+            const weekSchedule = dutyAllWeeks[selectedWeekGroup];
+            const currentGroupInfo = groupsData[selectedWeekGroup];
+
+            // Header info
+            const headerDiv = document.createElement("div");
+            headerDiv.className = "duty-header-info";
+            headerDiv.innerHTML = `
+                <h2><i class="fa-solid fa-users"></i> PHIÊN TRỰC NHÓM ${selectedWeekGroup}</h2>
+                <div style="font-size: 13px; color: #bbb;">
+                    <strong>Trưởng nhóm:</strong> ${currentGroupInfo.leaderEmail || 'Chưa gán'} | 
+                    <strong>Thành viên:</strong> ${currentGroupInfo.members ? currentGroupInfo.members.length : 0} người
+                </div>
+            `;
+            container.appendChild(headerDiv);
+
+            // Kiểm tra xem ai có quyền bấm "Phân công"
+            const coQuyenSua = (currentUser.role === "admin") || 
+                              (currentUser.role === "leader" && currentUser.leaderOfGroup === selectedWeekGroup);
+
+            weekSchedule.forEach((cat, cIdx) => {
                 const groupDiv = document.createElement("div");
                 groupDiv.className = "duty-group";
 
-                let adminGroupBtn = "";
-                if (currentUser.role === "admin") {
-                    adminGroupBtn = `<button class="duty-action-btn" onclick="moModalAdminGroup(${gIdx})"><i class="fa-solid fa-users-gear"></i> Phân chia thành viên</button>`;
-                }
+                groupDiv.innerHTML = `<div class="duty-title">${cat.category}</div>`;
 
-                groupDiv.innerHTML = `
-                    <div class="duty-group-header">
-                        <span class="duty-title">${group.groupName}</span>
-                        ${adminGroupBtn}
-                    </div>
-                `;
-
-                if (currentUser.role === "admin" && group.members) {
-                    groupDiv.innerHTML += `
-                        <div class="admin-group-box">
-                            <i class="fa-solid fa-user-group"></i> <strong>Thành viên:</strong> ${group.members.join(", ")}
-                        </div>
-                    `;
-                }
-
-                const canEditSlot = currentUser.role === "admin" || 
-                                   (currentUser.role === "leader" && (currentUser.managedGroup === "ALL" || currentUser.managedGroup === group.groupName));
-
-                group.slots.forEach((slot, sIdx) => {
-                    let editSlotBtn = "";
-                    if (canEditSlot) {
-                        editSlotBtn = `<button class="duty-action-btn" onclick="moModalChiaPhien(${gIdx}, ${sIdx})"><i class="fa-solid fa-pen-to-square"></i> Sửa</button>`;
+                cat.slots.forEach((slot, sIdx) => {
+                    let actionBtn = "";
+                    if (coQuyenSua) {
+                        actionBtn = `<button class="duty-action-btn" onclick="moModalChonNguoiTruc(${cIdx}, ${sIdx})"><i class="fa-solid fa-hand-pointer"></i> Phân công</button>`;
                     }
 
                     const item = document.createElement("div");
                     item.className = "duty-item";
                     item.innerHTML = `
-                        <input type="checkbox" ${slot.done ? "checked" : ""} onchange="toggleDutyCheck(${gIdx}, ${sIdx})">
+                        <input type="checkbox" ${slot.done ? "checked" : ""} onchange="toggleDutyCheck(${cIdx}, ${sIdx})">
                         <span class="duty-label-time">${slot.time}:</span>
                         <span class="duty-label-person" style="${slot.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${slot.person}</span>
-                        ${editSlotBtn}
+                        ${actionBtn}
                     `;
                     groupDiv.appendChild(item);
                 });
@@ -702,103 +920,130 @@
             });
         }
 
-        function toggleDutyCheck(gIdx, sIdx) {
-            dutySchedule[gIdx].slots[sIdx].done = !dutySchedule[gIdx].slots[sIdx].done;
-            localStorage.setItem("ht_duty_data", JSON.stringify(dutySchedule));
+        function toggleDutyCheck(cIdx, sIdx) {
+            dutyAllWeeks[selectedWeekGroup][cIdx].slots[sIdx].done = !dutyAllWeeks[selectedWeekGroup][cIdx].slots[sIdx].done;
+            localStorage.setItem("ht_duty_weeks", JSON.stringify(dutyAllWeeks));
             hienThiPhienTruc();
         }
 
-        function moModalChiaPhien(gIdx, sIdx) {
-            selectedDuty = { groupIdx: gIdx, slotIdx: sIdx };
-            const item = dutySchedule[gIdx].slots[sIdx];
-            document.getElementById("editDutyTime").value = `${dutySchedule[gIdx].groupName} - ${item.time}`;
-            document.getElementById("editDutyPerson").value = item.person;
-            document.getElementById("modalDutyEdit").classList.add("active");
+        // ================= NHÓM TRƯỞNG CHIA PHIÊN: BẤM VÀO TÊN ĐỂ CHỌN =================
+        function moModalChonNguoiTruc(cIdx, sIdx) {
+            currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
+            const slotData = dutyAllWeeks[selectedWeekGroup][cIdx].slots[sIdx];
+            const catName = dutyAllWeeks[selectedWeekGroup][cIdx].category;
+
+            document.getElementById("pickModalTitle").innerText = `Phân công: ${catName} (${slotData.time})`;
+
+            const container = document.getElementById("memberPickListContainer");
+            container.innerHTML = "";
+
+            const membersOfThisGroup = groupsData[selectedWeekGroup].members || [];
+
+            if (membersOfThisGroup.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên nào (Admin chưa thêm).</div>`;
+            } else {
+                membersOfThisGroup.forEach(memName => {
+                    const item = document.createElement("div");
+                    item.className = "member-pick-item";
+                    item.innerHTML = `
+                        <span><i class="fa-solid fa-user"></i> ${memName}</span>
+                        <i class="fa-regular fa-circle-check check-icon" style="color:#aaa;"></i>
+                    `;
+
+                    // Nếu đã có tên trong ca trực thì auto chọn trước
+                    if (slotData.person.includes(memName)) {
+                        item.classList.add("selected");
+                        item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon";
+                        item.querySelector(".check-icon").style.color = "#1976D2";
+                        currentEditingSlot.selectedMembers.push(memName);
+                    }
+
+                    item.onclick = function () {
+                        if (currentEditingSlot.selectedMembers.includes(memName)) {
+                            currentEditingSlot.selectedMembers = currentEditingSlot.selectedMembers.filter(m => m !== memName);
+                            item.classList.remove("selected");
+                            item.querySelector(".check-icon").className = "fa-regular fa-circle-check check-icon";
+                            item.querySelector(".check-icon").style.color = "#aaa";
+                        } else {
+                            currentEditingSlot.selectedMembers.push(memName);
+                            item.classList.add("selected");
+                            item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon";
+                            item.querySelector(".check-icon").style.color = "#1976D2";
+                        }
+                        capNhatResultInput();
+                    };
+
+                    container.appendChild(item);
+                });
+            }
+
+            capNhatResultInput();
+            document.getElementById("modalDutyPick").classList.add("active");
         }
 
-        function luuPhienTruc() {
-            const newPerson = document.getElementById("editDutyPerson").value.trim();
-            if (newPerson && selectedDuty.groupIdx !== null) {
-                dutySchedule[selectedDuty.groupIdx].slots[selectedDuty.slotIdx].person = newPerson;
-                localStorage.setItem("ht_duty_data", JSON.stringify(dutySchedule));
-                hienThiPhienTruc();
-                dongModalById("modalDutyEdit");
-            }
+        function capNhatResultInput() {
+            document.getElementById("selectedPersonResult").value = currentEditingSlot.selectedMembers.join(" - ") || "Chưa phân công";
         }
 
-        function moModalCapQuyenLeader() {
-            renderLeaderList();
-            document.getElementById("modalLeaderAuth").classList.add("active");
+        function luuPhanCongCaTruc() {
+            const resultText = document.getElementById("selectedPersonResult").value;
+            dutyAllWeeks[selectedWeekGroup][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].person = resultText;
+            localStorage.setItem("ht_duty_weeks", JSON.stringify(dutyAllWeeks));
+            hienThiPhienTruc();
+            dongModalById("modalDutyPick");
         }
 
-        function themTaiKhoanLeader() {
-            const email = document.getElementById("leaderEmailInput").value.trim().toLowerCase();
-            const group = document.getElementById("leaderGroupSelect").value;
-
-            if (!email || !email.includes("@")) {
-                alert("Vui lòng nhập định dạng Email hợp lệ!");
-                return;
-            }
-
-            if (leaderAccounts.some(acc => acc.email === email)) {
-                alert("Email này đã được cấp quyền trước đó!");
-                return;
-            }
-
-            leaderAccounts.push({ email, group });
-            localStorage.setItem("ht_leader_accounts", JSON.stringify(leaderAccounts));
-            document.getElementById("leaderEmailInput").value = "";
-            renderLeaderList();
-            alert(`Đã cấp quyền Trưởng nhóm cho: ${email}`);
+        // ================= ADMIN: CHIA 4 NHÓM & GÁN TRƯỞNG NHÓM =================
+        function moModalAdminChiaNhom() {
+            taiThongTinNhomAdmin();
+            document.getElementById("modalAdminGroups").classList.add("active");
         }
 
-        function xoaTaiKhoanLeader(index) {
-            if (confirm("Bạn có chắc muốn xóa quyền Trưởng nhóm của tài khoản này?")) {
-                leaderAccounts.splice(index, 1);
-                localStorage.setItem("ht_leader_accounts", JSON.stringify(leaderAccounts));
-                renderLeaderList();
-            }
-        }
+        function taiThongTinNhomAdmin() {
+            const g = document.getElementById("adminSelectGroupTab").value;
+            const currentGroup = groupsData[g];
 
-        function renderLeaderList() {
-            const box = document.getElementById("leaderListBox");
-            box.innerHTML = "";
-            if (leaderAccounts.length === 0) {
-                box.innerHTML = `<div style="color:#888; text-align:center; padding:10px;">Chưa có tài khoản nào được cấp.</div>`;
-                return;
-            }
-            leaderAccounts.forEach((acc, idx) => {
-                const item = document.createElement("div");
-                item.className = "leader-item";
+            document.getElementById("adminLeaderEmailInput").value = currentGroup.leaderEmail || "";
+
+            const listContainer = document.getElementById("adminHTCheckList");
+            listContainer.innerHTML = "";
+
+            danhSachGoc.forEach(ht => {
+                // Rút gọn lấy tên Huynh trưởng
+                const parts = ht.thanhHoTen.split(" ");
+                const shortName = parts.length > 2 ? `${parts[parts.length - 2]} ${parts[parts.length - 1]}` : ht.thanhHoTen;
+
+                const isChecked = currentGroup.members && (currentGroup.members.includes(shortName) || currentGroup.members.includes(ht.thanhHoTen));
+
+                const item = document.createElement("label");
+                item.className = "admin-assign-item";
                 item.innerHTML = `
-                    <span><strong>${acc.email}</strong> (${acc.group})</span>
-                    <button class="btn-delete-leader" onclick="xoaTaiKhoanLeader(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    <input type="checkbox" value="${shortName}" ${isChecked ? "checked" : ""}>
+                    <span>${ht.thanhHoTen} (${ht.chucVu})</span>
                 `;
-                box.appendChild(item);
+                listContainer.appendChild(item);
             });
         }
 
-        function moModalAdminGroup(gIdx) {
-            document.getElementById("adminGroupSelect").selectedIndex = gIdx;
-            hienThiThanhVienNhomAdmin();
-            document.getElementById("modalAdminGroup").classList.add("active");
-        }
+        function luuThongTinNhomAdmin() {
+            const g = document.getElementById("adminSelectGroupTab").value;
+            const leaderEmail = document.getElementById("adminLeaderEmailInput").value.trim().toLowerCase();
 
-        function hienThiThanhVienNhomAdmin() {
-            const gIdx = document.getElementById("adminGroupSelect").selectedIndex;
-            document.getElementById("adminGroupMembers").value = dutySchedule[gIdx].members ? dutySchedule[gIdx].members.join(", ") : "";
-        }
+            const checkboxes = document.querySelectorAll("#adminHTCheckList input[type='checkbox']:checked");
+            const members = Array.from(checkboxes).map(cb => cb.value);
 
-        function luuThanhVienNhomAdmin() {
-            const gIdx = document.getElementById("adminGroupSelect").selectedIndex;
-            const membersStr = document.getElementById("adminGroupMembers").value;
-            dutySchedule[gIdx].members = membersStr.split(",").map(m => m.trim()).filter(m => m);
-            localStorage.setItem("ht_duty_data", JSON.stringify(dutySchedule));
+            groupsData[g] = {
+                leaderEmail: leaderEmail,
+                members: members
+            };
+
+            localStorage.setItem("ht_groups_4", JSON.stringify(groupsData));
+            alert(`Đã lưu cấu hình Nhóm ${g} thành công!`);
             hienThiPhienTruc();
-            dongModalById("modalAdminGroup");
-            alert("Đã cập nhật danh sách thành viên nhóm!");
+            dongModalById("modalAdminGroups");
         }
 
+        // ================= HIỂN THỊ DANH SÁCH HT =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";

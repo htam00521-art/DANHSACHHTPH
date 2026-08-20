@@ -237,9 +237,9 @@
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC (GLASSMORPHISM) */
+        /* BẢNG PHIÊN TRỰC */
         .duty-wrapper {
-            max-width: 660px;
+            max-width: 680px;
             margin: 0 auto;
         }
 
@@ -356,38 +356,51 @@
         .duty-item {
             display: flex;
             align-items: center;
-            padding: 8px 0;
+            padding: 10px 0;
             font-size: 15px;
             line-height: 1.4;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .duty-item:last-child { border-bottom: none; }
 
-        .duty-item input[type="checkbox"] {
-            width: 19px;
-            height: 19px;
-            margin-right: 12px;
+        .duty-label-time { 
+            font-weight: 700; 
+            color: #80D8FF; 
+            min-width: 90px; 
+            text-shadow: 0 0 8px rgba(128, 216, 255, 0.3);
+        }
+
+        .duty-persons-container {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .person-check-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .person-check-badge input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
             accent-color: #00E676;
             cursor: pointer;
         }
 
-        .duty-item input[type="checkbox"]:disabled {
+        .person-check-badge input[type="checkbox"]:disabled {
             cursor: not-allowed;
             opacity: 0.4;
-        }
-
-        .duty-label-time { 
-            font-weight: 700; 
-            color: #80D8FF; 
-            min-width: 100px; 
-            text-shadow: 0 0 8px rgba(128, 216, 255, 0.3);
-        }
-
-        .duty-label-person { 
-            font-weight: 500; 
-            color: #FFFFFF; 
-            flex-grow: 1; 
         }
 
         .duty-action-btn {
@@ -401,6 +414,7 @@
             border-radius: 14px;
             transition: all 0.2s ease;
             box-shadow: 0 2px 8px rgba(30, 136, 229, 0.35);
+            margin-left: auto;
         }
         .duty-action-btn:hover { 
             background: linear-gradient(135deg, #2196F3, #1E88E5);
@@ -831,6 +845,7 @@
             { id: 10, name: " CN IV Thường Niên", dates: "01/02 - 07/02/2026", season: "Mùa Thường Niên" },
             { id: 11, name: " CN V Thường Niên", dates: "08/02 - 14/02/2026", season: "Mùa Thường Niên" },
             { id: 12, name: " CN VI Thường Niên & Tết Bính Ngọ", dates: "15/02 - 21/02/2026", season: "Tết Bính Ngọ" },
+            { id: 13, name: " Thứ Sáu LỄ TRO", dates: "20/02 - 21/02/2026", season: "Mùa Chay" },
             { id: 14, name: " CN I Mùa Chay", dates: "22/02 - 28/02/2026", season: "Mùa Chay" },
             { id: 15, name: " CN II Mùa Chay", dates: "01/03 - 07/03/2026", season: "Mùa Chay" },
             { id: 16, name: " CN III Mùa Chay", dates: "08/03 - 14/03/2026", season: "Mùa Chay" },
@@ -941,35 +956,33 @@
                 {
                     category: "Trực Máy",
                     slots: [
-                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
-                        { time: "Thứ 2", person: "Chưa phân công", done: false },
-                        { time: "Thứ 3", person: "Chưa phân công", done: false },
-                        { time: "Thứ 4", person: "Chưa phân công", done: false },
-                        { time: "Thứ 5", person: "Chưa phân công", done: false },
-                        { time: "Thứ 6", person: "Chưa phân công", done: false },
-                        { time: "Thứ 7", person: "Chưa phân công", done: false }
+                        { time: "CN lễ 3", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 2", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 3", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 4", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 5", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 6", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 7", persons: ["Chưa phân công"], dones: [false] }
                     ]
                 },
                 {
                     category: "Đọc Sách",
                     slots: [
-                        { time: "CN lễ nhì", person: "Chưa phân công", done: false },
-                        { time: "CN lễ 3", person: "Chưa phân công", done: false },
-                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                        { time: "CN lễ nhì", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "CN lễ 3", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 4", persons: ["Chưa phân công"], dones: [false] }
                     ]
                 },
                 {
                     category: "Giúp Lễ",
                     slots: [
-                        { time: "CN", person: "Chưa phân công", done: false },
-                        { time: "Thứ 4", person: "Chưa phân công", done: false }
+                        { time: "CN", persons: ["Chưa phân công"], dones: [false] },
+                        { time: "Thứ 4", persons: ["Chưa phân công"], dones: [false] }
                     ]
                 }
             ];
         }
 
-        // ================= 4. TÍNH NHÓM TRỰC TỰ ĐỘNG THEO TUẦN =================
-        // Mốc quy chuẩn: Tuần 39 là Nhóm 3 trực
         function tinhNhomTrucChoTuan(weekId) {
             const shift = (weekId - 39) % 4;
             let groupNumber = 3 + shift;
@@ -1204,6 +1217,7 @@
             return dutyHistoryData[dutyKey];
         }
 
+        // ================= HIỂN THỊ PHIÊN TRỰC (CHECKBOX CHO TỪNG NGƯỜI) =================
         function hienThiPhienTruc() {
             const container = document.getElementById("dutyContent");
             container.innerHTML = "";
@@ -1230,8 +1244,6 @@
             `;
             container.appendChild(headerDiv);
 
-            // KIỂM TRA QUYỀN SỬA CA TRỰC:
-            // Admin hoặc Nhóm trưởng/Phó của đúng nhóm được phân công trong tuần này
             const coQuyenSua = (currentUser.role === "admin") || 
                               (currentUser.role === "leader" && currentUser.leaderOfGroup === currentAssignedGroup);
 
@@ -1243,6 +1255,39 @@
                 groupDiv.innerHTML = `<div class="duty-title"><i class="fa-solid fa-layer-group"></i> ${cat.category}</div>`;
 
                 cat.slots.forEach((slot, sIdx) => {
+                    // Chuẩn hóa dữ liệu tương thích
+                    let personList = [];
+                    let doneList = [];
+
+                    if (Array.isArray(slot.persons)) {
+                        personList = slot.persons;
+                        doneList = Array.isArray(slot.dones) ? slot.dones : personList.map(() => false);
+                    } else if (slot.person) {
+                        personList = slot.person.split(" - ").map(p => p.trim());
+                        doneList = [slot.done || false, false];
+                    } else {
+                        personList = ["Chưa phân công"];
+                        doneList = [false];
+                    }
+
+                    let personsHTML = "";
+                    if (personList.length === 1 && personList[0] === "Chưa phân công") {
+                        personsHTML = `<span style="color: #9E9E9E; font-style: italic;">Chưa phân công</span>`;
+                    } else {
+                        personsHTML = personList.map((pName, pIdx) => {
+                            const isDone = doneList[pIdx] || false;
+                            return `
+                                <label class="person-check-badge">
+                                    <input type="checkbox" 
+                                           ${isDone ? "checked" : ""} 
+                                           ${!isAdmin ? "disabled title='Chỉ Admin mới có quyền xác nhận hoàn thành'" : ""} 
+                                           onchange="toggleIndividualCheck(${cIdx}, ${sIdx}, ${pIdx})">
+                                    <span style="${isDone ? 'text-decoration: line-through; opacity: 0.5; color:#9E9E9E;' : 'color:#FFFFFF; font-weight:500;'}">${pName}</span>
+                                </label>
+                            `;
+                        }).join("");
+                    }
+
                     let actionBtn = "";
                     if (coQuyenSua) {
                         actionBtn = `<button class="duty-action-btn" onclick="moModalChonNguoiTruc(${cIdx}, ${sIdx})"><i class="fa-solid fa-hand-pointer"></i> Phân công</button>`;
@@ -1251,12 +1296,8 @@
                     const item = document.createElement("div");
                     item.className = "duty-item";
                     item.innerHTML = `
-                        <input type="checkbox" 
-                               ${slot.done ? "checked" : ""} 
-                               ${!isAdmin ? "disabled title='Chỉ Admin mới có quyền xác nhận hoàn thành'" : ""} 
-                               onchange="toggleDutyCheck(${cIdx}, ${sIdx})">
                         <span class="duty-label-time">${slot.time}:</span>
-                        <span class="duty-label-person" style="${slot.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${slot.person}</span>
+                        <div class="duty-persons-container">${personsHTML}</div>
                         ${actionBtn}
                     `;
                     groupDiv.appendChild(item);
@@ -1266,18 +1307,25 @@
             });
         }
 
-        function toggleDutyCheck(cIdx, sIdx) {
+        // Tích chọn riêng từng người
+        function toggleIndividualCheck(cIdx, sIdx, pIdx) {
             if (currentUser.role !== "admin") {
                 alert("Chỉ Admin mới có quyền xác nhận hoàn thành ca trực!");
                 hienThiPhienTruc();
                 return;
             }
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
-            dutyHistoryData[dutyKey][cIdx].slots[sIdx].done = !dutyHistoryData[dutyKey][cIdx].slots[sIdx].done;
-            
+            const slot = dutyHistoryData[dutyKey][cIdx].slots[sIdx];
+
+            if (!Array.isArray(slot.dones)) {
+                slot.dones = [false, false];
+            }
+
+            slot.dones[pIdx] = !slot.dones[pIdx];
             db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]);
         }
 
+        // ================= NHÓM TRƯỞNG & PHÓ CHIA PHIÊN =================
         function moModalChonNguoiTruc(cIdx, sIdx) {
             currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
@@ -1291,6 +1339,13 @@
 
             const membersOfThisGroup = groupsData[currentAssignedGroup].members || [];
 
+            let currentPersons = [];
+            if (Array.isArray(slotData.persons)) {
+                currentPersons = slotData.persons;
+            } else if (slotData.person) {
+                currentPersons = slotData.person.split(" - ").map(p => p.trim());
+            }
+
             if (membersOfThisGroup.length === 0) {
                 container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên (Admin chưa chia trên web).</div>`;
             } else {
@@ -1302,7 +1357,7 @@
                         <i class="fa-regular fa-circle-check check-icon" style="color:#aaa;"></i>
                     `;
 
-                    if (slotData.person.includes(memName)) {
+                    if (currentPersons.includes(memName)) {
                         item.classList.add("selected");
                         item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon";
                         item.querySelector(".check-icon").style.color = "#1976D2";
@@ -1338,8 +1393,15 @@
 
         function luuPhanCongCaTruc() {
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
-            const resultText = document.getElementById("selectedPersonResult").value;
-            dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].person = resultText;
+            const selected = currentEditingSlot.selectedMembers;
+
+            if (selected.length === 0) {
+                dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = ["Chưa phân công"];
+                dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = [false];
+            } else {
+                dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = selected;
+                dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = selected.map(() => false);
+            }
             
             db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]);
             dongModalById("modalDutyPick");
@@ -1398,6 +1460,7 @@
             });
         }
 
+        // ================= HIỂN THỊ DANH SÁCH HT & XỬ LÝ ẢNH =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";

@@ -43,12 +43,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
             padding: 10px 18px;
             border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
             flex-wrap: wrap;
             gap: 10px;
         }
@@ -231,21 +231,23 @@
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC */
+        /* BẢNG PHIÊN TRỰC (NỀN BÓNG MỜ GLASSMORPHISM & MÀU NỔI BẬT) */
         .duty-wrapper {
-            max-width: 650px;
+            max-width: 660px;
             margin: 0 auto;
         }
 
         .week-control-panel {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 14px;
-            padding: 14px 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .control-row {
@@ -269,14 +271,15 @@
 
         .control-item select, .control-item input {
             width: 100%;
-            padding: 8px 10px;
-            border-radius: 8px;
+            padding: 9px 12px;
+            border-radius: 10px;
             border: 1px solid #90caf9;
             font-size: 13px;
             outline: none;
             color: #0D47A1;
             font-weight: 600;
             background: #fff;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .control-item select:disabled {
@@ -286,51 +289,80 @@
             border-color: #cfd8dc;
         }
 
+        /* KHUNG CHÍNH BẢNG PHIÊN TRỰC */
         .duty-container {
-            background: #121212;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: rgba(18, 24, 38, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 26px 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
             color: #f1f1f1;
         }
 
+        /* HEADER THÔNG TIN TRỰC */
         .duty-header-info {
             text-align: center;
-            padding-bottom: 16px;
-            margin-bottom: 18px;
-            border-bottom: 1px dashed #333;
+            padding-bottom: 18px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
         }
 
+        /* TÊN TUẦN PHỤNG VỤ NỔI BẬT */
         .duty-header-info .liturgical-title {
-            font-size: 19px;
-            font-weight: bold;
-            color: #64b5f6;
+            font-size: 20px;
+            font-weight: 800;
+            color: #FFE082;
+            text-shadow: 0 0 12px rgba(255, 224, 130, 0.35);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
         }
 
+        /* PHÂN CÔNG NHÓM TRỰC NỔI BẬT */
         .duty-header-info .group-duty-title {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 112, 67, 0.25), rgba(255, 183, 77, 0.25));
+            border: 1px solid #FF9E80;
+            color: #FFCCBC;
             font-size: 15px;
-            color: #ffb74d;
             font-weight: 700;
-            margin-bottom: 4px;
+            padding: 5px 16px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         .duty-header-info .extra-details {
-            font-size: 12px;
-            color: #9e9e9e;
-            line-height: 1.5;
+            font-size: 13px;
+            color: #B0BEC5;
+            line-height: 1.6;
         }
 
-        .duty-group { margin-bottom: 24px; }
+        .duty-header-info .extra-details strong {
+            color: #ECEFF1;
+        }
+
+        /* NHÓM CA TRỰC */
+        .duty-group { 
+            margin-bottom: 22px; 
+            background: rgba(255, 255, 255, 0.04);
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
         .duty-title { 
-            font-size: 17px; 
+            font-size: 16px; 
             font-weight: 700; 
-            color: #ffffff; 
-            margin-bottom: 10px;
+            color: #80E5FF;
+            margin-bottom: 8px;
             padding-bottom: 4px;
-            border-bottom: 1px solid #2d2d2d;
+            border-bottom: 1px solid rgba(128, 229, 255, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .duty-item {
@@ -339,43 +371,65 @@
             padding: 8px 0;
             font-size: 15px;
             line-height: 1.4;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .duty-item:last-child {
+            border-bottom: none;
         }
 
         .duty-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 19px;
+            height: 19px;
             margin-right: 12px;
-            accent-color: #1976D2;
+            accent-color: #00E676;
             cursor: pointer;
         }
 
         .duty-item input[type="checkbox"]:disabled {
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
-        .duty-label-time { font-weight: 500; color: #e0e0e0; min-width: 95px; }
-        .duty-label-person { font-weight: 400; color: #ffffff; flex-grow: 1; }
+        /* THỜI GIAN / THỨ TRỰC NỔI BẬT */
+        .duty-label-time { 
+            font-weight: 700; 
+            color: #80D8FF; 
+            min-width: 100px; 
+            text-shadow: 0 0 8px rgba(128, 216, 255, 0.3);
+        }
+
+        .duty-label-person { 
+            font-weight: 500; 
+            color: #FFFFFF; 
+            flex-grow: 1; 
+        }
 
         .duty-action-btn {
-            background: #1e88e5;
-            border: none;
+            background: linear-gradient(135deg, #1E88E5, #1565C0);
+            border: 1px solid #64B5F6;
             color: #ffffff;
             cursor: pointer;
             font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 12px;
-            transition: 0.2s;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(30, 136, 229, 0.35);
         }
-        .duty-action-btn:hover { background: #1565c0; }
+        .duty-action-btn:hover { 
+            background: linear-gradient(135deg, #2196F3, #1E88E5);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.5);
+        }
 
         /* MODALS */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.65);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.68);
+            backdrop-filter: blur(6px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -392,10 +446,10 @@
             background: #ffffff;
             width: 100%;
             max-width: 480px;
-            border-radius: 18px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
             position: relative;
-            padding: 22px;
+            padding: 24px;
             max-height: 90vh;
             display: flex;
             flex-direction: column;
@@ -1053,8 +1107,10 @@
                 <div class="liturgical-title">
                     <i class="fa-solid fa-cross"></i> ${currentWeekObj ? currentWeekObj.name.toUpperCase() : ''}
                 </div>
-                <div class="group-duty-title">
-                    <i class="fa-solid fa-users"></i> PHÂN CÔNG: ${groupInfo.groupName.toUpperCase()}
+                <div>
+                    <span class="group-duty-title">
+                        <i class="fa-solid fa-users"></i> PHÂN CÔNG: ${groupInfo.groupName.toUpperCase()}
+                    </span>
                 </div>
                 <div class="extra-details">
                     <div><strong>Ban điều hành:</strong> ${groupInfo.leaderName}</div>
@@ -1071,7 +1127,7 @@
             schedule.forEach((cat, cIdx) => {
                 const groupDiv = document.createElement("div");
                 groupDiv.className = "duty-group";
-                groupDiv.innerHTML = `<div class="duty-title">${cat.category}</div>`;
+                groupDiv.innerHTML = `<div class="duty-title"><i class="fa-solid fa-layer-group"></i> ${cat.category}</div>`;
 
                 cat.slots.forEach((slot, sIdx) => {
                     let actionBtn = "";

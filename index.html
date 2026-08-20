@@ -994,8 +994,8 @@
                     <i class="fa-solid fa-users"></i> PHÂN CÔNG: ${groupInfo.groupName.toUpperCase()}
                 </div>
                 <div class="extra-details">
-                    <div><strong>Ban điều hành:</strong> ${groupInfo.leaderName}</div>
-                    <div><strong>Thời gian:</strong> ${currentWeekObj ? currentWeekObj.dates : ''} | <strong>Mùa:</strong> ${currentWeekObj ? currentWeekObj.season : ''} | <strong>Quân số:</strong> ${(groupInfo.members || []).length} HT</div>
+                    <div><strong>Nhóm Trưởng:</strong> ${groupInfo.leaderName}</div>
+                    <div><strong>Thời gian:</strong> ${currentWeekObj ? currentWeekObj.dates : ''} | <strong>Mùa:</strong> ${currentWeekObj ? currentWeekObj.season : ''} | <strong>Số thành viên:</strong> ${(groupInfo.members || []).length} HT</div>
                 </div>
             `;
             container.appendChild(headerDiv);

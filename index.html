@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý & Phân Chia Phiên Trực Huynh Trưởng</title> 
+    <title>Danh Sách & Phân Chia Phiên Trực Huynh Trưởng</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Thư viện Google Identity Services (Google Sign-In) -->
+    <!-- Thư viện Google Identity Services & JWT Decode -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Thư viện hỗ trợ giải mã Google JWT Token -->
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
     <style>
@@ -339,7 +338,6 @@
         .btn-save { background: #0D47A1; color: #fff; }
         .btn-cancel { background: #e0e0e0; color: #333; }
 
-        /* DANH SÁCH TÀI KHOẢN TRƯỞNG NHÓM */
         .leader-list-box {
             max-height: 140px;
             overflow-y: auto;
@@ -378,12 +376,10 @@
                 </div>
             </div>
             <div class="auth-actions">
-                <!-- NÚT DÀNH RIÊNG CHO ADMIN -->
                 <button id="adminManageLeaderBtn" class="btn-auth-action" style="display:none; background:#2e7d32;" onclick="moModalCapQuyenLeader()">
                     <i class="fa-solid fa-user-plus"></i> Cấp quyền Trưởng nhóm
                 </button>
                 
-                <!-- GOOGLE SIGN IN BUTTON CONTAINER -->
                 <div id="googleBtnContainer"></div>
                 <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
                     <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
@@ -456,12 +452,12 @@
         </div>
     </div>
 
-    <!-- MODAL ADMIN CẤP QUYỀN TÀI KHOẢN TRƯỞNG NHÓM BẰNG GOOGLE EMAIL -->
+    <!-- MODAL CẤP QUYỀN TRƯỞNG NHÓM (ADMIN) -->
     <div class="modal-overlay" id="modalLeaderAuth">
         <div class="modal-card">
             <h3>Cấp Tài Khoản Trưởng Nhóm</h3>
             <p style="font-size: 13px; color: #666; margin-bottom: 12px; text-align: center;">
-                Nhập địa chỉ Gmail của Trưởng nhóm. Khi họ đăng nhập bằng Google, hệ thống sẽ cấp quyền Trưởng nhóm tương ứng.
+                Nhập địa chỉ Gmail của Trưởng nhóm để cấp quyền.
             </p>
             <div class="form-group">
                 <label>Email Google của Trưởng nhóm:</label>
@@ -488,14 +484,12 @@
     </div>
 
     <script>
-        // ================= CONFIG GOOGLE OAUTH =================
-        // THAY THẾ BẰNG GOOGLE CLIENT ID CỦA BẠN TỪ GOOGLE CLOUD CONSOLE
-        const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+        // GOOGLE CLIENT ID
+        const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         
-        // EMAIL CỦA ADMIN TOÀN QUYỀN
+        // THAY BẰNG EMAIL GMAIL ADMIN CHÍNH CỦA BẠN
         const SUPER_ADMIN_EMAIL = "htam00521@gmail.com"; 
 
-        // ================= DỮ LIỆU BAN ĐẦU =================
         const danhSachGoc = [
             { thanhHoTen: "Patriciô Nguyễn Thiên Ân", chucVu: "Trưởng Huynh Trưởng - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "21/01/2004", sdt: "0395800581", hinhAnhUrl: "thienan" },
             { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", chucVu: "Phó Huynh Trưởng, Thủ Quỹ - Ban Điều Hành", cap: "Huynh Trưởng Cấp 2", ngaySinh: "25/02/2005", sdt: "0921786312", hinhAnhUrl: "hieutam" },
@@ -546,22 +540,18 @@
             }
         ];
 
-        // DANH SÁCH EMAIL TRƯỞNG NHÓM ĐƯỢC CẤP QUYỀN [{ email: '...', group: '...' }]
         let leaderAccounts = JSON.parse(localStorage.getItem("ht_leader_accounts")) || [];
-
-        // TRẠNG THÁI NGƯỜI DÙNG HIỆN TẠI
         let currentUser = JSON.parse(localStorage.getItem("ht_current_user")) || {
             name: "Khách",
             email: "",
             picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-            role: "viewer", // 'admin' | 'leader' | 'viewer'
-            managedGroup: null // null hoặc Tên nhóm
+            role: "viewer",
+            managedGroup: null
         };
 
         let dutySchedule = JSON.parse(localStorage.getItem("ht_duty_data")) || defaultDutyData;
         let selectedDuty = { groupIdx: null, slotIdx: null };
 
-        // ================= XỬ LÝ GOOGLE SIGN-IN =================
         function handleCredentialResponse(response) {
             try {
                 const responsePayload = jwt_decode(response.credential);
@@ -570,11 +560,9 @@
                 let role = "viewer";
                 let managedGroup = null;
 
-                // Kiểm tra xem có phải Super Admin không
                 if (userEmail === SUPER_ADMIN_EMAIL.toLowerCase()) {
                     role = "admin";
                 } else {
-                    // Kiểm tra xem email có trong danh sách Trưởng nhóm không
                     const leader = leaderAccounts.find(acc => acc.email.toLowerCase() === userEmail);
                     if (leader) {
                         role = "leader";
@@ -599,7 +587,6 @@
         }
 
         window.onload = function () {
-            // Khởi tạo Google Identity Services
             if (window.google) {
                 google.accounts.id.initialize({
                     client_id: GOOGLE_CLIENT_ID,
@@ -627,7 +614,6 @@
             alert("Đã đăng xuất!");
         }
 
-        // ================= CẬP NHẬT GIAO DIỆN THEO QUYỀN =================
         function capNhatGiaoDienQuyen() {
             document.getElementById("userNameDisplay").innerText = currentUser.name;
             document.getElementById("userAvatarMini").src = currentUser.picture;
@@ -664,7 +650,6 @@
             hienThiPhienTruc();
         }
 
-        // ================= HIỂN THỊ PHIÊN TRỰC =================
         function hienThiPhienTruc() {
             const container = document.getElementById("dutyContent");
             container.innerHTML = "";
@@ -685,7 +670,6 @@
                     </div>
                 `;
 
-                // Hiển thị danh sách thành viên nhóm nếu là Admin
                 if (currentUser.role === "admin" && group.members) {
                     groupDiv.innerHTML += `
                         <div class="admin-group-box">
@@ -694,7 +678,6 @@
                     `;
                 }
 
-                // Kiểm tra quyền sửa ca trực: Admin hoặc Trưởng nhóm được gán đúng nhóm
                 const canEditSlot = currentUser.role === "admin" || 
                                    (currentUser.role === "leader" && (currentUser.managedGroup === "ALL" || currentUser.managedGroup === group.groupName));
 
@@ -725,7 +708,6 @@
             hienThiPhienTruc();
         }
 
-        // ================= XỬ LÝ PHÂN CHIA PHIÊN (TRƯỞNG NHÓM & ADMIN) =================
         function moModalChiaPhien(gIdx, sIdx) {
             selectedDuty = { groupIdx: gIdx, slotIdx: sIdx };
             const item = dutySchedule[gIdx].slots[sIdx];
@@ -744,7 +726,6 @@
             }
         }
 
-        // ================= XỬ LÝ CẤP TÀI KHOẢN TRƯỞNG NHÓM (ADMIN) =================
         function moModalCapQuyenLeader() {
             renderLeaderList();
             document.getElementById("modalLeaderAuth").classList.add("active");
@@ -797,7 +778,6 @@
             });
         }
 
-        // ================= QUẢN LÝ THÀNH VIÊN NHÓM =================
         function moModalAdminGroup(gIdx) {
             document.getElementById("adminGroupSelect").selectedIndex = gIdx;
             hienThiThanhVienNhomAdmin();
@@ -819,7 +799,6 @@
             alert("Đã cập nhật danh sách thành viên nhóm!");
         }
 
-        // ================= HIỂN THỊ DANH SÁCH =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";
@@ -857,7 +836,6 @@
             document.getElementById(id).classList.remove("active");
         }
 
-        // TÌM KIẾM
         document.getElementById("searchInput").addEventListener("input", (e) => {
             const keyword = e.target.value.toLowerCase().trim();
             const filtered = danhSachGoc.filter(ht => 

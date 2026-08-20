@@ -13,6 +13,10 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
+    <!-- Firebase SDK (v9 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -407,7 +411,6 @@
             font-size: 14px;
         }
 
-        /* DANH SÁCH THÀNH VIÊN ĐỂ BẤM CHỌN */
         .member-pick-list {
             flex-grow: 1;
             overflow-y: auto;
@@ -447,7 +450,6 @@
         .btn-save { background: #0D47A1; color: #fff; }
         .btn-cancel { background: #e0e0e0; color: #333; }
 
-        /* DANH SÁCH TÍCH CHỌN CHO ADMIN CHIA NHÓM */
         .admin-assign-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -513,13 +515,11 @@
             <h1 class="header-title">Lịch Phân Phiên Trực Năm Phụng Vụ 2025-2026</h1>
 
             <div class="duty-wrapper">
-                <!-- THANH CHỌN TUẦN PHỤNG VỤ & NHÓM TRỰC -->
                 <div class="week-control-panel">
                     <div class="control-row">
                         <div class="control-item" style="flex: 2;">
                             <i class="fa-solid fa-church"></i>
                             <select id="liturgicalWeekSelect" onchange="chuyenTuanVaNhom()">
-                                <!-- Load 53 tuần phụng vụ từ JS -->
                             </select>
                         </div>
                     </div>
@@ -540,13 +540,12 @@
                     </div>
                 </div>
 
-                <!-- BẢNG PHIÊN TRỰC DARK THEME -->
                 <div class="duty-container" id="dutyContent"></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PHÂN CÔNG CA TRỰC (CHỌN TÊN THÀNH VIÊN) -->
+    <!-- MODAL PHÂN CÔNG CA TRỰC -->
     <div class="modal-overlay" id="modalDutyPick" onclick="dongModalById('modalDutyPick')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 id="pickModalTitle">Phân Công Ca Trực</h3>
@@ -568,7 +567,7 @@
         </div>
     </div>
 
-    <!-- MODAL ADMIN CẤU HÌNH 4 NHÓM & NHÓM TRƯỞNG -->
+    <!-- MODAL ADMIN CẤU HÌNH 4 NHÓM -->
     <div class="modal-overlay" id="modalAdminGroups" onclick="dongModalById('modalAdminGroups')">
         <div class="modal-card" style="max-width: 520px;" onclick="event.stopPropagation()">
             <h3>Cấu Hình 4 Nhóm & Phân Chia Thành Viên</h3>
@@ -600,53 +599,55 @@
 
             <div class="modal-actions">
                 <button class="btn-modal btn-cancel" type="button" onclick="dongModalById('modalAdminGroups')">Đóng</button>
-                <button class="btn-modal btn-save" type="button" onclick="luuThongTinNhomAdmin()">Lưu thiết lập nhóm</button>
+                <button class="btn-modal btn-save" type="button" onclick="luuThongTinNhomAdmin()">Lưu lên hệ thống</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ================= 1. CẤU HÌNH GMAIL ADMIN =================
+        // ================= 1. CẤU HÌNH FIREBASE DATABASE =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
+            authDomain: "phantruchuynhtruong.firebaseapp.com",
+            databaseURL: "https://phantruchuynhtruong-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "phantruchuynhtruong",
+            storageBucket: "phantruchuynhtruong.firebasestorage.app",
+            messagingSenderId: "105589587705",
+            appId: "1:105589587705:web:e5673f9dad38c130b56c28",
+            measurementId: "G-YENZE6ZNSW"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // ================= 2. CẤU HÌNH GMAIL ADMIN & GOOGLE AUTH =================
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         
         const ADMIN_EMAILS = [
             "htam00521@gmail.com"
-            // "admin2@gmail.com"
         ]; 
 
-        // ================= 2. CẤU HÌNH GMAIL TRƯỞNG & PHÓ 4 NHÓM =================
+        // CẤU HÌNH GMAIL TRƯỞNG & PHÓ 4 NHÓM
         const hardcodedGroupEmails = {
             1: {
                 groupName: "Nhóm 1",
                 leaderName: "Duy Lữ (Trưởng)",
-                leaderEmails: [
-                    "ltam54127@gmail.com", // Gmail Trưởng nhóm 1
-                    "pho_nhom1@gmail.com"     // Gmail Phó nhóm 1
-                ]
+                leaderEmails: ["ltam54127@gmail.com", "pho_nhom1@gmail.com"]
             },
             2: {
                 groupName: "Nhóm 2",
                 leaderName: "Thiên Ân (Trưởng)",
-                leaderEmails: [
-                    "truong_nhom2@gmail.com", // Gmail Trưởng nhóm 2
-                    "pho_nhom2@gmail.com"     // Gmail Phó nhóm 2
-                ]
+                leaderEmails: ["truong_nhom2@gmail.com", "pho_nhom2@gmail.com"]
             },
             3: {
                 groupName: "Nhóm 3",
                 leaderName: "Minh Phát (Trưởng)",
-                leaderEmails: [
-                    "truong_nhom3@gmail.com", // Gmail Trưởng nhóm 3
-                    "pho_nhom3@gmail.com"     // Gmail Phó nhóm 3
-                ]
+                leaderEmails: ["truong_nhom3@gmail.com", "pho_nhom3@gmail.com"]
             },
             4: {
                 groupName: "Nhóm 4",
                 leaderName: "Hồng Châu (Trưởng)",
-                leaderEmails: [
-                    "truong_nhom4@gmail.com", // Gmail Trưởng nhóm 4
-                    "pho_nhom4@gmail.com"     // Gmail Phó nhóm 4
-                ]
+                leaderEmails: ["truong_nhom4@gmail.com", "pho_nhom4@gmail.com"]
             }
         };
 
@@ -800,20 +801,40 @@
             ];
         }
 
-        // ================= XỬ LÝ ĐỒNG BỘ DỮ LIỆU CHUẨN XÁC =================
-        let dutyHistoryData = JSON.parse(localStorage.getItem("ht_duty_liturgical_history")) || {};
-        let storedGroups = JSON.parse(localStorage.getItem("ht_groups_configured")) || {};
-
-        // Luôn cập nhật danh sách email và ban điều hành mới nhất từ code, giữ lại danh sách thành viên do Admin chia
+        // ================= 4. ĐỒNG BỘ REALTIME VỚI FIREBASE =================
+        let dutyHistoryData = {};
         let groupsData = {};
+
         for (let g = 1; g <= 4; g++) {
             groupsData[g] = {
                 groupName: hardcodedGroupEmails[g].groupName,
                 leaderName: hardcodedGroupEmails[g].leaderName,
                 leaderEmails: hardcodedGroupEmails[g].leaderEmails || [],
-                members: (storedGroups[g] && storedGroups[g].members) ? storedGroups[g].members : []
+                members: []
             };
         }
+
+        db.ref("groupsData").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                for (let g = 1; g <= 4; g++) {
+                    if (data[g]) {
+                        groupsData[g].groupName = data[g].groupName || hardcodedGroupEmails[g].groupName;
+                        groupsData[g].leaderName = data[g].leaderName || hardcodedGroupEmails[g].leaderName;
+                        groupsData[g].members = data[g].members || [];
+                    }
+                }
+            }
+            hienThiPhienTruc();
+        });
+
+        db.ref("dutyHistory").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                dutyHistoryData = data;
+            }
+            hienThiPhienTruc();
+        });
 
         let currentSelectedWeek = 1;
         let currentSelectedGroup = 1;
@@ -828,7 +849,6 @@
 
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
-        // NẠP DANH SÁCH 53 TUẦN PHỤNG VỤ VÀO DROPDOWN
         function khoiTaoDanhSachTuanPhungVu() {
             const select = document.getElementById("liturgicalWeekSelect");
             select.innerHTML = "";
@@ -858,11 +878,9 @@
                 let role = "viewer";
                 let leaderOfGroup = null;
 
-                // 1. Kiểm tra Admin
                 if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
                     role = "admin";
                 } else {
-                    // 2. Kiểm tra Nhóm trưởng / Nhóm phó
                     for (let g = 1; g <= 4; g++) {
                         const emails = hardcodedGroupEmails[g].leaderEmails || [];
                         if (emails.some(e => e.toLowerCase().trim() === email)) {
@@ -955,7 +973,6 @@
             hienThiPhienTruc();
         }
 
-        // ================= XỬ LÝ CHUYỂN TUẦN VÀ NHÓM TRỰC =================
         function chuyenTuanVaNhom() {
             currentSelectedWeek = parseInt(document.getElementById("liturgicalWeekSelect").value);
             currentSelectedGroup = parseInt(document.getElementById("currentGroupSelect").value);
@@ -972,7 +989,6 @@
             return dutyHistoryData[dutyKey];
         }
 
-        // ================= HIỂN THỊ PHIÊN TRỰC =================
         function hienThiPhienTruc() {
             const container = document.getElementById("dutyContent");
             container.innerHTML = "";
@@ -1039,11 +1055,10 @@
             }
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             dutyHistoryData[dutyKey][cIdx].slots[sIdx].done = !dutyHistoryData[dutyKey][cIdx].slots[sIdx].done;
-            localStorage.setItem("ht_duty_liturgical_history", JSON.stringify(dutyHistoryData));
-            hienThiPhienTruc();
+            
+            db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]);
         }
 
-        // ================= NHÓM TRƯỞNG & PHÓ CHIA PHIÊN (BẤM VÀO TÊN) =================
         function moModalChonNguoiTruc(cIdx, sIdx) {
             currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
@@ -1106,12 +1121,11 @@
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             const resultText = document.getElementById("selectedPersonResult").value;
             dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].person = resultText;
-            localStorage.setItem("ht_duty_liturgical_history", JSON.stringify(dutyHistoryData));
-            hienThiPhienTruc();
+            
+            db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]);
             dongModalById("modalDutyPick");
         }
 
-        // ================= ADMIN: CẤU HÌNH & CHIA THÀNH VIÊN TRÊN WEB =================
         function moModalAdminChiaNhom() {
             taiThongTinNhomAdmin();
             document.getElementById("modalAdminGroups").classList.add("active");
@@ -1151,21 +1165,20 @@
             const checkboxes = document.querySelectorAll("#adminHTCheckList input[type='checkbox']:checked");
             const members = Array.from(checkboxes).map(cb => cb.value);
 
-            groupsData[g].groupName = groupName;
-            groupsData[g].leaderName = leaderName;
-            groupsData[g].members = members;
+            const updatedGroup = {
+                groupName: groupName,
+                leaderName: leaderName,
+                members: members
+            };
 
-            // Lưu danh sách thành viên vào localStorage
-            let currentStored = JSON.parse(localStorage.getItem("ht_groups_configured")) || {};
-            currentStored[g] = { members: members };
-            localStorage.setItem("ht_groups_configured", JSON.stringify(currentStored));
-
-            alert(`Đã lưu danh sách thành viên cho ${groupName} thành công!`);
-            hienThiPhienTruc();
-            dongModalById("modalAdminGroups");
+            db.ref(`groupsData/${g}`).set(updatedGroup).then(() => {
+                alert(`Đã lưu danh sách thành viên cho ${groupName} lên Firebase Cloud thành công!`);
+                dongModalById("modalAdminGroups");
+            }).catch(err => {
+                alert("Lỗi lưu Firebase: " + err.message);
+            });
         }
 
-        // ================= HIỂN THỊ DANH SÁCH HT =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";

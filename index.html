@@ -571,7 +571,7 @@
     <!-- MODAL ADMIN CẤU HÌNH 4 NHÓM & NHÓM TRƯỞNG -->
     <div class="modal-overlay" id="modalAdminGroups" onclick="dongModalById('modalAdminGroups')">
         <div class="modal-card" style="max-width: 520px;" onclick="event.stopPropagation()">
-            <h3>Cấu Hình 4 Nhóm & Nhóm Trưởng</h3>
+            <h3>Cấu Hình 4 Nhóm & Phân Chia Thành Viên</h3>
             
             <div class="form-group">
                 <label>Chọn Nhóm cần chỉnh sửa:</label>
@@ -585,17 +585,12 @@
 
             <div class="form-group">
                 <label>Tên Nhóm hiển thị:</label>
-                <input type="text" id="adminGroupNameInput" placeholder="Ví dụ: Nhóm 1 - Têrêsa">
+                <input type="text" id="adminGroupNameInput" placeholder="Ví dụ: Nhóm 1">
             </div>
 
             <div class="form-group">
-                <label>Họ và Tên Nhóm trưởng:</label>
-                <input type="text" id="adminLeaderNameInput" placeholder="Ví dụ: Philipphe Nguyễn Duy Lữ">
-            </div>
-
-            <div class="form-group">
-                <label>Gmail của Nhóm trưởng (dùng để đăng nhập):</label>
-                <input type="email" id="adminLeaderEmailInput" placeholder="nhomtruong@gmail.com">
+                <label>Tên Nhóm trưởng / Nhóm phó:</label>
+                <input type="text" id="adminLeaderNameInput" placeholder="Ví dụ: Duy Lữ (Trưởng), Thảo Vy (Phó)">
             </div>
 
             <div class="form-group">
@@ -611,16 +606,52 @@
     </div>
 
     <script>
-        // ================= CẤU HÌNH GOOGLE OAUTH =================
+        // ================= 1. CẤU HÌNH GMAIL ADMIN (Toàn quyền) =================
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         
-        // DANH SÁCH TẤT CẢ GMAIL ADMIN (Viết chữ thường)
         const ADMIN_EMAILS = [
             "htam00521@gmail.com"
-            // "admin2@gmail.com" // Thêm Gmail admin tiếp theo vào đây
+            // "admin2@gmail.com"
         ]; 
 
-        // ================= DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 (NĂM A - GP VĨNH LONG) =================
+        // ================= 2. CẤU HÌNH GMAIL TRƯỞNG & PHÓ 4 NHÓM =================
+        // Điền chính xác địa chỉ Gmail của Trưởng và Phó từng nhóm vào đây
+        const hardcodedGroupEmails = {
+            1: {
+                groupName: "Nhóm 1",
+                leaderName: "Duy Lữ (Trưởng)",
+                leaderEmails: [
+                    "truong_nhom1@gmail.com", // Gmail Trưởng nhóm 1
+                    "pho_nhom1@gmail.com"     // Gmail Phó nhóm 1
+                ]
+            },
+            2: {
+                groupName: "Nhóm 2",
+                leaderName: "Thiên Ân (Trưởng)",
+                leaderEmails: [
+                    "truong_nhom2@gmail.com", // Gmail Trưởng nhóm 2
+                    "pho_nhom2@gmail.com"     // Gmail Phó nhóm 2
+                ]
+            },
+            3: {
+                groupName: "Nhóm 3",
+                leaderName: "Minh Phát (Trưởng)",
+                leaderEmails: [
+                    "truong_nhom3@gmail.com", // Gmail Trưởng nhóm 3
+                    "pho_nhom3@gmail.com"     // Gmail Phó nhóm 3
+                ]
+            },
+            4: {
+                groupName: "Nhóm 4",
+                leaderName: "Hồng Châu (Trưởng)",
+                leaderEmails: [
+                    "truong_nhom4@gmail.com", // Gmail Trưởng nhóm 4
+                    "pho_nhom4@gmail.com"     // Gmail Phó nhóm 4
+                ]
+            }
+        };
+
+        // ================= 3. DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 (GP VĨNH LONG) =================
         const danhSachTuanPhungVu = [
             { id: 1, name: "Tuần 1: CN I Mùa Vọng", dates: "30/11 - 06/12/2025", season: "Mùa Vọng" },
             { id: 2, name: "Tuần 2: CN II Mùa Vọng", dates: "07/12 - 13/12/2025", season: "Mùa Vọng" },
@@ -738,34 +769,6 @@
             { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", chucVu: "HT", cap: "Huynh Trưởng Cấp 2", ngaySinh: "17/03/2008", sdt: "0814657029", hinhAnhUrl: "duynguyen" }
         ];
 
-        // 4 NHÓM MẶC ĐỊNH
-        const defaultGroupsData = {
-            1: { 
-                groupName: "Nhóm 1", 
-                leaderName: "Philipphe Nguyễn Duy Lữ", 
-                leaderEmail: "", 
-                members: ["Duy Lữ", "Thảo Vy", "Duy Tân", "Hoàng Anh", "Hải Huỳnh", "Thảo My", "Sĩ Nguyên", "Hồng Hải", "Thanh Thoảng", "Hương Giang", "Minh Vũ", "Tiến Khoa", "Thái Hào"] 
-            },
-            2: { 
-                groupName: "Nhóm 2", 
-                leaderName: "Patriciô Nguyễn Thiên Ân", 
-                leaderEmail: "", 
-                members: ["Thiên Ân", "Hiếu Tâm", "Kiều Vy", "Phương Nam", "Yến Như", "Hiếu Nghĩa"] 
-            },
-            3: { 
-                groupName: "Nhóm 3", 
-                leaderName: "Phêrô Đoàn Minh Phát", 
-                leaderEmail: "", 
-                members: ["Minh Phát", "Diễm Hương", "Thịnh Đạt", "Phương Hà", "Thanh Uyên", "Bảo Thy"] 
-            },
-            4: { 
-                groupName: "Nhóm 4", 
-                leaderName: "Maria Lê Nguyễn Hồng Châu", 
-                leaderEmail: "", 
-                members: ["Hồng Châu", "Ngọc Trâm", "Hồng Yến", "Cẩm Hướng", "Tấn Tài", "Phúc Khang"] 
-            }
-        };
-
         function taoKhungCaTrucMau() {
             return [
                 {
@@ -798,8 +801,22 @@
             ];
         }
 
+        // TẢI DỮ LIỆU & ĐỒNG BỘ EMAIL CODE CỨNG
         let dutyHistoryData = JSON.parse(localStorage.getItem("ht_duty_liturgical_history")) || {};
-        let groupsData = JSON.parse(localStorage.getItem("ht_groups_configured")) || defaultGroupsData;
+        let groupsData = JSON.parse(localStorage.getItem("ht_groups_configured")) || {
+            1: { groupName: "Nhóm 1", leaderName: "Duy Lữ (Trưởng)", members: [] },
+            2: { groupName: "Nhóm 2", leaderName: "Thiên Ân (Trưởng)", members: [] },
+            3: { groupName: "Nhóm 3", leaderName: "Minh Phát (Trưởng)", members: [] },
+            4: { groupName: "Nhóm 4", leaderName: "Hồng Châu (Trưởng)", members: [] }
+        };
+
+        // Ghi đè danh sách Email và tên Trưởng/Phó từ code cứng để tất cả máy đều đồng bộ
+        for (let g = 1; g <= 4; g++) {
+            if (!groupsData[g]) groupsData[g] = { members: [] };
+            groupsData[g].groupName = hardcodedGroupEmails[g].groupName;
+            groupsData[g].leaderName = hardcodedGroupEmails[g].leaderName;
+            groupsData[g].leaderEmails = hardcodedGroupEmails[g].leaderEmails;
+        }
 
         let currentSelectedWeek = 1;
         let currentSelectedGroup = 1;
@@ -839,17 +856,19 @@
         function handleCredentialResponse(response) {
             try {
                 const payload = jwt_decode(response.credential);
-                const email = payload.email.toLowerCase();
+                const email = payload.email.toLowerCase().trim();
 
                 let role = "viewer";
                 let leaderOfGroup = null;
 
-                // Kiểm tra xem email có nằm trong danh sách Admin hay không
-                if (ADMIN_EMAILS.includes(email)) {
+                // 1. Kiểm tra Admin
+                if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
                     role = "admin";
                 } else {
+                    // 2. Kiểm tra Nhóm trưởng / Nhóm phó
                     for (let g = 1; g <= 4; g++) {
-                        if (groupsData[g].leaderEmail && groupsData[g].leaderEmail.toLowerCase() === email) {
+                        const emails = hardcodedGroupEmails[g].leaderEmails || [];
+                        if (emails.some(e => e.toLowerCase().trim() === email)) {
                             role = "leader";
                             leaderOfGroup = g;
                             break;
@@ -867,7 +886,7 @@
 
                 localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
                 capNhatGiaoDienQuyen();
-                alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : (role === 'leader' ? 'Trưởng Nhóm ' + leaderOfGroup : 'Người Xem')}`);
+                alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : (role === 'leader' ? 'Điều Hành Nhóm ' + leaderOfGroup : 'Người Xem')}`);
             } catch (e) {
                 console.error("Lỗi Google Auth:", e);
             }
@@ -920,7 +939,7 @@
                 adminBtn.style.display = "inline-flex";
             } else if (currentUser.role === "leader") {
                 badge.classList.add("role-leader");
-                badge.innerText = `Trưởng Nhóm ${currentUser.leaderOfGroup}`;
+                badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`;
                 adminBtn.style.display = "none";
             } else {
                 badge.classList.add("role-viewer");
@@ -962,10 +981,9 @@
             container.innerHTML = "";
 
             const schedule = layDuLieuPhienTruc();
-            const groupInfo = groupsData[currentSelectedGroup] || { groupName: `Nhóm ${currentSelectedGroup}`, leaderName: "Chưa đặt", leaderEmail: "", members: [] };
+            const groupInfo = groupsData[currentSelectedGroup] || { groupName: `Nhóm ${currentSelectedGroup}`, leaderName: "Chưa đặt", members: [] };
             const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek);
 
-            // TIÊU ĐỀ BẢNG PHÂN CÔNG THEO LỊCH PHỤNG VỤ
             const headerDiv = document.createElement("div");
             headerDiv.className = "duty-header-info";
             headerDiv.innerHTML = `
@@ -976,17 +994,15 @@
                     <i class="fa-solid fa-users"></i> PHÂN CÔNG: ${groupInfo.groupName.toUpperCase()}
                 </div>
                 <div class="extra-details">
-                    <div><strong>Nhóm trưởng:</strong> ${groupInfo.leaderName} (${groupInfo.leaderEmail || 'Chưa gán Gmail'})</div>
+                    <div><strong>Ban điều hành:</strong> ${groupInfo.leaderName}</div>
                     <div><strong>Thời gian:</strong> ${currentWeekObj ? currentWeekObj.dates : ''} | <strong>Mùa:</strong> ${currentWeekObj ? currentWeekObj.season : ''} | <strong>Quân số:</strong> ${(groupInfo.members || []).length} HT</div>
                 </div>
             `;
             container.appendChild(headerDiv);
 
-            // Kiểm tra quyền sửa ca trực: Admin hoặc Nhóm trưởng của nhóm hiện tại
             const coQuyenSua = (currentUser.role === "admin") || 
                               (currentUser.role === "leader" && currentUser.leaderOfGroup === currentSelectedGroup);
 
-            // Kiểm tra quyền tick checkbox: CHỈ ADMIN MỚI ĐƯỢC PHÉP
             const isAdmin = (currentUser.role === "admin");
 
             schedule.forEach((cat, cIdx) => {
@@ -1019,7 +1035,6 @@
         }
 
         function toggleDutyCheck(cIdx, sIdx) {
-            // Chặn trực tiếp trong hàm nếu không phải Admin
             if (currentUser.role !== "admin") {
                 alert("Chỉ Admin mới có quyền xác nhận hoàn thành ca trực!");
                 hienThiPhienTruc();
@@ -1031,7 +1046,7 @@
             hienThiPhienTruc();
         }
 
-        // ================= NHÓM TRƯỞNG CHIA PHIÊN: BẤM VÀO TÊN ĐỂ CHỌN =================
+        // ================= NHÓM TRƯỞNG & PHÓ CHIA PHIÊN (BẤM VÀO TÊN) =================
         function moModalChonNguoiTruc(cIdx, sIdx) {
             currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
@@ -1046,7 +1061,7 @@
             const membersOfThisGroup = groupsData[currentSelectedGroup].members || [];
 
             if (membersOfThisGroup.length === 0) {
-                container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên nào (Admin chưa thêm).</div>`;
+                container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên (Admin chưa chia trên web).</div>`;
             } else {
                 membersOfThisGroup.forEach(memName => {
                     const item = document.createElement("div");
@@ -1099,7 +1114,7 @@
             dongModalById("modalDutyPick");
         }
 
-        // ================= ADMIN: CẤU HÌNH 4 NHÓM =================
+        // ================= ADMIN: CẤU HÌNH & CHIA THÀNH VIÊN TRÊN WEB =================
         function moModalAdminChiaNhom() {
             taiThongTinNhomAdmin();
             document.getElementById("modalAdminGroups").classList.add("active");
@@ -1107,11 +1122,10 @@
 
         function taiThongTinNhomAdmin() {
             const g = document.getElementById("adminSelectGroupTab").value;
-            const currentGroup = groupsData[g] || { groupName: `Nhóm ${g}`, leaderName: "", leaderEmail: "", members: [] };
+            const currentGroup = groupsData[g] || { groupName: `Nhóm ${g}`, leaderName: "", members: [] };
 
             document.getElementById("adminGroupNameInput").value = currentGroup.groupName || `Nhóm ${g}`;
             document.getElementById("adminLeaderNameInput").value = currentGroup.leaderName || "";
-            document.getElementById("adminLeaderEmailInput").value = currentGroup.leaderEmail || "";
 
             const listContainer = document.getElementById("adminHTCheckList");
             listContainer.innerHTML = "";
@@ -1136,20 +1150,16 @@
             const g = document.getElementById("adminSelectGroupTab").value;
             const groupName = document.getElementById("adminGroupNameInput").value.trim() || `Nhóm ${g}`;
             const leaderName = document.getElementById("adminLeaderNameInput").value.trim() || "Chưa có tên";
-            const leaderEmail = document.getElementById("adminLeaderEmailInput").value.trim().toLowerCase();
 
             const checkboxes = document.querySelectorAll("#adminHTCheckList input[type='checkbox']:checked");
             const members = Array.from(checkboxes).map(cb => cb.value);
 
-            groupsData[g] = {
-                groupName: groupName,
-                leaderName: leaderName,
-                leaderEmail: leaderEmail,
-                members: members
-            };
+            groupsData[g].groupName = groupName;
+            groupsData[g].leaderName = leaderName;
+            groupsData[g].members = members;
 
             localStorage.setItem("ht_groups_configured", JSON.stringify(groupsData));
-            alert(`Đã lưu cấu hình ${groupName} thành công!`);
+            alert(`Đã lưu danh sách thành viên cho ${groupName} thành công!`);
             hienThiPhienTruc();
             dongModalById("modalAdminGroups");
         }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách & Lịch Trực Huynh Trưởng Phước Hảo</title>
+    <title>Lịch Trực Huynh Trưởng - Năm Phụng Vụ 2025-2026</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -237,7 +237,7 @@
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC (GLASSMORPHISM & MÀU TƯƠNG PHẢN CAO) */
+        /* BẢNG PHIÊN TRỰC (GLASSMORPHISM) */
         .duty-wrapper {
             max-width: 660px;
             margin: 0 auto;
@@ -285,13 +285,6 @@
             color: #0D47A1;
             font-weight: 600;
             background: #fff;
-        }
-
-        .control-item select:disabled {
-            background: #eceff1;
-            color: #546e7a;
-            cursor: not-allowed;
-            border-color: #cfd8dc;
         }
 
         .duty-container {
@@ -452,7 +445,6 @@
             text-align: center;
         }
 
-        /* MODAL CHI TIẾT HUYNH TRƯỞNG */
         .modal-detail-card {
             background: #ffffff;
             width: 100%;
@@ -663,19 +655,14 @@
                     <div class="control-row">
                         <div class="control-item" style="flex: 2;">
                             <i class="fa-solid fa-church"></i>
-                            <select id="liturgicalWeekSelect" onchange="chuyenTuanVaNhom()">
+                            <select id="liturgicalWeekSelect" onchange="chuyenTuan()">
                             </select>
                         </div>
                     </div>
                     <div class="control-row">
                         <div class="control-item">
                             <i class="fa-solid fa-users"></i>
-                            <select id="currentGroupSelect" onchange="chuyenTuanVaNhom()">
-                                <option value="1">Nhóm 1 Trực</option>
-                                <option value="2">Nhóm 2 Trực</option>
-                                <option value="3">Nhóm 3 Trực</option>
-                                <option value="4">Nhóm 4 Trực</option>
-                            </select>
+                            <input type="text" id="currentGroupDisplay" readonly style="background:#e3f2fd; color:#0d47a1; font-weight:bold;">
                         </div>
                         <div class="control-item">
                             <i class="fa-regular fa-calendar-days"></i>
@@ -810,22 +797,22 @@
         const hardcodedGroupEmails = {
             1: {
                 groupName: "Nhóm 1",
-                leaderName: "Đôminicô Huỳnh Lê Hiếu Nghĩa ",
+                leaderName: "Duy Lữ (Trưởng)",
                 leaderEmails: ["ltam54127@gmail.com", "pho_nhom1@gmail.com"]
             },
             2: {
                 groupName: "Nhóm 2",
-                leaderName: "Matta Lê Thị Ngọc Trâm ",
+                leaderName: "Thiên Ân (Trưởng)",
                 leaderEmails: ["truong_nhom2@gmail.com", "pho_nhom2@gmail.com"]
             },
             3: {
                 groupName: "Nhóm 3",
-                leaderName: "Phêrô Nguyễn Minh Vũ",
+                leaderName: "Minh Phát (Trưởng)",
                 leaderEmails: ["truong_nhom3@gmail.com", "pho_nhom3@gmail.com"]
             },
             4: {
                 groupName: "Nhóm 4",
-                leaderName: "Phêrô Trần Bùi Thịnh Đạt",
+                leaderName: "Hồng Châu (Trưởng)",
                 leaderEmails: ["truong_nhom4@gmail.com", "pho_nhom4@gmail.com"]
             }
         };
@@ -844,6 +831,7 @@
             { id: 10, name: " CN IV Thường Niên", dates: "01/02 - 07/02/2026", season: "Mùa Thường Niên" },
             { id: 11, name: " CN V Thường Niên", dates: "08/02 - 14/02/2026", season: "Mùa Thường Niên" },
             { id: 12, name: " CN VI Thường Niên & Tết Bính Ngọ", dates: "15/02 - 21/02/2026", season: "Tết Bính Ngọ" },
+            { id: 13, name: " Thứ Sáu LỄ TRO", dates: "20/02 - 21/02/2026", season: "Mùa Chay" },
             { id: 14, name: " CN I Mùa Chay", dates: "22/02 - 28/02/2026", season: "Mùa Chay" },
             { id: 15, name: " CN II Mùa Chay", dates: "01/03 - 07/03/2026", season: "Mùa Chay" },
             { id: 16, name: " CN III Mùa Chay", dates: "08/03 - 14/03/2026", season: "Mùa Chay" },
@@ -981,7 +969,16 @@
             ];
         }
 
-        // ================= 4. ĐỒNG BỘ REALTIME VỚI FIREBASE =================
+        // ================= 4. TÍNH NHÓM TRỰC TỰ ĐỘNG THEO TUẦN =================
+        // Mốc quy chuẩn: Tuần 39 là Nhóm 3 trực
+        function tinhNhomTrucChoTuan(weekId) {
+            const shift = (weekId - 39) % 4;
+            let groupNumber = 3 + shift;
+            while (groupNumber < 1) groupNumber += 4;
+            while (groupNumber > 4) groupNumber -= 4;
+            return groupNumber;
+        }
+
         let dutyHistoryData = {};
         let groupsData = {};
 
@@ -1016,8 +1013,8 @@
             hienThiPhienTruc();
         });
 
-        let currentSelectedWeek = 1;
-        let currentSelectedGroup = 1;
+        let currentSelectedWeek = 39;
+        let currentAssignedGroup = 3;
 
         let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {
             name: "Khách",
@@ -1062,11 +1059,12 @@
                     }
                 }
             }
-            return 1;
+            return 39;
         }
 
         function khoiTaoDanhSachTuanPhungVu() {
             currentSelectedWeek = timIdTuanHienTai();
+            currentAssignedGroup = tinhNhomTrucChoTuan(currentSelectedWeek);
 
             const select = document.getElementById("liturgicalWeekSelect");
             select.innerHTML = "";
@@ -1081,10 +1079,12 @@
         }
 
         function capNhatThongTinTuanHienTai() {
+            currentAssignedGroup = tinhNhomTrucChoTuan(currentSelectedWeek);
             const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek);
             if (currentWeekObj) {
                 document.getElementById("weekDateRangeDisplay").value = `📅 ${currentWeekObj.dates} (${currentWeekObj.season})`;
             }
+            document.getElementById("currentGroupDisplay").value = `Nhóm ${currentAssignedGroup} Trực`;
         }
 
         // ================= XỬ LÝ GOOGLE SIGN-IN =================
@@ -1163,7 +1163,6 @@
             const googleBtn = document.getElementById("googleBtnContainer");
             const logoutBtn = document.getElementById("logoutBtn");
             const adminBtn = document.getElementById("adminManageBtn");
-            const groupSelect = document.getElementById("currentGroupSelect");
 
             badge.className = "role-tag";
 
@@ -1171,19 +1170,14 @@
                 badge.classList.add("role-admin");
                 badge.innerText = "Admin";
                 adminBtn.style.display = "inline-flex";
-                groupSelect.disabled = false;
             } else if (currentUser.role === "leader") {
                 badge.classList.add("role-leader");
                 badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`;
                 adminBtn.style.display = "none";
-                currentSelectedGroup = currentUser.leaderOfGroup;
-                groupSelect.value = currentUser.leaderOfGroup;
-                groupSelect.disabled = true;
             } else {
                 badge.classList.add("role-viewer");
                 badge.innerText = "Người xem";
                 adminBtn.style.display = "none";
-                groupSelect.disabled = true;
             }
 
             if (currentUser.email) {
@@ -1197,16 +1191,14 @@
             hienThiPhienTruc();
         }
 
-        function chuyenTuanVaNhom() {
+        function chuyenTuan() {
             currentSelectedWeek = parseInt(document.getElementById("liturgicalWeekSelect").value);
-            currentSelectedGroup = parseInt(document.getElementById("currentGroupSelect").value);
-
             capNhatThongTinTuanHienTai();
             hienThiPhienTruc();
         }
 
         function layDuLieuPhienTruc() {
-            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
             if (!dutyHistoryData[dutyKey]) {
                 dutyHistoryData[dutyKey] = taoKhungCaTrucMau();
             }
@@ -1218,7 +1210,7 @@
             container.innerHTML = "";
 
             const schedule = layDuLieuPhienTruc();
-            const groupInfo = groupsData[currentSelectedGroup] || { groupName: `Nhóm ${currentSelectedGroup}`, leaderName: "Chưa đặt", members: [] };
+            const groupInfo = groupsData[currentAssignedGroup] || { groupName: `Nhóm ${currentAssignedGroup}`, leaderName: "Chưa đặt", members: [] };
             const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek);
 
             const headerDiv = document.createElement("div");
@@ -1233,14 +1225,16 @@
                     </span>
                 </div>
                 <div class="extra-details">
-                    <div><strong>Trưởng nhóm:</strong> ${groupInfo.leaderName}</div>
+                    <div><strong>Ban điều hành:</strong> ${groupInfo.leaderName}</div>
                     <div><strong>Thời gian:</strong> ${currentWeekObj ? currentWeekObj.dates : ''} | <strong>Mùa:</strong> ${currentWeekObj ? currentWeekObj.season : ''} | <strong>Số thành viên:</strong> ${(groupInfo.members || []).length} HT</div>
                 </div>
             `;
             container.appendChild(headerDiv);
 
+            // KIỂM TRA QUYỀN SỬA CA TRỰC:
+            // Admin hoặc Nhóm trưởng/Phó của đúng nhóm được phân công trong tuần này
             const coQuyenSua = (currentUser.role === "admin") || 
-                              (currentUser.role === "leader" && currentUser.leaderOfGroup === currentSelectedGroup);
+                              (currentUser.role === "leader" && currentUser.leaderOfGroup === currentAssignedGroup);
 
             const isAdmin = (currentUser.role === "admin");
 
@@ -1279,7 +1273,7 @@
                 hienThiPhienTruc();
                 return;
             }
-            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
             dutyHistoryData[dutyKey][cIdx].slots[sIdx].done = !dutyHistoryData[dutyKey][cIdx].slots[sIdx].done;
             
             db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]);
@@ -1287,7 +1281,7 @@
 
         function moModalChonNguoiTruc(cIdx, sIdx) {
             currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
-            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
             const slotData = dutyHistoryData[dutyKey][cIdx].slots[sIdx];
             const catName = dutyHistoryData[dutyKey][cIdx].category;
 
@@ -1296,7 +1290,7 @@
             const container = document.getElementById("memberPickListContainer");
             container.innerHTML = "";
 
-            const membersOfThisGroup = groupsData[currentSelectedGroup].members || [];
+            const membersOfThisGroup = groupsData[currentAssignedGroup].members || [];
 
             if (membersOfThisGroup.length === 0) {
                 container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên (Admin chưa chia trên web).</div>`;
@@ -1344,7 +1338,7 @@
         }
 
         function luuPhanCongCaTruc() {
-            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`;
             const resultText = document.getElementById("selectedPersonResult").value;
             dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].person = resultText;
             
@@ -1405,7 +1399,6 @@
             });
         }
 
-        // ================= HIỂN THỊ DANH SÁCH HT & XỬ LÝ ẢNH =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";
@@ -1469,7 +1462,6 @@
             });
         }
 
-        // Mở popup xem chi tiết Huynh Trưởng
         function moModalChiTietHT(ht, currentImgSrc) {
             document.getElementById("modalImg").src = currentImgSrc;
             document.getElementById("modalTen").innerText = ht.thanhHoTen;

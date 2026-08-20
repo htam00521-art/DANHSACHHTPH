@@ -338,6 +338,11 @@
             cursor: pointer;
         }
 
+        .duty-item input[type="checkbox"]:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
         .duty-label-time { font-weight: 500; color: #e0e0e0; min-width: 95px; }
         .duty-label-person { font-weight: 400; color: #ffffff; flex-grow: 1; }
 
@@ -608,7 +613,12 @@
     <script>
         // ================= CẤU HÌNH GOOGLE OAUTH =================
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
-        const SUPER_ADMIN_EMAIL = "htam00521@gmail.com"; 
+        
+        // DANH SÁCH TẤT CẢ GMAIL ADMIN (Viết chữ thường)
+        const ADMIN_EMAILS = [
+            "htam00521@gmail.com"
+            // "admin2@gmail.com" // Thêm Gmail admin tiếp theo vào đây
+        ]; 
 
         // ================= DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 (NĂM A - GP VĨNH LONG) =================
         const danhSachTuanPhungVu = [
@@ -834,7 +844,8 @@
                 let role = "viewer";
                 let leaderOfGroup = null;
 
-                if (email === SUPER_ADMIN_EMAIL.toLowerCase()) {
+                // Kiểm tra xem email có nằm trong danh sách Admin hay không
+                if (ADMIN_EMAILS.includes(email)) {
                     role = "admin";
                 } else {
                     for (let g = 1; g <= 4; g++) {
@@ -971,9 +982,12 @@
             `;
             container.appendChild(headerDiv);
 
-            // Kiểm tra quyền sửa
+            // Kiểm tra quyền sửa ca trực: Admin hoặc Nhóm trưởng của nhóm hiện tại
             const coQuyenSua = (currentUser.role === "admin") || 
                               (currentUser.role === "leader" && currentUser.leaderOfGroup === currentSelectedGroup);
+
+            // Kiểm tra quyền tick checkbox: CHỈ ADMIN MỚI ĐƯỢC PHÉP
+            const isAdmin = (currentUser.role === "admin");
 
             schedule.forEach((cat, cIdx) => {
                 const groupDiv = document.createElement("div");
@@ -989,7 +1003,10 @@
                     const item = document.createElement("div");
                     item.className = "duty-item";
                     item.innerHTML = `
-                        <input type="checkbox" ${slot.done ? "checked" : ""} onchange="toggleDutyCheck(${cIdx}, ${sIdx})">
+                        <input type="checkbox" 
+                               ${slot.done ? "checked" : ""} 
+                               ${!isAdmin ? "disabled title='Chỉ Admin mới có quyền xác nhận hoàn thành'" : ""} 
+                               onchange="toggleDutyCheck(${cIdx}, ${sIdx})">
                         <span class="duty-label-time">${slot.time}:</span>
                         <span class="duty-label-person" style="${slot.done ? 'text-decoration: line-through; opacity: 0.6;' : ''}">${slot.person}</span>
                         ${actionBtn}
@@ -1002,6 +1019,12 @@
         }
 
         function toggleDutyCheck(cIdx, sIdx) {
+            // Chặn trực tiếp trong hàm nếu không phải Admin
+            if (currentUser.role !== "admin") {
+                alert("Chỉ Admin mới có quyền xác nhận hoàn thành ca trực!");
+                hienThiPhienTruc();
+                return;
+            }
             const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             dutyHistoryData[dutyKey][cIdx].slots[sIdx].done = !dutyHistoryData[dutyKey][cIdx].slots[sIdx].done;
             localStorage.setItem("ht_duty_liturgical_history", JSON.stringify(dutyHistoryData));

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý & Phân Chia Phiên Trực Huynh Trưởng</title>
+    <title>Lịch Trực Huynh Trưởng - Năm Phụng Vụ 2025-2026</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -229,7 +229,7 @@
 
         /* BẢNG PHIÊN TRỰC (DARK THEME) */
         .duty-wrapper {
-            max-width: 620px;
+            max-width: 650px;
             margin: 0 auto;
         }
 
@@ -240,6 +240,12 @@
             margin-bottom: 16px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-row {
+            display: flex;
             flex-wrap: wrap;
             gap: 12px;
             align-items: center;
@@ -249,20 +255,24 @@
         .control-item {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             font-size: 13px;
             font-weight: bold;
             color: #0D47A1;
+            flex: 1;
+            min-width: 240px;
         }
 
         .control-item select, .control-item input {
-            padding: 6px 10px;
+            width: 100%;
+            padding: 8px 10px;
             border-radius: 8px;
             border: 1px solid #90caf9;
             font-size: 13px;
             outline: none;
             color: #0D47A1;
             font-weight: 600;
+            background: #fff;
         }
 
         .duty-container {
@@ -273,7 +283,7 @@
             color: #f1f1f1;
         }
 
-        /* TIÊU ĐỀ BẢNG PHÂN CÔNG ĐÃ ĐƯỢC NÂNG CẤP */
+        /* TIÊU ĐỀ BẢNG PHÂN CÔNG PHỤNG VỤ */
         .duty-header-info {
             text-align: center;
             padding-bottom: 16px;
@@ -281,8 +291,8 @@
             border-bottom: 1px dashed #333;
         }
 
-        .duty-header-info .main-group-title {
-            font-size: 20px;
+        .duty-header-info .liturgical-title {
+            font-size: 19px;
             font-weight: bold;
             color: #64b5f6;
             text-transform: uppercase;
@@ -290,16 +300,17 @@
             margin-bottom: 6px;
         }
 
-        .duty-header-info .sub-leader-title {
-            font-size: 14px;
+        .duty-header-info .group-duty-title {
+            font-size: 15px;
             color: #ffb74d;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 4px;
         }
 
         .duty-header-info .extra-details {
             font-size: 12px;
             color: #9e9e9e;
+            line-height: 1.5;
         }
 
         .duty-group { margin-bottom: 24px; }
@@ -495,33 +506,33 @@
 
         <!-- TAB 2: LỊCH PHÂN CHIA PHIÊN TRỰC -->
         <div id="tab-truc" class="view-section">
-            <h1 class="header-title">Lịch Phân Phiên Trực</h1>
+            <h1 class="header-title">Lịch Phân Phiên Trực Năm Phụng Vụ 2025-2026</h1>
 
             <div class="duty-wrapper">
-                <!-- THANH CHỌN TUẦN TRỰC & LỊCH SỬ -->
+                <!-- THANH CHỌN TUẦN PHỤNG VỤ & NHÓM TRỰC -->
                 <div class="week-control-panel">
-                    <div class="control-item">
-                        <i class="fa-solid fa-calendar-week"></i>
-                        <span>Tuần:</span>
-                        <select id="weekNumberSelect" onchange="chuyenTuanVaNhom()">
-                            <!-- Tạo danh sách tuần từ 1 đến 52 -->
-                        </select>
+                    <div class="control-row">
+                        <div class="control-item" style="flex: 2;">
+                            <i class="fa-solid fa-church"></i>
+                            <select id="liturgicalWeekSelect" onchange="chuyenTuanVaNhom()">
+                                <!-- Load 53 tuần phụng vụ từ JS -->
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="control-item">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Nhóm trực:</span>
-                        <select id="currentGroupSelect" onchange="chuyenTuanVaNhom()">
-                            <option value="1">Nhóm 1</option>
-                            <option value="2">Nhóm 2</option>
-                            <option value="3">Nhóm 3</option>
-                            <option value="4">Nhóm 4</option>
-                        </select>
-                    </div>
-
-                    <div class="control-item">
-                        <i class="fa-regular fa-clock"></i>
-                        <input type="text" id="weekDateRangeInput" placeholder="VD: 18/08 - 24/08" onchange="luuGhiChuNgayTuan()">
+                    <div class="control-row">
+                        <div class="control-item">
+                            <i class="fa-solid fa-users"></i>
+                            <select id="currentGroupSelect" onchange="chuyenTuanVaNhom()">
+                                <option value="1">Nhóm 1 Trực</option>
+                                <option value="2">Nhóm 2 Trực</option>
+                                <option value="3">Nhóm 3 Trực</option>
+                                <option value="4">Nhóm 4 Trực</option>
+                            </select>
+                        </div>
+                        <div class="control-item">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <input type="text" id="weekDateRangeDisplay" readonly style="background:#f0f4f8; border-color:#cfd8dc;">
+                        </div>
                     </div>
                 </div>
 
@@ -575,7 +586,7 @@
 
             <div class="form-group">
                 <label>Họ và Tên Nhóm trưởng:</label>
-                <input type="text" id="adminLeaderNameInput" placeholder="Ví dụ: Maria Nguyễn Thị Kiều Vy">
+                <input type="text" id="adminLeaderNameInput" placeholder="Ví dụ: Philipphe Nguyễn Duy Lữ">
             </div>
 
             <div class="form-group">
@@ -599,6 +610,63 @@
         // ================= CẤU HÌNH GOOGLE OAUTH =================
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         const SUPER_ADMIN_EMAIL = "htam00521@gmail.com"; 
+
+        // ================= DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 (NĂM A - GP VĨNH LONG) =================
+        const danhSachTuanPhungVu = [
+            { id: 1, name: "Tuần 1: CN I Mùa Vọng", dates: "30/11 - 06/12/2025", season: "Mùa Vọng" },
+            { id: 2, name: "Tuần 2: CN II Mùa Vọng", dates: "07/12 - 13/12/2025", season: "Mùa Vọng" },
+            { id: 3, name: "Tuần 3: CN III Mùa Vọng", dates: "14/12 - 20/12/2025", season: "Mùa Vọng" },
+            { id: 4, name: "Tuần 4: CN IV Mùa Vọng & Lễ Giáng Sinh", dates: "21/12 - 27/12/2025", season: "Mùa Vọng & Giáng Sinh" },
+            { id: 5, name: "Tuần 5: CN Lễ Thánh Gia Thất", dates: "28/12/2025 - 03/01/2026", season: "Mùa Giáng Sinh" },
+            { id: 6, name: "Tuần 6: CN Lễ Chúa Hiển Linh", dates: "04/01 - 10/01/2026", season: "Mùa Giáng Sinh" },
+            { id: 7, name: "Tuần 7: CN Chúa Giêsu Chịu Phép Rửa", dates: "11/01 - 17/01/2026", season: "Kết thúc Mùa Giáng Sinh" },
+            { id: 8, name: "Tuần 8: CN II Thường Niên", dates: "18/01 - 24/01/2026", season: "Mùa Thường Niên" },
+            { id: 9, name: "Tuần 9: CN III Thường Niên", dates: "25/01 - 31/01/2026", season: "Mùa Thường Niên" },
+            { id: 10, name: "Tuần 10: CN IV Thường Niên", dates: "01/02 - 07/02/2026", season: "Mùa Thường Niên" },
+            { id: 11, name: "Tuần 11: CN V Thường Niên", dates: "08/02 - 14/02/2026", season: "Mùa Thường Niên" },
+            { id: 12, name: "Tuần 12: CN VI Thường Niên & Tết Bính Ngọ", dates: "15/02 - 19/02/2026", season: "Tết Bính Ngọ" },
+            { id: 13, name: "Tuần 13: Thứ Sáu LỄ TRO (Khai mạc Mùa Chay)", dates: "20/02 - 21/02/2026", season: "Mùa Chay" },
+            { id: 14, name: "Tuần 14: CN I Mùa Chay", dates: "22/02 - 28/02/2026", season: "Mùa Chay" },
+            { id: 15, name: "Tuần 15: CN II Mùa Chay", dates: "01/03 - 07/03/2026", season: "Mùa Chay" },
+            { id: 16, name: "Tuần 16: CN III Mùa Chay", dates: "08/03 - 14/03/2026", season: "Mùa Chay" },
+            { id: 17, name: "Tuần 17: CN IV Mùa Chay (Chúa Nhật Hồng)", dates: "15/03 - 21/03/2026", season: "Mùa Chay" },
+            { id: 18, name: "Tuần 18: CN V Mùa Chay", dates: "22/03 - 28/03/2026", season: "Mùa Chay" },
+            { id: 19, name: "Tuần 19: TUẦN THÁNH & TAM NHẬT VƯỢT QUA", dates: "29/03 - 04/04/2026", season: "Tuần Thánh" },
+            { id: 20, name: "Tuần 20: ĐẠI LỄ CHÚA PHỤC SINH (Bát Nhật)", dates: "05/04 - 11/04/2026", season: "Mùa Phục Sinh" },
+            { id: 21, name: "Tuần 21: CN II Phục Sinh (Lòng Thương Xót)", dates: "12/04 - 18/04/2026", season: "Mùa Phục Sinh" },
+            { id: 22, name: "Tuần 22: CN III Phục Sinh", dates: "19/04 - 25/04/2026", season: "Mùa Phục Sinh" },
+            { id: 23, name: "Tuần 23: CN IV Phục Sinh (Chúa Chiên Lành)", dates: "26/04 - 02/05/2026", season: "Mùa Phục Sinh" },
+            { id: 24, name: "Tuần 24: CN V Phục Sinh", dates: "03/05 - 09/05/2026", season: "Mùa Phục Sinh" },
+            { id: 25, name: "Tuần 25: CN VI Phục Sinh", dates: "10/05 - 16/05/2026", season: "Mùa Phục Sinh" },
+            { id: 26, name: "Tuần 26: CN VII Phục Sinh (Chúa Thăng Thiên)", dates: "17/05 - 23/05/2026", season: "Mùa Phục Sinh" },
+            { id: 27, name: "Tuần 27: CHÚA THÁNH THẦN HIỆN XUỐNG", dates: "24/05 - 30/05/2026", season: "Đại Lễ Hiện Xuống" },
+            { id: 28, name: "Tuần 28: CN IX Thường Niên (Lễ Chúa Ba Ngôi)", dates: "31/05 - 06/06/2026", season: "Mùa Thường Niên" },
+            { id: 29, name: "Tuần 29: CN X Thường Niên (Mình Máu Thánh Chúa)", dates: "07/06 - 13/06/2026", season: "Mùa Thường Niên" },
+            { id: 30, name: "Tuần 30: CN XI Thường Niên", dates: "14/06 - 20/06/2026", season: "Mùa Thường Niên" },
+            { id: 31, name: "Tuần 31: CN XII Thường Niên", dates: "21/06 - 27/06/2026", season: "Mùa Thường Niên" },
+            { id: 32, name: "Tuần 32: CN XIII Thường Niên (Thánh Phêrô & Phaolô)", dates: "28/06 - 04/07/2026", season: "Mùa Thường Niên" },
+            { id: 33, name: "Tuần 33: CN XIV Thường Niên", dates: "05/07 - 11/07/2026", season: "Mùa Thường Niên" },
+            { id: 34, name: "Tuần 34: CN XV Thường Niên", dates: "12/07 - 18/07/2026", season: "Mùa Thường Niên" },
+            { id: 35, name: "Tuần 35: CN XVI Thường Niên", dates: "19/07 - 25/07/2026", season: "Mùa Thường Niên" },
+            { id: 36, name: "Tuần 36: CN XVII Thường Niên", dates: "26/07 - 01/08/2026", season: "Mùa Thường Niên" },
+            { id: 37, name: "Tuần 37: CN XVIII Thường Niên", dates: "02/08 - 08/08/2026", season: "Mùa Thường Niên" },
+            { id: 38, name: "Tuần 38: CN XIX Thường Niên (Chầu lượt Phước Hảo)", dates: "09/08 - 15/08/2026", season: "Mùa Thường Niên" },
+            { id: 39, name: "Tuần 39: CN XX Thường Niên", dates: "16/08 - 22/08/2026", season: "Mùa Thường Niên" },
+            { id: 40, name: "Tuần 40: CN XXI Thường Niên", dates: "23/08 - 29/08/2026", season: "Mùa Thường Niên" },
+            { id: 41, name: "Tuần 41: CN XXII Thường Niên", dates: "30/08 - 05/09/2026", season: "Mùa Thường Niên" },
+            { id: 42, name: "Tuần 42: CN XXIII Thường Niên", dates: "06/09 - 12/09/2026", season: "Mùa Thường Niên" },
+            { id: 43, name: "Tuần 43: CN XXIV Thường Niên", dates: "13/09 - 19/09/2026", season: "Mùa Thường Niên" },
+            { id: 44, name: "Tuần 44: CN XXV Thường Niên", dates: "20/09 - 26/09/2026", season: "Mùa Thường Niên" },
+            { id: 45, name: "Tuần 45: CN XXVI Thường Niên", dates: "27/09 - 03/10/2026", season: "Mùa Thường Niên" },
+            { id: 46, name: "Tuần 46: CN XXVII Thường Niên (Đức Mẹ Mân Côi)", dates: "04/10 - 10/10/2026", season: "Tháng Mân Côi" },
+            { id: 47, name: "Tuần 47: CN XXVIII Thường Niên", dates: "11/10 - 17/10/2026", season: "Mùa Thường Niên" },
+            { id: 48, name: "Tuần 48: CN XXIX Thường Niên (Khánh Nhật Truyền Giáo)", dates: "18/10 - 24/10/2026", season: "Mùa Thường Niên" },
+            { id: 49, name: "Tuần 49: CN XXX Thường Niên", dates: "25/10 - 31/10/2026", season: "Mùa Thường Niên" },
+            { id: 50, name: "Tuần 50: CN XXXI TN (Lễ Các Thánh & Các Đẳng)", dates: "01/11 - 07/11/2026", season: "Tháng Các Linh Hồn" },
+            { id: 51, name: "Tuần 51: CN XXXII Thường Niên", dates: "08/11 - 14/11/2026", season: "Mùa Thường Niên" },
+            { id: 52, name: "Tuần 52: CN XXXIII TN (Các Thánh Tử Đạo VN)", dates: "15/11 - 21/11/2026", season: "Mùa Thường Niên" },
+            { id: 53, name: "Tuần 53: CN XXXIV TN - ĐỨC GIÊSU KITÔ VUA VŨ TRỤ", dates: "22/11 - 28/11/2026", season: "Kết Thúc Năm Phụng Vụ A" }
+        ];
 
         // DANH SÁCH HUYNH TRƯỞNG GỐC
         const danhSachGoc = [
@@ -637,7 +705,7 @@
             { thanhHoTen: "Anna Nguyễn Thị Tường Lam", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/01/2011", sdt: "0382530494", hinhAnhUrl: "tuonglam" },
             { thanhHoTen: "Phêrô Lê Minh Tiến", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "19/02/2011", sdt: "0966908232", hinhAnhUrl: "minhtien" },
             { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "17/03/2011", sdt: "0332183247", hinhAnhUrl: "huonggiang" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "06/11/2011", sdt: "0949344205", hinhAnhUrl: "singuyen" },
+            { thanhHuynh: "Phêrô Lê Huỳnh Sĩ Nguyên", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "06/11/2011", sdt: "0949344205", hinhAnhUrl: "singuyen" },
             { thanhHoTen: "Gioan Baotixita Lê Thái Hào", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/10/2011", sdt: "0704964207", hinhAnhUrl: "thaihao" },
             { thanhHoTen: "Maria Trần Huỳnh Trâm", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "30/10/2011", sdt: "0704964207", hinhAnhUrl: "huynhtram" },
             { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", chucVu: "HT", cap: "Huynh Trưởng Cấp 1", ngaySinh: "15/04/2011", sdt: "0765993928", hinhAnhUrl: "ngoctan" },
@@ -661,7 +729,7 @@
             { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", chucVu: "HT", cap: "Huynh Trưởng Cấp 2", ngaySinh: "17/03/2008", sdt: "0814657029", hinhAnhUrl: "duynguyen" }
         ];
 
-        // CẤU HÌNH SẴN 4 NHÓM: TÊN NHÓM, NHÓM TRƯỞNG & THÀNH VIÊN
+        // 4 NHÓM MẶC ĐỊNH
         const defaultGroupsData = {
             1: { 
                 groupName: "Nhóm 1", 
@@ -689,7 +757,6 @@
             }
         };
 
-        // KHUNG CA TRỰC MẪU
         function taoKhungCaTrucMau() {
             return [
                 {
@@ -722,12 +789,9 @@
             ];
         }
 
-        // LƯU TRỮ LỊCH SỬ THEO TUẦN VÀ THEO NHÓM: dutyHistoryData['tuan_1_nhom_1']
-        let dutyHistoryData = JSON.parse(localStorage.getItem("ht_duty_history")) || {};
-        let weekNotesData = JSON.parse(localStorage.getItem("ht_week_notes")) || {};
+        let dutyHistoryData = JSON.parse(localStorage.getItem("ht_duty_liturgical_history")) || {};
         let groupsData = JSON.parse(localStorage.getItem("ht_groups_configured")) || defaultGroupsData;
 
-        // Trạng thái hiện tại
         let currentSelectedWeek = 1;
         let currentSelectedGroup = 1;
 
@@ -741,17 +805,25 @@
 
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
-        // KHỞI TẠO DROPDOWN 52 TUẦN
-        function khoiTaoDanhSachTuan() {
-            const select = document.getElementById("weekNumberSelect");
+        // NẠP DANH SÁCH 53 TUẦN PHỤNG VỤ VÀO DROPDOWN
+        function khoiTaoDanhSachTuanPhungVu() {
+            const select = document.getElementById("liturgicalWeekSelect");
             select.innerHTML = "";
-            for (let i = 1; i <= 52; i++) {
+            danhSachTuanPhungVu.forEach(w => {
                 const opt = document.createElement("option");
-                opt.value = i;
-                opt.innerText = `Tuần ${i}`;
+                opt.value = w.id;
+                opt.innerText = `${w.name} (${w.dates})`;
                 select.appendChild(opt);
-            }
+            });
             select.value = currentSelectedWeek;
+            capNhatThongTinTuanHienTai();
+        }
+
+        function capNhatThongTinTuanHienTai() {
+            const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek);
+            if (currentWeekObj) {
+                document.getElementById("weekDateRangeDisplay").value = `📅 ${currentWeekObj.dates} (${currentWeekObj.season})`;
+            }
         }
 
         // ================= XỬ LÝ GOOGLE SIGN-IN =================
@@ -792,7 +864,7 @@
         }
 
         window.onload = function () {
-            khoiTaoDanhSachTuan();
+            khoiTaoDanhSachTuanPhungVu();
 
             if (window.google) {
                 google.accounts.id.initialize({
@@ -859,60 +931,48 @@
 
         // ================= XỬ LÝ CHUYỂN TUẦN VÀ NHÓM TRỰC =================
         function chuyenTuanVaNhom() {
-            currentSelectedWeek = parseInt(document.getElementById("weekNumberSelect").value);
+            currentSelectedWeek = parseInt(document.getElementById("liturgicalWeekSelect").value);
             currentSelectedGroup = parseInt(document.getElementById("currentGroupSelect").value);
 
-            // Nạp ngày tháng ghi chú nếu có
-            const weekKey = `week_${currentSelectedWeek}`;
-            document.getElementById("weekDateRangeInput").value = weekNotesData[weekKey] || "";
-
+            capNhatThongTinTuanHienTai();
             hienThiPhienTruc();
         }
 
-        function luuGhiChuNgayTuan() {
-            const weekKey = `week_${currentSelectedWeek}`;
-            weekNotesData[weekKey] = document.getElementById("weekDateRangeInput").value.trim();
-            localStorage.setItem("ht_week_notes", JSON.stringify(weekNotesData));
-            hienThiPhienTruc();
-        }
-
-        // LẤY DỮ LIỆU CA TRỰC HIỆN TẠI (NẾU CHƯA CÓ THÌ TẠO MỚI)
         function layDuLieuPhienTruc() {
-            const dutyKey = `w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             if (!dutyHistoryData[dutyKey]) {
                 dutyHistoryData[dutyKey] = taoKhungCaTrucMau();
             }
             return dutyHistoryData[dutyKey];
         }
 
-        // ================= HIỂN THỊ PHIÊN TRỰC & TIÊU ĐỀ BẢNG =================
+        // ================= HIỂN THỊ PHIÊN TRỰC =================
         function hienThiPhienTruc() {
             const container = document.getElementById("dutyContent");
             container.innerHTML = "";
 
             const schedule = layDuLieuPhienTruc();
             const groupInfo = groupsData[currentSelectedGroup] || { groupName: `Nhóm ${currentSelectedGroup}`, leaderName: "Chưa đặt", leaderEmail: "", members: [] };
-            const weekNote = weekNotesData[`week_${currentSelectedWeek}`] || "";
+            const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek);
 
-            // TIÊU ĐỀ BẢNG PHÂN CÔNG (HIỂN THỊ ĐỦ TÊN NHÓM & NHÓM TRƯỞNG)
+            // TIÊU ĐỀ BẢNG PHÂN CÔNG THEO LỊCH PHỤNG VỤ
             const headerDiv = document.createElement("div");
             headerDiv.className = "duty-header-info";
             headerDiv.innerHTML = `
-                <div class="main-group-title">
-                    <i class="fa-solid fa-calendar-check"></i> TUẦN ${currentSelectedWeek}: ${groupInfo.groupName.toUpperCase()}
+                <div class="liturgical-title">
+                    <i class="fa-solid fa-cross"></i> ${currentWeekObj ? currentWeekObj.name.toUpperCase() : ''}
                 </div>
-                <div class="sub-leader-title">
-                    <i class="fa-solid fa-user-tie"></i> Nhóm trưởng: ${groupInfo.leaderName}
+                <div class="group-duty-title">
+                    <i class="fa-solid fa-users"></i> PHÂN CÔNG: ${groupInfo.groupName.toUpperCase()}
                 </div>
                 <div class="extra-details">
-                    <span>${weekNote ? '📅 Thời gian: ' + weekNote + ' | ' : ''}</span>
-                    <span>✉️ Gmail: ${groupInfo.leaderEmail || 'Chưa cập nhật'} | </span>
-                    <span>👥 Số lượng: ${(groupInfo.members || []).length} Huynh Trưởng</span>
+                    <div><strong>Nhóm trưởng:</strong> ${groupInfo.leaderName} (${groupInfo.leaderEmail || 'Chưa gán Gmail'})</div>
+                    <div><strong>Thời gian:</strong> ${currentWeekObj ? currentWeekObj.dates : ''} | <strong>Mùa:</strong> ${currentWeekObj ? currentWeekObj.season : ''} | <strong>Quân số:</strong> ${(groupInfo.members || []).length} HT</div>
                 </div>
             `;
             container.appendChild(headerDiv);
 
-            // Kiểm tra quyền phân công
+            // Kiểm tra quyền sửa
             const coQuyenSua = (currentUser.role === "admin") || 
                               (currentUser.role === "leader" && currentUser.leaderOfGroup === currentSelectedGroup);
 
@@ -943,16 +1003,16 @@
         }
 
         function toggleDutyCheck(cIdx, sIdx) {
-            const dutyKey = `w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             dutyHistoryData[dutyKey][cIdx].slots[sIdx].done = !dutyHistoryData[dutyKey][cIdx].slots[sIdx].done;
-            localStorage.setItem("ht_duty_history", JSON.stringify(dutyHistoryData));
+            localStorage.setItem("ht_duty_liturgical_history", JSON.stringify(dutyHistoryData));
             hienThiPhienTruc();
         }
 
         // ================= NHÓM TRƯỞNG CHIA PHIÊN: BẤM VÀO TÊN ĐỂ CHỌN =================
         function moModalChonNguoiTruc(cIdx, sIdx) {
             currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] };
-            const dutyKey = `w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             const slotData = dutyHistoryData[dutyKey][cIdx].slots[sIdx];
             const catName = dutyHistoryData[dutyKey][cIdx].category;
 
@@ -1009,10 +1069,10 @@
         }
 
         function luuPhanCongCaTruc() {
-            const dutyKey = `w${currentSelectedWeek}_g${currentSelectedGroup}`;
+            const dutyKey = `lit_w${currentSelectedWeek}_g${currentSelectedGroup}`;
             const resultText = document.getElementById("selectedPersonResult").value;
             dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].person = resultText;
-            localStorage.setItem("ht_duty_history", JSON.stringify(dutyHistoryData));
+            localStorage.setItem("ht_duty_liturgical_history", JSON.stringify(dutyHistoryData));
             hienThiPhienTruc();
             dongModalById("modalDutyPick");
         }

@@ -231,7 +231,7 @@
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC (DARK THEME) */
+        /* BẢNG PHIÊN TRỰC */
         .duty-wrapper {
             max-width: 650px;
             margin: 0 auto;
@@ -277,6 +277,13 @@
             color: #0D47A1;
             font-weight: 600;
             background: #fff;
+        }
+
+        .control-item select:disabled {
+            background: #eceff1;
+            color: #546e7a;
+            cursor: not-allowed;
+            border-color: #cfd8dc;
         }
 
         .duty-container {
@@ -627,7 +634,6 @@
             "htam00521@gmail.com"
         ]; 
 
-        // CẤU HÌNH GMAIL TRƯỞNG & PHÓ 4 NHÓM
         const hardcodedGroupEmails = {
             1: {
                 groupName: "Nhóm 1",
@@ -651,7 +657,7 @@
             }
         };
 
-        // ================= 3. DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 (GP VĨNH LONG) =================
+        // ================= 3. DANH SÁCH 53 TUẦN NĂM PHỤNG VỤ 2025-2026 =================
         const danhSachTuanPhungVu = [
             { id: 1, name: " CN I Mùa Vọng", dates: "30/11 - 06/12/2025", season: "Mùa Vọng" },
             { id: 2, name: " CN II Mùa Vọng", dates: "07/12 - 13/12/2025", season: "Mùa Vọng" },
@@ -848,7 +854,46 @@
 
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
+        // Tự động tìm tuần hiện tại dựa trên ngày thực tế
+        function timIdTuanHienTai() {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+
+            for (let item of danhSachTuanPhungVu) {
+                const parts = item.dates.split("-").map(p => p.trim());
+                if (parts.length === 2) {
+                    const endMatch = parts[1].match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                    if (endMatch) {
+                        const endYear = parseInt(endMatch[3]);
+                        const endMonth = parseInt(endMatch[2]) - 1;
+                        const endDay = parseInt(endMatch[1]);
+                        const endDate = new Date(endYear, endMonth, endDay, 23, 59, 59);
+
+                        let startYear = endYear;
+                        const startParts = parts[0].split("/");
+                        let startMonth = parseInt(startParts[1]) - 1;
+                        let startDay = parseInt(startParts[0]);
+
+                        if (startParts.length === 3) {
+                            startYear = parseInt(startParts[2]);
+                        } else if (startMonth > endMonth) {
+                            startYear = endYear - 1;
+                        }
+
+                        const startDate = new Date(startYear, startMonth, startDay, 0, 0, 0);
+
+                        if (now >= startDate && now <= endDate) {
+                            return item.id;
+                        }
+                    }
+                }
+            }
+            return 1;
+        }
+
         function khoiTaoDanhSachTuanPhungVu() {
+            currentSelectedWeek = timIdTuanHienTai();
+
             const select = document.getElementById("liturgicalWeekSelect");
             select.innerHTML = "";
             danhSachTuanPhungVu.forEach(w => {
@@ -944,6 +989,7 @@
             const googleBtn = document.getElementById("googleBtnContainer");
             const logoutBtn = document.getElementById("logoutBtn");
             const adminBtn = document.getElementById("adminManageBtn");
+            const groupSelect = document.getElementById("currentGroupSelect");
 
             badge.className = "role-tag";
 
@@ -951,14 +997,19 @@
                 badge.classList.add("role-admin");
                 badge.innerText = "Admin";
                 adminBtn.style.display = "inline-flex";
+                groupSelect.disabled = false;
             } else if (currentUser.role === "leader") {
                 badge.classList.add("role-leader");
                 badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`;
                 adminBtn.style.display = "none";
+                currentSelectedGroup = currentUser.leaderOfGroup;
+                groupSelect.value = currentUser.leaderOfGroup;
+                groupSelect.disabled = true;
             } else {
                 badge.classList.add("role-viewer");
                 badge.innerText = "Người xem";
                 adminBtn.style.display = "none";
+                groupSelect.disabled = true;
             }
 
             if (currentUser.email) {

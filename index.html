@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lịch Trực Huynh Trưởng - Năm Phụng Vụ 2025-2026</title>
+    <title>Danh Sách & Lịch Trực Huynh Trưởng Phước Hảo</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -188,10 +188,14 @@
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
+            user-select: none;
         }
 
-        .ht-card:hover { transform: translateY(-4px); }
+        .ht-card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(13, 71, 161, 0.25);
+        }
 
         .badge-stt {
             position: absolute;
@@ -210,12 +214,13 @@
         }
 
         .avatar {
-            width: 75px;
-            height: 75px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #0D47A1;
             margin-bottom: 10px;
+            background-color: #E3F2FD;
         }
 
         .name {
@@ -225,13 +230,14 @@
             min-height: 38px;
             display: flex;
             align-items: center;
+            justify-content: center;
         }
 
         .chuc-vu { color: #2E7D32; font-size: 12px; font-weight: bold; }
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC (NỀN BÓNG MỜ GLASSMORPHISM & MÀU NỔI BẬT) */
+        /* BẢNG PHIÊN TRỰC (GLASSMORPHISM & MÀU TƯƠNG PHẢN CAO) */
         .duty-wrapper {
             max-width: 660px;
             margin: 0 auto;
@@ -279,7 +285,6 @@
             color: #0D47A1;
             font-weight: 600;
             background: #fff;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .control-item select:disabled {
@@ -289,7 +294,6 @@
             border-color: #cfd8dc;
         }
 
-        /* KHUNG CHÍNH BẢNG PHIÊN TRỰC */
         .duty-container {
             background: rgba(18, 24, 38, 0.88);
             backdrop-filter: blur(16px);
@@ -301,7 +305,6 @@
             color: #f1f1f1;
         }
 
-        /* HEADER THÔNG TIN TRỰC */
         .duty-header-info {
             text-align: center;
             padding-bottom: 18px;
@@ -309,7 +312,6 @@
             border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
         }
 
-        /* TÊN TUẦN PHỤNG VỤ NỔI BẬT */
         .duty-header-info .liturgical-title {
             font-size: 20px;
             font-weight: 800;
@@ -320,7 +322,6 @@
             margin-bottom: 8px;
         }
 
-        /* PHÂN CÔNG NHÓM TRỰC NỔI BẬT */
         .duty-header-info .group-duty-title {
             display: inline-block;
             background: linear-gradient(135deg, rgba(255, 112, 67, 0.25), rgba(255, 183, 77, 0.25));
@@ -331,7 +332,6 @@
             padding: 5px 16px;
             border-radius: 20px;
             margin-bottom: 10px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
         .duty-header-info .extra-details {
@@ -340,11 +340,6 @@
             line-height: 1.6;
         }
 
-        .duty-header-info .extra-details strong {
-            color: #ECEFF1;
-        }
-
-        /* NHÓM CA TRỰC */
         .duty-group { 
             margin-bottom: 22px; 
             background: rgba(255, 255, 255, 0.04);
@@ -374,9 +369,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .duty-item:last-child {
-            border-bottom: none;
-        }
+        .duty-item:last-child { border-bottom: none; }
 
         .duty-item input[type="checkbox"] {
             width: 19px;
@@ -391,7 +384,6 @@
             opacity: 0.4;
         }
 
-        /* THỜI GIAN / THỨ TRỰC NỔI BẬT */
         .duty-label-time { 
             font-weight: 700; 
             color: #80D8FF; 
@@ -420,7 +412,6 @@
         .duty-action-btn:hover { 
             background: linear-gradient(135deg, #2196F3, #1E88E5);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.5);
         }
 
         /* MODALS */
@@ -458,6 +449,98 @@
         .modal-card h3 {
             color: #0D47A1;
             margin-bottom: 14px;
+            text-align: center;
+        }
+
+        /* MODAL CHI TIẾT HUYNH TRƯỞNG */
+        .modal-detail-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            position: relative;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .modal-header-banner {
+            width: 100%;
+            height: 280px;
+            position: relative;
+            background: linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .modal-avatar-full {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center bottom;
+            display: block;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            border: 1px solid #CFD8DC;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .modal-close-btn:hover { background: #ffebee; color: #d32f2f; }
+
+        .modal-detail-body {
+            padding: 20px 24px 24px;
+            overflow-y: auto;
+            background: #ffffff;
+        }
+
+        .modal-detail-name {
+            color: #0D47A1;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .modal-info-list {
+            text-align: left;
+            background: #F8F9FA;
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 16px;
+            border: 1px solid #E9ECEF;
+        }
+
+        .modal-info-item {
+            font-size: 14px;
+            color: #333333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .modal-info-item:last-child { margin-bottom: 0; }
+        .modal-info-item i {
+            color: #1976D2;
+            width: 18px;
+            margin-top: 2px;
             text-align: center;
         }
 
@@ -602,6 +685,42 @@
                 </div>
 
                 <div class="duty-container" id="dutyContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP XEM CHI TIẾT HUYNH TRƯỞNG -->
+    <div class="modal-overlay" id="modalDetail" onclick="dongModalById('modalDetail')">
+        <div class="modal-detail-card" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="dongModalById('modalDetail')"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header-banner">
+                <img class="modal-avatar-full" id="modalImg" src="" alt="Avatar">
+            </div>
+            <div class="modal-detail-body">
+                <h2 class="modal-detail-name" id="modalTen">Tên Huynh Trưởng</h2>
+                <div class="modal-info-list">
+                    <div class="modal-info-item">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <div><strong>Mã HT:</strong> <span id="modalMaHT">Chưa có</span></div>
+                    </div>
+                    <div class="modal-info-item">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <div><strong>Chức vụ:</strong> <span id="modalChucVu" style="color: #2E7D32; font-weight: 600;">HT</span></div>
+                    </div>
+                    <div class="modal-info-item">
+                        <i class="fa-solid fa-award"></i>
+                        <div><strong>Cấp bậc:</strong> <span id="modalCap" style="color: #E65100; font-weight: 600;">Cấp 1</span></div>
+                    </div>
+                    <div class="modal-info-item">
+                        <i class="fa-solid fa-cake-candles"></i>
+                        <div><strong>Ngày sinh:</strong> <span id="modalNgaySinh">Chưa cập nhật</span></div>
+                    </div>
+                    <div class="modal-info-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <div><strong>Điện thoại:</strong> <span id="modalSDT">Chưa cập nhật</span></div>
+                    </div>
+                </div>
+                <button class="btn-modal btn-save" style="width: 100%; border-radius: 20px;" onclick="dongModalById('modalDetail')">Đóng</button>
             </div>
         </div>
     </div>
@@ -828,6 +947,8 @@
             { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", chucVu: "HT", cap: "Huynh Trưởng Cấp 2", ngaySinh: "17/03/2008", sdt: "0814657029", hinhAnhUrl: "duynguyen" }
         ];
 
+        const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
         function taoKhungCaTrucMau() {
             return [
                 {
@@ -908,7 +1029,6 @@
 
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
-        // Tự động tìm tuần hiện tại dựa trên ngày thực tế
         function timIdTuanHienTai() {
             const now = new Date();
             now.setHours(0, 0, 0, 0);
@@ -1285,24 +1405,82 @@
             });
         }
 
+        // ================= HIỂN THỊ DANH SÁCH HT & XỬ LÝ ẢNH =================
         function hienThiDanhSach(list) {
             const grid = document.getElementById("htGrid");
             grid.innerHTML = "";
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div style="text-align:center; padding:30px; grid-column:1/-1; color:#0D47A1; font-weight:bold;">Không tìm thấy Huynh Trưởng!</div>`;
+                return;
+            }
+
             list.forEach((ht, index) => {
                 if (!ht.thanhHoTen) return;
+
+                let avatarSrc = defaultAvatar;
+                let isLocalName = false;
+
+                if (ht.hinhAnhUrl) {
+                    if (ht.hinhAnhUrl.startsWith("http://") || ht.hinhAnhUrl.startsWith("https://")) {
+                        avatarSrc = ht.hinhAnhUrl;
+                    } else {
+                        avatarSrc = `${ht.hinhAnhUrl}.jpg`;
+                        isLocalName = true;
+                    }
+                }
+
                 const card = document.createElement("div");
                 card.className = "ht-card";
                 card.innerHTML = `
                     <div class="badge-stt">${index + 1}</div>
-                    <img class="avatar" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="${ht.thanhHoTen}">
+                    <img class="avatar" src="${avatarSrc}" alt="${ht.thanhHoTen}" data-name="${ht.hinhAnhUrl}" data-step="0">
                     <div class="name">${ht.thanhHoTen}</div>
                     <div class="chuc-vu">${ht.chucVu}</div>
                     <div class="cap">${ht.cap}</div>
                     <div class="info-row"><i class="fa-solid fa-cake-candles"></i> ${ht.ngaySinh}</div>
                     <div class="info-row"><i class="fa-solid fa-phone"></i> ${ht.sdt}</div>
                 `;
+
+                const imgElement = card.querySelector(".avatar");
+                imgElement.onerror = function() {
+                    if (!isLocalName) {
+                        this.src = defaultAvatar;
+                        return;
+                    }
+                    const fileName = this.getAttribute("data-name");
+                    const step = parseInt(this.getAttribute("data-step") || "0");
+                    const extensions = [".png", ".jpeg", ".webp", ".JPG", ".PNG", ".JPEG", ".WEBP"];
+
+                    if (step < extensions.length) {
+                        this.setAttribute("data-step", (step + 1).toString());
+                        this.src = `${fileName}${extensions[step]}`;
+                    } else {
+                        this.src = defaultAvatar;
+                        this.onerror = null;
+                    }
+                };
+
+                card.addEventListener("click", () => {
+                    moModalChiTietHT(ht, imgElement.src);
+                });
+
                 grid.appendChild(card);
             });
+        }
+
+        // Mở popup xem chi tiết Huynh Trưởng
+        function moModalChiTietHT(ht, currentImgSrc) {
+            document.getElementById("modalImg").src = currentImgSrc;
+            document.getElementById("modalTen").innerText = ht.thanhHoTen;
+            document.getElementById("modalMaHT").innerText = ht.maHT || (ht.hinhAnhUrl ? ht.hinhAnhUrl.toUpperCase() : "Chưa có");
+            document.getElementById("modalChucVu").innerText = ht.chucVu || "HT";
+            document.getElementById("modalCap").innerText = ht.cap || "Huynh Trưởng";
+            document.getElementById("modalNgaySinh").innerText = ht.ngaySinh || "Chưa cập nhật";
+            document.getElementById("modalSDT").innerText = ht.sdt || "Chưa cập nhật";
+
+            document.getElementById("modalDetail").classList.add("active");
+            document.body.style.overflow = "hidden";
         }
 
         function chuyenTab(tabId) {
@@ -1322,6 +1500,7 @@
         function dongModalById(id) {
             const el = document.getElementById(id);
             if (el) el.classList.remove("active");
+            document.body.style.overflow = "auto";
         }
 
         document.getElementById("searchInput").addEventListener("input", (e) => {

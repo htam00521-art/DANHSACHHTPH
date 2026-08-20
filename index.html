@@ -237,7 +237,7 @@
         .cap { color: #E65100; font-size: 11px; font-weight: 500; margin-bottom: 6px; }
         .info-row { color: #616161; font-size: 12px; margin-top: 2px; }
 
-        /* BẢNG PHIÊN TRỰC */
+        /* BẢNG PHIÊN TRỰC (GLASSMORPHISM) */
         .duty-wrapper {
             max-width: 680px;
             margin: 0 auto;
@@ -805,14 +805,15 @@
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         
         const ADMIN_EMAILS = [
-            "htam00521@gmail.com", "htam9630@gmail.com"
+            "htam00521@gmail.com", 
+            "htam9630@gmail.com"
         ]; 
 
         const hardcodedGroupEmails = {
             1: {
                 groupName: "Nhóm 1",
                 leaderName: "Hiếu Nghĩa",
-                leaderEmails: ["ltam54127@gmail.com", "nguyenxhuyvu70@gamil.com"]
+                leaderEmails: ["ltam54127@gmail.com", "nguyenxhuyvu70@gmail.com"]
             },
             2: {
                 groupName: "Nhóm 2",
@@ -827,7 +828,7 @@
             4: {
                 groupName: "Nhóm 4",
                 leaderName: "Thịnh Đạt",
-                leaderEmails: ["tranbuithinhdatph@gmail.com", "diemthy352026"]
+                leaderEmails: ["tranbuithinhdatph@gmail.com", "diemthy352026@gmail.com"]
             }
         };
 
@@ -1255,7 +1256,6 @@
                 groupDiv.innerHTML = `<div class="duty-title"><i class="fa-solid fa-layer-group"></i> ${cat.category}</div>`;
 
                 cat.slots.forEach((slot, sIdx) => {
-                    // Chuẩn hóa dữ liệu tương thích
                     let personList = [];
                     let doneList = [];
 
@@ -1307,7 +1307,6 @@
             });
         }
 
-        // Tích chọn riêng từng người
         function toggleIndividualCheck(cIdx, sIdx, pIdx) {
             if (currentUser.role !== "admin") {
                 alert("Chỉ Admin mới có quyền xác nhận hoàn thành ca trực!");

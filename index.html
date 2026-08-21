@@ -1039,9 +1039,17 @@
 
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
 
+        // TỰ ĐỘNG CHUYỂN TUẦN LÚC 6H00 SÁNG THỨ BẢY
         function timIdTuanHienTai() {
             const now = new Date();
-            now.setHours(0, 0, 0, 0);
+
+            // Nếu là Thứ Bảy (getDay() === 6) và từ 06:00 sáng trở đi: cộng thêm 1 ngày để nhảy sang tuần mới
+            let targetDate = new Date(now);
+            if (now.getDay() === 6 && now.getHours() >= 6) {
+                targetDate.setDate(targetDate.getDate() + 1);
+            }
+
+            targetDate.setHours(0, 0, 0, 0);
 
             for (let item of danhSachTuanPhungVu) {
                 const parts = item.dates.split("-").map(p => p.trim());
@@ -1066,7 +1074,7 @@
 
                         const startDate = new Date(startYear, startMonth, startDay, 0, 0, 0);
 
-                        if (now >= startDate && now <= endDate) {
+                        if (targetDate >= startDate && targetDate <= endDate) {
                             return item.id;
                         }
                     }

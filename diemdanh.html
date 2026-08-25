@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                       url('bg_church.jpg'), url('backgroud.jpg');
+                        url('nen1.jpg'), url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -767,14 +767,29 @@
                 const doiKey = `doi_${doiId}`;
                 thieuNhiData[doiKey].splice(index, 1);
                 
-                const cleanArray = thieuNhiData[doiKey].map(em => ({
-                    hoTen: em.hoTen || "",
-                    ngaySinh: em.ngaySinh || "",
-                    nganh: em.nganh || "",
-                    sdtPhuHuynh: em.sdtPhuHuynh || "",
-                    diemDanh: em.diemDanh || {},
-                    lyDoVang: em.lyDoVang || {}
-                }));
+                const cleanArray = thieuNhiData[doiKey].map(em => {
+                    let cleanedEmDiemDanh = {};
+                    if (em.diemDanh && typeof em.diemDanh === 'object') {
+                        for (let k in em.diemDanh) {
+                            cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
+                        }
+                    }
+                    let cleanedEmLyDo = {};
+                    if (em.lyDoVang && typeof em.lyDoVang === 'object') {
+                        for (let k in em.lyDoVang) {
+                            cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
+                        }
+                    }
+
+                    return {
+                        hoTen: em.hoTen || "",
+                        ngaySinh: em.ngaySinh || "",
+                        nganh: em.nganh || "",
+                        sdtPhuHuynh: em.sdtPhuHuynh || "",
+                        diemDanh: cleanedEmDiemDanh,
+                        lyDoVang: cleanedEmLyDo
+                    };
+                });
 
                 try {
                     await db.ref(`diemDanhThucTe2026/${doiKey}`).set(cleanArray);
@@ -816,6 +831,7 @@
             document.getElementById("modalThemEm").classList.add("active");
         }
 
+        // Hàm lưu thành viên mới đã được tích hợp chuẩn hóa toàn bộ key an toàn 100%
         async function luuThieuNhiMoi() {
             const ten = document.getElementById("inputTenEm").value.trim();
             const ngaySinh = document.getElementById("inputNgaySinhEm").value.trim();
@@ -847,14 +863,29 @@
                 });
             }
 
-            const cleanArray = thieuNhiData[doiKey].map(em => ({
-                hoTen: em.hoTen || "",
-                ngaySinh: em.ngaySinh || "",
-                nganh: em.nganh || "",
-                sdtPhuHuynh: em.sdtPhuHuynh || "",
-                diemDanh: em.diemDanh || {},
-                lyDoVang: em.lyDoVang || {}
-            }));
+            const cleanArray = thieuNhiData[doiKey].map(em => {
+                let cleanedEmDiemDanh = {};
+                if (em.diemDanh && typeof em.diemDanh === 'object') {
+                    for (let k in em.diemDanh) {
+                        cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
+                    }
+                }
+                let cleanedEmLyDo = {};
+                if (em.lyDoVang && typeof em.lyDoVang === 'object') {
+                    for (let k in em.lyDoVang) {
+                        cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
+                    }
+                }
+
+                return {
+                    hoTen: em.hoTen || "",
+                    ngaySinh: em.ngaySinh || "",
+                    nganh: em.nganh || "",
+                    sdtPhuHuynh: em.sdtPhuHuynh || "",
+                    diemDanh: cleanedEmDiemDanh,
+                    lyDoVang: cleanedEmLyDo
+                };
+            });
 
             try {
                 await db.ref(`diemDanhThucTe2026/${doiKey}`).set(cleanArray);
@@ -962,7 +993,7 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh tối ưu hoàn toàn mới, làm sạch key tự động trước khi lưu lên node "diemDanhThucTe2026"
+        // Hàm điểm danh tối ưu chống lỗi dấu chấm tuyệt đối
         async function toggleDiemDanh(index, ngayKey) {
             try {
                 const doiId = currentSelectedDoi;
@@ -986,7 +1017,6 @@
                 const currentVal = newDiemDanh[safeNgayKey];
                 const nextVal = (currentVal === true || currentVal === "co_phep") ? false : true;
                 
-                // Xóa bỏ key cũ chứa dấu chấm nếu lỡ tồn tại
                 delete newDiemDanh[ngayKey];
                 newDiemDanh[safeNgayKey] = nextVal;
 
@@ -1049,13 +1079,13 @@
 
             const cleanArray = thieuNhiData[doiKey].map(em => {
                 let cleanedEmDiemDanh = {};
-                if (em.diemDanh) {
+                if (em.diemDanh && typeof em.diemDanh === 'object') {
                     for (let k in em.diemDanh) {
                         cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
                     }
                 }
                 let cleanedEmLyDo = {};
-                if (em.lyDoVang) {
+                if (em.lyDoVang && typeof em.lyDoVang === 'object') {
                     for (let k in em.lyDoVang) {
                         cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
                     }

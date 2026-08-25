@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                        url('bg_church.jpg'), url('backgroud.jpg');
+                        url('nen1.jpg'), url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -831,7 +831,6 @@
             document.getElementById("modalThemEm").classList.add("active");
         }
 
-        // Hàm lưu thành viên mới đã được tích hợp chuẩn hóa toàn bộ key an toàn 100%
         async function luuThieuNhiMoi() {
             const ten = document.getElementById("inputTenEm").value.trim();
             const ngaySinh = document.getElementById("inputNgaySinhEm").value.trim();
@@ -993,7 +992,6 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh tối ưu chống lỗi dấu chấm tuyệt đối
         async function toggleDiemDanh(index, ngayKey) {
             try {
                 const doiId = currentSelectedDoi;

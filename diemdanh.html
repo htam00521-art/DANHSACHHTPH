@@ -52,6 +52,7 @@
         .user-avatar-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #0D47A1; }
         .role-tag { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; }
         .role-admin { background: #d32f2f; }
+        .role-leader { background: #e65100; }
         .role-doitruong { background: #059669; }
         .role-viewer { background: #1976d2; }
 
@@ -414,7 +415,7 @@
     </div>
 
     <script>
-        // ================= CẤU HÌNH FIREBASE (SỬ DỤNG NODE MỚI SẠCH SẼ HOÀN TOÀN) =================
+        // ================= CẤU HÌNH FIREBASE =================
         const firebaseConfig = {
             apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
             authDomain: "phantruchuynhtruong.firebaseapp.com",
@@ -513,12 +514,12 @@
             name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
         };
 
-        // Hàm chuẩn hóa key loại bỏ dấu chấm (.) thành dấu gạch dưới (_) để tuyệt đối an toàn cho Firebase
+        // Hàm chuẩn hóa key loại bỏ dấu chấm (.) thành dấu gạch dưới (_) bảo mật tuyệt đối cho Firebase
         function formatNgayKey(ngayStr) {
             return String(ngayStr || "").replace(/\./g, '_');
         }
 
-        // Lắng nghe dữ liệu từ node mới hoàn toàn: "diemDanhThucTe2026"
+        // Lắng nghe dữ liệu Firebase trên node mới sạch sẽ "diemDanhThucTe2026"
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -961,7 +962,7 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh lưu node mới "diemDanhThucTe2026"
+        // Hàm điểm danh tối ưu hoàn toàn mới, làm sạch key tự động trước khi lưu lên node "diemDanhThucTe2026"
         async function toggleDiemDanh(index, ngayKey) {
             try {
                 const doiId = currentSelectedDoi;
@@ -984,6 +985,9 @@
 
                 const currentVal = newDiemDanh[safeNgayKey];
                 const nextVal = (currentVal === true || currentVal === "co_phep") ? false : true;
+                
+                // Xóa bỏ key cũ chứa dấu chấm nếu lỡ tồn tại
+                delete newDiemDanh[ngayKey];
                 newDiemDanh[safeNgayKey] = nextVal;
 
                 thieuNhiData[doiKey][index].diemDanh = newDiemDanh;
@@ -1013,7 +1017,7 @@
                 });
 
                 await db.ref(`diemDanhThucTe2026/${doiKey}`).set(cleanArray);
-                console.log("Đã lưu điểm danh thành công!");
+                console.log("Đã lưu điểm danh thành công lên Firebase!");
                 hienThiChiTietDoi();
             } catch (error) {
                 console.error("Lỗi ghi Firebase:", error);

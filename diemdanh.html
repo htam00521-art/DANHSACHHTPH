@@ -504,6 +504,11 @@
         let editingLyDo = { emIdx: null, ngayKey: null };
         let editingEmIdx = null; 
 
+        // Hàm chuẩn hóa key tên ngày lễ để không chứa dấu chấm (.) gây lỗi Firebase
+        function formatNgayKey(ngayStr) {
+            return ngayStr.replace(/\./g, '_');
+        }
+
         // Lắng nghe dữ liệu chuẩn từ node gốc
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
@@ -770,7 +775,8 @@
 
                     let colsHTML = "";
                     danhSachNgayLe.forEach((ngay, nIdx) => {
-                        const status = diemsDanhMap[ngay];
+                        const safeNgayKey = formatNgayKey(ngay);
+                        const status = diemsDanhMap[safeNgayKey];
                         const isCoMat = status === true;
                         const isCoPhep = status === "co_phep";
                         if (isCoMat) {
@@ -778,7 +784,7 @@
                             tongSoNguoiMoiNgay[nIdx]++;
                         }
 
-                        let lydoText = (isCoPhep && em.lyDoVang && em.lyDoVang[ngay]) ? `<span class="lydo-note">Phép: ${em.lyDoVang[ngay]}</span>` : '';
+                        let lydoText = (isCoPhep && em.lyDoVang && em.lyDoVang[safeNgayKey]) ? `<span class="lydo-note">Phép: ${em.lyDoVang[safeNgayKey]}</span>` : '';
 
                         colsHTML += `
                             <td style="text-align: center;">
@@ -813,20 +819,21 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh tối ưu dùng async/await lưu thẳng lên Firebase vĩnh viễn
+        // Hàm điểm danh tối ưu dùng async/await lưu thẳng lên Firebase vĩnh viễn (Đã xử lý an toàn dấu chấm)
         async function toggleDiemDanh(index, ngayKey) {
             try {
                 const doiId = currentSelectedDoi;
                 const doiKey = `doi_${doiId}`;
+                const safeNgayKey = formatNgayKey(ngayKey);
                 
                 if (!thieuNhiData[doiKey]) thieuNhiData[doiKey] = [];
                 if (!thieuNhiData[doiKey][index]) thieuNhiData[doiKey][index] = {};
                 if (!thieuNhiData[doiKey][index].diemDanh) thieuNhiData[doiKey][index].diemDanh = {};
 
-                const currentVal = thieuNhiData[doiKey][index].diemDanh[ngayKey];
+                const currentVal = thieuNhiData[doiKey][index].diemDanh[safeNgayKey];
                 const nextVal = (currentVal === true || currentVal === "co_phep") ? false : true;
                 
-                thieuNhiData[doiKey][index].diemDanh[ngayKey] = nextVal;
+                thieuNhiData[doiKey][index].diemDanh[safeNgayKey] = nextVal;
 
                 const cleanArray = thieuNhiData[doiKey].map(em => ({
                     hoTen: em.hoTen || "",
@@ -839,6 +846,7 @@
 
                 await db.ref(`quanLyDiemDanhDoanSinh/${doiKey}`).set(cleanArray);
                 console.log("Đã lưu điểm danh thành công lên Firebase!");
+                hienThiChiTietDoi();
             } catch (error) {
                 console.error("Lỗi ghi Firebase:", error);
                 alert("Lỗi không thể lưu điểm danh: " + error.message);
@@ -859,11 +867,12 @@
 
             const doiId = currentSelectedDoi;
             const doiKey = `doi_${doiId}`;
+            const safeNgayKey = formatNgayKey(editingLyDo.ngayKey);
             const em = thieuNhiData[doiKey][editingLyDo.emIdx];
 
-            em.diemDanh[editingLyDo.ngayKey] = "co_phep";
+            em.diemDanh[safeNgayKey] = "co_phep";
             if (!em.lyDoVang) em.lyDoVang = {};
-            em.lyDoVang[editingLyDo.ngayKey] = lydo;
+            em.lyDoVang[safeNgayKey] = lydo;
 
             const cleanArray = thieuNhiData[doiKey].map(em => ({
                 hoTen: em.hoTen || "",
@@ -1026,7 +1035,8 @@
                         let di = 0, khongp = 0, cophep = 0;
 
                         danhSachNgayLe.forEach(ngay => {
-                            const stt = diemsDanhMap[ngay];
+                            const safeNgayKey = formatNgayKey(ngay);
+                            const stt = diemsDanhMap[safeNgayKey];
                             if (stt === true) di++;
                             else if (stt === "co_phep") cophep++;
                             else khongp++;

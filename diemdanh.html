@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                        url('bg_church.jpg'), url('backgroud.jpg');
+                     url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -520,7 +520,7 @@
             return ngayStr.replace(/\./g, '_');
         }
 
-        // Lắng nghe dữ liệu chuẩn từ node gốc duy nhất
+        // Lắng nghe dữ liệu Firebase
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -544,13 +544,13 @@
                 if (Array.isArray(rawData[doiKey])) {
                     cleanedData[doiKey] = rawData[doiKey].map(em => {
                         let cDiemDanh = {};
-                        if (em.diemDanh) {
+                        if (em.diemDanh && typeof em.diemDanh === 'object') {
                             for (let k in em.diemDanh) {
                                 cDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
                             }
                         }
                         let cLyDo = {};
-                        if (em.lyDoVang) {
+                        if (em.lyDoVang && typeof em.lyDoVang === 'object') {
                             for (let k in em.lyDoVang) {
                                 cLyDo[formatNgayKey(k)] = em.lyDoVang[k];
                             }
@@ -718,7 +718,7 @@
             danhSachDoi.forEach(doi => {
                 total += (thieuNhiData[`doi_${doi.id}`] || []).length;
             });
-            const elem = document.getElementById("statTongSoThieuNhi");
+            const elem = document.getElementById("statTongThieuNhi");
             if (elem) elem.innerText = `${total} em`;
         }
 
@@ -968,12 +968,15 @@
                 
                 if (!thieuNhiData[doiKey]) thieuNhiData[doiKey] = [];
                 if (!thieuNhiData[doiKey][index]) thieuNhiData[doiKey][index] = {};
-                if (!thieuNhiData[doiKey][index].diemDanh) thieuNhiData[doiKey][index].diemDanh = {};
+                
+                if (!thieuNhiData[doiKey][index].diemDanh || typeof thieuNhiData[doiKey][index].diemDanh !== 'object') {
+                    thieuNhiData[doiKey][index].diemDanh = {};
+                }
 
                 let oldDiemDanh = thieuNhiData[doiKey][index].diemDanh;
                 let newDiemDanh = {};
                 for (let k in oldDiemDanh) {
-                    let cleanedKey = formatNgayKey(k);
+                    let cleanedKey = k.replace(/\./g, '_');
                     newDiemDanh[cleanedKey] = oldDiemDanh[k];
                 }
 
@@ -985,15 +988,15 @@
 
                 const cleanArray = thieuNhiData[doiKey].map(em => {
                     let cleanedEmDiemDanh = {};
-                    if (em.diemDanh) {
+                    if (em.diemDanh && typeof em.diemDanh === 'object') {
                         for (let k in em.diemDanh) {
-                            cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
+                            cleanedEmDiemDanh[k.replace(/\./g, '_')] = em.diemDanh[k];
                         }
                     }
                     let cleanedEmLyDo = {};
-                    if (em.lyDoVang) {
+                    if (em.lyDoVang && typeof em.lyDoVang === 'object') {
                         for (let k in em.lyDoVang) {
-                            cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
+                            cleanedEmLyDo[k.replace(/\./g, '_')] = em.lyDoVang[k];
                         }
                     }
 

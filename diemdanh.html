@@ -224,18 +224,22 @@
             </nav>
         </div>
 
-        <!-- AUTH BAR -->
+        <!-- AUTH BAR (ĐÃ KHÔI PHỤC ĐẦY ĐỦ TÍNH NĂNG ĐĂNG NHẬP GOOGLE) -->
         <div class="auth-bar">
             <div class="user-status">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
                 <div>
-                    <span id="userNameDisplay" style="font-weight: 600;">Quản Trị Viên</span>
-                    <span id="roleBadge" class="role-tag role-admin">Toàn Quyền</span>
+                    <span id="userNameDisplay" style="font-weight: 600;">Khách</span>
+                    <span id="roleBadge" class="role-tag role-viewer">Người xem</span>
                 </div>
             </div>
             <div class="auth-actions">
-                <button id="adminConfigDoiBtn" class="btn-auth-action" style="background:#d97706;" onclick="moModalAdminDoi()">
-                    <i class="fa-solid fa-shield-halved"></i> Quản Lý & Cấu Hình Đội
+                <button id="adminConfigDoiBtn" class="btn-auth-action" style="display:none; background:#d97706;" onclick="moModalAdminDoi()">
+                    <i class="fa-solid fa-shield-halved"></i> Admin: Quản Lý Đội
+                </button>
+                <div id="googleBtnContainer"></div>
+                <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
                 </button>
             </div>
         </div>
@@ -426,6 +430,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
+        const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
+        const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
+
         const defaultDanhSachDoi = [
             { id: 1, name: "Đội 1 (Giuse)", nganh: "Ngành Ấu" }, { id: 2, name: "Đội 2 (Maria)", nganh: "Ngành Ấu" },
             { id: 3, name: "Đội 3 (Pêrô)", nganh: "Ngành Ấu" }, { id: 4, name: "Đội 4 (Phao-lô)", nganh: "Ngành Thiếu" },
@@ -504,12 +511,16 @@
         let editingLyDo = { emIdx: null, ngayKey: null };
         let editingEmIdx = null; 
 
-        // Hàm chuẩn hóa key tên ngày lễ để không chứa dấu chấm (.) gây lỗi Firebase
+        let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {
+            name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
+        };
+
+        // Hàm chuẩn hóa key tên ngày lễ loại bỏ dấu chấm (.) bảo mật tuyệt đối cho Firebase
         function formatNgayKey(ngayStr) {
             return ngayStr.replace(/\./g, '_');
         }
 
-        // Lắng nghe dữ liệu chuẩn từ node gốc
+        // Lắng nghe dữ liệu Firebase
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -532,8 +543,108 @@
 
         db.ref("doiTruongMapping").on("value", (snapshot) => {
             doiTruongMap = snapshot.val() || {};
+            xacDinhQuyenTruyCap();
             capNhatGiaoDien();
         });
+
+        function handleCredentialResponse(response) {
+            try {
+                const payload = jwt_decode(response.credential);
+                const email = payload.email.toLowerCase().trim();
+
+                let role = "viewer";
+                if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
+                    role = "admin";
+                } else {
+                    for (let id in doiTruongMap) {
+                        const info = doiTruongMap[id] || {};
+                        if ((info.emailDt && info.emailDt.toLowerCase().trim() === email) || (info.emailDp && info.emailDp.toLowerCase().trim() === email)) {
+                            role = "doitruong";
+                            break;
+                        }
+                    }
+                }
+
+                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
+                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
+                xacDinhQuyenTruyCap();
+                alert(`Đăng nhập thành công! Chào ${payload.name}`);
+            } catch (e) { console.error(e); }
+        }
+
+        window.onload = function () {
+            if (window.google) {
+                google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
+                google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
+            }
+            xacDinhQuyenTruyCap();
+        };
+
+        function xuLyDangXuat() {
+            currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
+            localStorage.removeItem("ht_user_session");
+            xacDinhQuyenTruyCap();
+            alert("Đã đăng xuất!");
+        }
+
+        function xacDinhQuyenTruyCap() {
+            document.getElementById("userNameDisplay").innerText = currentUser.name;
+            document.getElementById("userAvatarMini").src = currentUser.picture;
+
+            const badge = document.getElementById("roleBadge");
+            const googleBtn = document.getElementById("googleBtnContainer");
+            const logoutBtn = document.getElementById("logoutBtn");
+            const adminConfigBtn = document.getElementById("adminConfigDoiBtn");
+
+            badge.className = "role-tag";
+            if (currentUser.role === "admin") {
+                badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
+                adminConfigBtn.style.display = "inline-flex";
+            } else if (currentUser.role === "doitruong") {
+                badge.classList.add("role-doitruong"); badge.innerText = "Đội Trưởng/Phó";
+                adminConfigBtn.style.display = "none";
+            } else {
+                badge.classList.add("role-viewer"); badge.innerText = "Người xem";
+                adminConfigBtn.style.display = "none";
+            }
+
+            if (currentUser.email) {
+                googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex";
+            } else {
+                googleBtn.style.display = "block"; logoutBtn.style.display = "none";
+            }
+
+            kiemTraQuyenThaoTacDoi();
+        }
+
+        function kiemTraQuyenThaoTacDoi() {
+            const btnThemNgay = document.getElementById("btnThemNgayLe");
+            const btnThemEm = document.getElementById("btnThemThieuNhi");
+            const btnModalThemEm = document.getElementById("btnModalThemThanhVien");
+
+            let duocPhepSua = false;
+            if (currentUser.role === "admin") {
+                duocPhepSua = true;
+            } else if (currentUser.role === "doitruong") {
+                const info = doiTruongMap[currentSelectedDoi] || {};
+                const emailDt = (info.emailDt || "").toLowerCase().trim();
+                const emailDp = (info.emailDp || "").toLowerCase().trim();
+                const myEmail = currentUser.email.toLowerCase().trim();
+                if ((emailDt && emailDt === myEmail) || (emailDp && emailDp === myEmail)) {
+                    duocPhepSua = true;
+                }
+            }
+
+            if (duocPhepSua) {
+                if(btnThemNgay) btnThemNgay.style.display = "inline-block";
+                if(btnThemEm) btnThemEm.style.display = "inline-block";
+                if(btnModalThemEm) btnModalThemEm.style.display = "inline-block";
+            } else {
+                if(btnThemNgay) btnThemNgay.style.display = "none";
+                if(btnThemEm) btnThemEm.style.display = "none";
+                if(btnModalThemEm) btnModalThemEm.style.display = "none";
+            }
+        }
 
         function capNhatGiaoDien() {
             khoiTaoTheDoi();

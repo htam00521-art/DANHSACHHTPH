@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                        url('nen1.jpg'), url('bg_church.jpg'), url('backgroud.jpg');
+                        url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -515,12 +515,12 @@
             name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
         };
 
-        // Hàm chuẩn hóa key tên ngày lễ loại bỏ dấu chấm (.) bảo mật tuyệt đối cho Firebase
+        // Hàm chuẩn hóa key loại bỏ dấu chấm (.) bảo mật tuyệt đối cho Firebase
         function formatNgayKey(ngayStr) {
             return ngayStr.replace(/\./g, '_');
         }
 
-        // Lắng nghe dữ liệu Firebase
+        // Lắng nghe dữ liệu chuẩn từ node gốc duy nhất
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -537,7 +537,36 @@
         });
 
         db.ref("quanLyDiemDanhDoanSinh").on("value", (snapshot) => {
-            thieuNhiData = snapshot.val() || {};
+            let rawData = snapshot.val() || {};
+            let cleanedData = {};
+            
+            for (let doiKey in rawData) {
+                if (Array.isArray(rawData[doiKey])) {
+                    cleanedData[doiKey] = rawData[doiKey].map(em => {
+                        let cDiemDanh = {};
+                        if (em.diemDanh) {
+                            for (let k in em.diemDanh) {
+                                cDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
+                            }
+                        }
+                        let cLyDo = {};
+                        if (em.lyDoVang) {
+                            for (let k in em.lyDoVang) {
+                                cLyDo[formatNgayKey(k)] = em.lyDoVang[k];
+                            }
+                        }
+                        return {
+                            hoTen: em.hoTen || "",
+                            ngaySinh: em.ngaySinh || "",
+                            nganh: em.nganh || "",
+                            sdtPhuHuynh: em.sdtPhuHuynh || "",
+                            diemDanh: cDiemDanh,
+                            lyDoVang: cLyDo
+                        };
+                    });
+                }
+            }
+            thieuNhiData = cleanedData;
             capNhatGiaoDien();
         });
 
@@ -689,7 +718,7 @@
             danhSachDoi.forEach(doi => {
                 total += (thieuNhiData[`doi_${doi.id}`] || []).length;
             });
-            const elem = document.getElementById("statTongThieuNhi");
+            const elem = document.getElementById("statTongSoThieuNhi");
             if (elem) elem.innerText = `${total} em`;
         }
 
@@ -941,7 +970,6 @@
                 if (!thieuNhiData[doiKey][index]) thieuNhiData[doiKey][index] = {};
                 if (!thieuNhiData[doiKey][index].diemDanh) thieuNhiData[doiKey][index].diemDanh = {};
 
-                // Làm sạch toàn bộ key cũ bị dính dấu chấm trong object của em này
                 let oldDiemDanh = thieuNhiData[doiKey][index].diemDanh;
                 let newDiemDanh = {};
                 for (let k in oldDiemDanh) {
@@ -955,7 +983,6 @@
 
                 thieuNhiData[doiKey][index].diemDanh = newDiemDanh;
 
-                // Chuẩn hóa toàn bộ mảng dữ liệu sạch 100% không chứa dấu chấm
                 const cleanArray = thieuNhiData[doiKey].map(em => {
                     let cleanedEmDiemDanh = {};
                     if (em.diemDanh) {

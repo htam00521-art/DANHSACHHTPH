@@ -14,10 +14,6 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
-    <!-- Firebase SDK (v9 Compat) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
 
@@ -52,8 +48,6 @@
         .user-avatar-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #0D47A1; }
         .role-tag { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; }
         .role-admin { background: #d32f2f; }
-        .role-leader { background: #e65100; }
-        .role-doitruong { background: #059669; }
         .role-viewer { background: #1976d2; }
 
         .btn-auth-action {
@@ -110,10 +104,6 @@
             margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; color: #1e293b;
             box-shadow: 0 4px 12px rgba(0,0,0,0.03);
         }
-        .search-result-stats { display: flex; gap: 8px; font-size: 13px; font-weight: 700; flex-wrap: wrap; align-items: center; margin-top: 4px; }
-        .badge-s-di { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 8px; }
-        .badge-s-khongp { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 8px; }
-        .badge-s-cop { background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 8px; }
 
         /* THẺ ĐỘI */
         .section-heading { color: #0D47A1; font-size: 20px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 3px rgba(255,255,255,0.9); }
@@ -126,8 +116,6 @@
         }
         .doi-card:hover { transform: translateY(-5px); background: #ffffff; box-shadow: 0 14px 35px rgba(0,114,255,0.18); border-color: #93c5fd; }
         .doi-card h4 { color: #0052d4; font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-        .doi-card .doitruong-lbl { color: #059669; font-size: 12px; font-weight: 700; display: block; }
-        .doi-card .doipho-lbl { color: #d97706; font-size: 12px; font-weight: 700; margin-bottom: 6px; display: block; }
         .doi-card p { color: #64748b; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
         
         .doi-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -135,8 +123,6 @@
             padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; border: none;
             display: inline-flex; align-items: center; gap: 5px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .btn-xem-ds { background: #475569; color: #fff; }
-        .btn-xem-ds:hover { background: #334155; transform: translateY(-2px); }
         .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; }
         .btn-diem-danh:hover { transform: translateY(-2px); filter: brightness(1.05); }
 
@@ -168,47 +154,24 @@
             padding: 9px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer;
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); transition: 0.2s;
         }
-        .btn-custom-action.btn-them-ngay { background: linear-gradient(135deg, #d97706, #fbbf24); }
         .btn-custom-action.btn-quay-lai { background: linear-gradient(135deg, #475569, #64748b); }
         .btn-custom-action:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        .lydo-note { font-size: 11px; color: #fbbf24; font-style: italic; display: block; margin-top: 2px; }
-
-        /* MODAL & NÚT BẤM TO ĐẸP */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 25, 47, 0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.25s; padding: 16px; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-card {
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.3);
-            width: 100%; max-width: 580px; border-radius: 28px; padding: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); color: #f8fafc;
+        /* LOADING OVERLAY */
+        #loadingOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 25, 47, 0.7); backdrop-filter: blur(5px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 99999; color: #fff; font-size: 16px; font-weight: bold;
         }
-        .form-control-custom { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 14px; outline: none; margin-bottom: 12px; font-weight: 600; }
-        .form-control-custom:focus { border-color: #38bdf8; background: rgba(255,255,255,0.12); }
-
-        select.form-control-custom, select.select-dt, select.select-dp {
-            background-color: rgba(15, 23, 42, 0.95) !important; color: #f8fafc !important; border: 1px solid rgba(255, 255, 255, 0.25) !important;
-        }
-        select.form-control-custom option, select.select-dt option, select.select-dp option {
-            background-color: #0f172a !important; color: #f8fafc !important; padding: 10px !important;
-        }
-
-        .btn-modal-action {
-            padding: 12px 28px; font-size: 15px; font-weight: 800; border-radius: 50px;
-            cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-        }
-        .btn-modal-action.btn-confirm {
-            background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff;
-            border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 8px 25px rgba(0, 114, 255, 0.45); flex: 1.5;
-        }
-        .btn-modal-action.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0, 114, 255, 0.6); filter: brightness(1.1); }
-        .btn-modal-action.btn-dismiss {
-            background: rgba(255, 255, 255, 0.12); color: #f8fafc;
-            border: 1px solid rgba(255, 255, 255, 0.25); flex: 1;
-        }
-        .btn-modal-action.btn-dismiss:hover { background: rgba(255, 255, 255, 0.25); color: #fff; }
+        .spinner { width: 45px; height: 45px; border: 5px solid #fff; border-top-color: #38bdf8; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <span>Đang kết nối dữ liệu Google Sheets...</span>
+    </div>
 
     <div class="container">
         <!-- TOPBAR NAVIGATION -->
@@ -234,9 +197,6 @@
                 </div>
             </div>
             <div class="auth-actions">
-                <button id="adminConfigDoiBtn" class="btn-auth-action" style="display:none; background:#d97706;" onclick="moModalAdminDoi()">
-                    <i class="fa-solid fa-shield-halved"></i> Admin: Quản Lý Đội
-                </button>
                 <div id="googleBtnContainer"></div>
                 <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
                     <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
@@ -247,7 +207,7 @@
         <!-- HEADER BANNER -->
         <div class="dashboard-header">
             <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Đoàn Sinh</h2>
-            <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh toàn đoàn</p>
+            <p>Hệ thống đồng bộ dữ liệu thời gian thực trực tuyến</p>
         </div>
 
         <!-- 3 Ô THỐNG KÊ TỔNG QUAN -->
@@ -301,8 +261,6 @@
                     </div>
                     <div class="btn-action-group">
                         <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
-                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ (Hôm nay)</button>
-                        <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
                     </div>
                 </div>
 
@@ -328,112 +286,14 @@
         </div>
     </div>
 
-    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT -->
-    <div class="modal-overlay" id="modalXemDanhSach" onclick="dongModal('modalXemDanhSach')">
-        <div class="modal-card" style="max-width: 820px;" onclick="event.stopPropagation()">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
-                <h3 id="modalXemDsTitle" style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 20px;">Hồ Sơ Thành Viên</h3>
-                <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
-                    <i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên
-                </button>
-            </div>
-            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                <table class="thieunhi-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">STT</th>
-                            <th>Thánh Họ Và Tên</th>
-                            <th>Ngày Sinh</th>
-                            <th>Ngành</th>
-                            <th>SĐT Phụ Huynh</th>
-                            <th style="width: 100px; text-align: center;">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="modalHosoTableBody"></tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-end mt-4">
-                <button class="btn-modal-action btn-dismiss" style="flex: initial; padding: 10px 24px;" onclick="dongModal('modalXemDanhSach')">Đóng</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL THÊM / CẬP NHẬT THÀNH VIÊN -->
-    <div class="modal-overlay" id="modalThemEm" onclick="dongModal('modalThemEm')">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <h3 id="modalThemEmTitle" style="color: #38bdf8; text-align: center; margin-bottom: 16px; font-weight: 800;">Thêm Thành Viên Mới</h3>
-            
-            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Thánh Họ Và Tên (*):</label>
-            <input type="text" id="inputTenEm" class="form-control-custom" placeholder="Ví dụ: Phêrô Đoàn Minh Phát">
-
-            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Ngày Tháng Năm Sinh (*):</label>
-            <input type="text" id="inputNgaySinhEm" class="form-control-custom" placeholder="Ví dụ: 15/05/2012">
-
-            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Ngành (*):</label>
-            <select id="inputNganhEm" class="form-control-custom">
-                <option value="">-- Chọn Ngành --</option>
-                <option value="Ngành Ấu">Ngành Ấu</option>
-                <option value="Ngành Thiếu">Ngành Thiếu</option>
-                <option value="Ngành Nghĩa">Ngành Nghĩa</option>
-            </select>
-
-            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Số Điện Thoại Phụ Huynh (*):</label>
-            <input type="text" id="inputSdtEm" class="form-control-custom" placeholder="Ví dụ: 0912345678">
-
-            <div class="d-flex gap-3 mt-4">
-                <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalThemEm')">Hủy</button>
-                <button class="btn-modal-action btn-confirm" onclick="luuThieuNhiMoi()">Lưu thành viên</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL NHẬP LÝ DO VẮNG CÓ PHÉP -->
-    <div class="modal-overlay" id="modalLyDoVang" onclick="dongModal('modalLyDoVang')">
-        <div class="modal-card" onclick="event.stopPropagation()">
-            <h3 style="color: #fbbf24; text-align: center; margin-bottom: 12px; font-weight: 800;">Ghi Nhận Vắng Có Phép</h3>
-            <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px;" id="lyDoEmName">Đang chọn học sinh...</p>
-            <input type="text" id="inputLyDoPhep" class="form-control-custom" placeholder="Nhập lý do vắng (Bận việc, đi khám bệnh...)">
-            <div class="d-flex gap-3 mt-4">
-                <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalLyDoVang')">Hủy</button>
-                <button class="btn-modal-action btn-confirm" style="background: linear-gradient(135deg, #d97706, #fbbf24);" onclick="luuLyDoVang()">Lưu lý do</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL ADMIN QUẢN LÝ DANH SÁCH ĐỘI & ĐỘI TRƯỞNG/PHÓ -->
-    <div class="modal-overlay" id="modalAdminDoi" onclick="dongModal('modalAdminDoi')">
-        <div class="modal-card" style="max-width: 620px;" onclick="event.stopPropagation()">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 style="color: #38bdf8; font-weight: 800; margin: 0;">Quản Lý & Phân Công Đội</h3>
-                <button class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="themDoiMoiAdmin()"><i class="fa-solid fa-plus me-1"></i> Thêm đội mới</button>
-            </div>
-            <div id="adminDoiFormContainer" style="max-height: 400px; overflow-y: auto; padding-right: 5px;"></div>
-            <div class="d-flex gap-3 mt-4">
-                <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalAdminDoi')">Đóng</button>
-                <button class="btn-modal-action btn-confirm" onclick="luuQuanLyDoiAdmin()">Lưu thay đổi</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // ================= CẤU HÌNH FIREBASE =================
-        const firebaseConfig = {
-            apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
-            authDomain: "phantruchuynhtruong.firebaseapp.com",
-            databaseURL: "https://phantruchuynhtruong-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "phantruchuynhtruong",
-            storageBucket: "phantruchuynhtruong.firebasestorage.app",
-            messagingSenderId: "105589587705",
-            appId: "1:105589587705:web:e5673f9dad38c130b56c28",
-            measurementId: "G-YENZE6ZNSW"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        // URL Google Apps Script chuẩn xác từ tài khoản của bạn
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwst2fabm2wPEQw-WtI9NIZ-c2Oa9Db7D5S9N0A1YHBCCoU24-gPBgoPRH-zhn8Uqzszg/exec";
 
         const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
 
-        const defaultDanhSachDoi = [
+        const danhSachDoi = [
             { id: 1, name: "Đội 1 (Giuse)", nganh: "Ngành Ấu" }, { id: 2, name: "Đội 2 (Maria)", nganh: "Ngành Ấu" },
             { id: 3, name: "Đội 3 (Pêrô)", nganh: "Ngành Ấu" }, { id: 4, name: "Đội 4 (Phao-lô)", nganh: "Ngành Thiếu" },
             { id: 5, name: "Đội 5 (An-tôn)", nganh: "Ngành Thiếu" }, { id: 6, name: "Đội 6 (Agnes)", nganh: "Ngành Thiếu" },
@@ -443,165 +303,28 @@
             { id: 13, name: "Đội 13 (Phêrô & Phaolô)", nganh: "Ngành Nghĩa" }
         ];
 
-        const danhSachGocHT = [
-            { thanhHoTen: "Patriciô Nguyễn Thiên Ân", sdt: "0395800581" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", sdt: "0921786312" },
-            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", sdt: "0834577510" },
-            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", sdt: "0343351327" },
-            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", sdt: "0366548104" },
-            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", sdt: "0346328816" },
-            { thanhHoTen: "Phêrô Đoàn Minh Phát", sdt: "0364521171" },
-            { thanhHoTen: "Matta Trương Thị Diễm Hương", sdt: "0349356330" },
-            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", sdt: "0343481454" },
-            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", sdt: "0338595144" },
-            { thanhHoTen: "Têrêsa Trần Thanh Uyên", sdt: "0357667730" },
-            { thanhHoTen: "Maria Nguyễn Bảo Thy", sdt: "0349735441" },
-            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", sdt: "0385966649" },
-            { thanhHoTen: "Maria Diệp Thanh Thoảng", sdt: "0948673652" },
-            { thanhHoTen: "Phêrô Nguyễn Minh Vũ", sdt: "0382961153" },
-            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", sdt: "0337383298" },
-            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", sdt: "0792394746" },
-            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", sdt: "0396462484" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Tân", sdt: "0896416291" },
-            { thanhHoTen: "Phêrô Trần Tấn Tài", sdt: "0396191605" },
-            { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", sdt: "0972756505" },
-            { thanhHoTen: "Giuse Nguyễn Phúc Khang", sdt: "0368902575" },
-            { thanhHoTen: "Maria Hứa Thanh Thảo", sdt: "0972546881" },
-            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", sdt: "0799320036" },
-            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", sdt: "0345204809" },
-            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", sdt: "0983525538" },
-            { thanhHoTen: "Maria Trương Anh Phong Nhi", sdt: "0363673929" },
-            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", sdt: "0987974107" },
-            { thanhHoTen: "Maria Sơn Thị Thảo Vy", sdt: "0374246153" },
-            { thanhHoTen: "Raymonđô Trương Công Hậu", sdt: "0358319506" },
-            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", sdt: "0773913619" },
-            { thanhHoTen: "Matta Nguyễn Yến Lan", sdt: "0769640742" },
-            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", sdt: "0382530494" },
-            { thanhHoTen: "Phêrô Lê Minh Tiến", sdt: "0966908232" },
-            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", sdt: "0332183247" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", sdt: "0949344205" },
-            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", sdt: "0704964207" },
-            { thanhHoTen: "Maria Trần Huỳnh Trâm", sdt: "0704964207" },
-            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", sdt: "0765993928" },
-            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", sdt: "0963981148" },
-            { thanhHoTen: "Maria Nguyễn Như Thùy", sdt: "0395382387" },
-            { thanhHoTen: "Maria Nguyễn Kiều Duyên", sdt: "0797852698" },
-            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", sdt: "0932471359" },
-            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", sdt: "0785801705" },
-            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", sdt: "0909107132" },
-            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", sdt: "0369902728" },
-            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", sdt: "0966265200" },
-            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", sdt: "0326271470" },
-            { thanhHoTen: "Matta Nguyễn Phương Thảo My", sdt: "0338158231" },
-            { thanhHoTen: "Giuse Nguyễn Thái Sơn", sdt: "0365656063" },
-            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", sdt: "0345344063" },
-            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", sdt: "0326395940" },
-            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", sdt: "0355749059" },
-            { thanhHoTen: "Maria Trần Thị Kiều Trang", sdt: "0385627732" },
-            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", sdt: "0586075828" },
-            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", sdt: "0907037009" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", sdt: "0814657029" }
-        ];
-
         let currentSelectedDoi = 1;
-        let danhSachDoi = defaultDanhSachDoi;
-        let thieuNhiData = {};
-        let danhSachNgayLe = ["CN 09/08/2026", "CN 16/08/2026"];
-        let doiTruongMap = {}; 
-        let editingLyDo = { emIdx: null, ngayKey: null };
-        let editingEmIdx = null; 
-
+        let globalData = { thieuNhi: {}, ngayLe: ["CN 09/08/2026", "CN 16/08/2026"], doiTruong: {} };
         let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {
             name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
         };
 
-        // Hàm chuẩn hóa key loại bỏ dấu chấm (.) bảo mật tuyệt đối cho Firebase
-        function formatNgayKey(ngayStr) {
-            return String(ngayStr || "").replace(/\./g, '_');
-        }
-
-        // Lắng nghe dữ liệu Firebase với cơ chế tự động làm sạch sâu
-        db.ref("danhSachDoi").on("value", (snapshot) => {
-            if (snapshot.exists()) {
-                danhSachDoi = snapshot.val();
-            } else {
-                db.ref("danhSachDoi").set(defaultDanhSachDoi);
-                danhSachDoi = defaultDanhSachDoi;
-            }
-            capNhatGiaoDien();
-        });
-
-        db.ref("danhSachNgayLe").on("value", (snapshot) => {
-            if (snapshot.exists()) danhSachNgayLe = snapshot.val();
-            capNhatGiaoDien();
-        });
-
-        db.ref("quanLyDiemDanhDoanSinh").on("value", (snapshot) => {
-            let rawData = snapshot.val() || {};
-            let cleanedData = {};
-            
-            for (let doiKey in rawData) {
-                let listEm = rawData[doiKey];
-                if (!Array.isArray(listEm)) {
-                    listEm = Object.values(listEm || {});
-                }
-                
-                cleanedData[doiKey] = listEm.map(em => {
-                    let cDiemDanh = {};
-                    if (em.diemDanh && typeof em.diemDanh === 'object') {
-                        for (let k in em.diemDanh) {
-                            cDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
-                        }
-                    }
-                    let cLyDo = {};
-                    if (em.lyDoVang && typeof em.lyDoVang === 'object') {
-                        for (let k in em.lyDoVang) {
-                            cLyDo[formatNgayKey(k)] = em.lyDoVang[k];
-                        }
-                    }
-                    return {
-                        hoTen: em.hoTen || "",
-                        ngaySinh: em.ngaySinh || "",
-                        nganh: em.nganh || "",
-                        sdtPhuHuynh: em.sdtPhuHuynh || "",
-                        diemDanh: cDiemDanh,
-                        lyDoVang: cLyDo
-                    };
-                });
-            }
-            thieuNhiData = cleanedData;
-            capNhatGiaoDien();
-        });
-
-        db.ref("doiTruongMapping").on("value", (snapshot) => {
-            doiTruongMap = snapshot.val() || {};
-            xacDinhQuyenTruyCap();
-            capNhatGiaoDien();
-        });
-
-        function handleCredentialResponse(response) {
+        // Tải dữ liệu từ Google Sheets
+        async function taiDuLieuTuSheet() {
             try {
-                const payload = jwt_decode(response.credential);
-                const email = payload.email.toLowerCase().trim();
-
-                let role = "viewer";
-                if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
-                    role = "admin";
-                } else {
-                    for (let id in doiTruongMap) {
-                        const info = doiTruongMap[id] || {};
-                        if ((info.emailDt && info.emailDt.toLowerCase().trim() === email) || (info.emailDp && info.emailDp.toLowerCase().trim() === email)) {
-                            role = "doitruong";
-                            break;
-                        }
-                    }
+                const response = await fetch(GOOGLE_SCRIPT_URL);
+                const result = await response.json();
+                if (result && result.success) {
+                    globalData.thieuNhi = result.thieuNhi || {};
+                    if (result.ngayLe && result.ngayLe.length > 0) globalData.ngayLe = result.ngayLe;
+                    globalData.doiTruong = result.doiTruong || {};
                 }
-
-                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
-                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
-                xacDinhQuyenTruyCap();
-                alert(`Đăng nhập thành công! Chào ${payload.name}`);
-            } catch (e) { console.error(e); }
+            } catch (e) {
+                console.error("Lỗi tải Google Sheets:", e);
+            } finally {
+                document.getElementById("loadingOverlay").style.display = "none";
+                capNhatGiaoDien();
+            }
         }
 
         window.onload = function () {
@@ -610,7 +333,21 @@
                 google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
             }
             xacDinhQuyenTruyCap();
+            taiDuLieuTuSheet();
         };
+
+        function handleCredentialResponse(response) {
+            try {
+                const payload = jwt_decode(response.credential);
+                const email = payload.email.toLowerCase().trim();
+                let role = ADMIN_EMAILS.includes(email) ? "admin" : "viewer";
+
+                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
+                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
+                xacDinhQuyenTruyCap();
+                alert(`Đăng nhập thành công! Chào ${payload.name}`);
+            } catch (e) { console.error(e); }
+        }
 
         function xuLyDangXuat() {
             currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
@@ -622,59 +359,21 @@
         function xacDinhQuyenTruyCap() {
             document.getElementById("userNameDisplay").innerText = currentUser.name;
             document.getElementById("userAvatarMini").src = currentUser.picture;
-
             const badge = document.getElementById("roleBadge");
             const googleBtn = document.getElementById("googleBtnContainer");
             const logoutBtn = document.getElementById("logoutBtn");
-            const adminConfigBtn = document.getElementById("adminConfigDoiBtn");
 
             badge.className = "role-tag";
             if (currentUser.role === "admin") {
-                badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
-                adminConfigBtn.style.display = "inline-flex";
-            } else if (currentUser.role === "doitruong") {
-                badge.classList.add("role-doitruong"); badge.innerText = "Đội Trưởng/Phó";
-                adminConfigBtn.style.display = "none";
+                badge.classList.add("role-admin"); badge.innerText = "Quản trị viên";
             } else {
                 badge.classList.add("role-viewer"); badge.innerText = "Người xem";
-                adminConfigBtn.style.display = "none";
             }
 
             if (currentUser.email) {
                 googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex";
             } else {
                 googleBtn.style.display = "block"; logoutBtn.style.display = "none";
-            }
-
-            kiemTraQuyenThaoTacDoi();
-        }
-
-        function kiemTraQuyenThaoTacDoi() {
-            const btnThemNgay = document.getElementById("btnThemNgayLe");
-            const btnThemEm = document.getElementById("btnThemThieuNhi");
-            const btnModalThemEm = document.getElementById("btnModalThemThanhVien");
-
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") {
-                duocPhepSua = true;
-            } else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const emailDt = (info.emailDt || "").toLowerCase().trim();
-                const emailDp = (info.emailDp || "").toLowerCase().trim();
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((emailDt && emailDt === myEmail) || (emailDp && emailDp === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
-
-            if (duocPhepSua) {
-                if(btnThemNgay) btnThemNgay.style.display = "inline-block";
-                if(btnThemEm) btnThemEm.style.display = "inline-block";
-                if(btnModalThemEm) btnModalThemEm.style.display = "inline-block";
-            } else {
-                if(btnThemNgay) btnThemNgay.style.display = "none";
-                if(btnThemEm) btnThemEm.style.display = "none";
-                if(btnModalThemEm) btnModalThemEm.style.display = "none";
             }
         }
 
@@ -683,9 +382,6 @@
             tinhToanTongSoThieuNhi();
             if (document.getElementById("chiTietDoiSection").classList.contains("active")) {
                 hienThiChiTietDoi();
-            }
-            if (document.getElementById("modalXemDanhSach").classList.contains("active")) {
-                renderModalHosoTable();
             }
         }
 
@@ -697,19 +393,14 @@
 
             danhSachDoi.forEach(doi => {
                 const doiKey = `doi_${doi.id}`;
-                const siSo = (thieuNhiData[doiKey] || []).length;
-                const info = doiTruongMap[doi.id] || {};
-                const tenDt = info.dt || "Chưa phân công";
-
+                const siSo = (globalData.thieuNhi[doiKey] || []).length;
                 const card = document.createElement("div");
                 card.className = "doi-card";
                 card.innerHTML = `
                     <h4>${doi.name}</h4>
-                    <span class="doitruong-lbl"><i class="fa-solid fa-user-tie me-1"></i> ĐT: ${tenDt}</span>
                     <p>${doi.nganh || 'Chưa phân ngành'} • Sĩ số: <strong>${siSo} em</strong></p>
                     <div class="doi-card-actions">
-                        <button class="btn-card-action btn-xem-ds" onclick="moModalXemDanhSach(${doi.id})"><i class="fa-solid fa-address-book"></i> Xem danh sách</button>
-                        <button class="btn-card-action btn-diem-danh" onclick="moChiTietDoi(${doi.id})"><i class="fa-solid fa-clipboard-user"></i> Điểm danh</button>
+                        <button class="btn-card-action btn-diem-danh" onclick="moChiTietDoi(${doi.id})"><i class="fa-solid fa-clipboard-user"></i> Xem & Điểm danh</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -719,168 +410,16 @@
         function tinhToanTongSoThieuNhi() {
             let total = 0;
             danhSachDoi.forEach(doi => {
-                total += (thieuNhiData[`doi_${doi.id}`] || []).length;
+                total += (globalData.thieuNhi[`doi_${doi.id}`] || []).length;
             });
-            const elem = document.getElementById("statTongSoThieuNhi");
+            const elem = document.getElementById("statTongThieuNhi");
             if (elem) elem.innerText = `${total} em`;
-        }
-
-        function moModalXemDanhSach(doiId) {
-            currentSelectedDoi = doiId;
-            const doiObj = danhSachDoi.find(d => d.id === doiId);
-            document.getElementById("modalXemDsTitle").innerText = `Hồ Sơ Thành Viên - ${doiObj ? doiObj.name : ''}`;
-            renderModalHosoTable();
-            document.getElementById("modalXemDanhSach").classList.add("active");
-        }
-
-        function renderModalHosoTable() {
-            const tbody = document.getElementById("modalHosoTableBody");
-            if (!tbody) return;
-            tbody.innerHTML = "";
-            const doiKey = `doi_${currentSelectedDoi}`;
-            const danhSachEm = thieuNhiData[doiKey] || [];
-
-            if (danhSachEm.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Chưa có thành viên nào trong đội.</td></tr>`;
-                return;
-            }
-
-            danhSachEm.forEach((em, idx) => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td class="fw-bold text-muted">${idx + 1}</td>
-                    <td><strong style="color: #f8fafc;">${em.hoTen}</strong></td>
-                    <td class="text-info">${em.ngaySinh || 'Chưa cập nhật'}</td>
-                    <td class="text-warning">${em.nganh || 'Chưa cập nhật'}</td>
-                    <td class="text-success">${em.sdtPhuHuynh || 'Chưa cập nhật'}</td>
-                    <td style="text-align: center;">
-                        <button class="btn btn-sm btn-primary px-2 py-1 me-1" onclick="moModalSuaThieuNhi(${idx})" title="Cập nhật"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="btn btn-sm btn-danger px-2 py-1" onclick="xoaThieuNhi(${idx})" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        async function xoaThieuNhi(index) {
-            if (confirm("Bạn có chắc chắn muốn xóa thành viên này khỏi đội không?")) {
-                const doiId = currentSelectedDoi;
-                const doiKey = `doi_${doiId}`;
-                thieuNhiData[doiKey].splice(index, 1);
-                
-                const cleanArray = thieuNhiData[doiKey].map(em => ({
-                    hoTen: em.hoTen || "",
-                    ngaySinh: em.ngaySinh || "",
-                    nganh: em.nganh || "",
-                    sdtPhuHuynh: em.sdtPhuHuynh || "",
-                    diemDanh: em.diemDanh || {},
-                    lyDoVang: em.lyDoVang || {}
-                }));
-
-                try {
-                    await db.ref(`quanLyDiemDanhDoanSinh/${doiKey}`).set(cleanArray);
-                    renderModalHosoTable();
-                    khoiTaoTheDoi();
-                    tinhToanTongSoThieuNhi();
-                } catch (error) {
-                    alert("Lỗi khi xóa thành viên: " + error.message);
-                }
-            }
-        }
-
-        function moModalThemThieuNhiTuModal() {
-            dongModal('modalXemDanhSach');
-            moModalThemThieuNhi();
-        }
-
-        function moModalThemThieuNhi() {
-            editingEmIdx = null; 
-            document.getElementById("modalThemEmTitle").innerText = "Thêm Thành Viên Mới";
-            document.getElementById("inputTenEm").value = "";
-            document.getElementById("inputNgaySinhEm").value = "";
-            document.getElementById("inputNganhEm").value = "";
-            document.getElementById("inputSdtEm").value = "";
-            document.getElementById("modalThemEm").classList.add("active");
-        }
-
-        function moModalSuaThieuNhi(idx) {
-            dongModal('modalXemDanhSach');
-            editingEmIdx = idx; 
-            const doiKey = `doi_${currentSelectedDoi}`;
-            const em = thieuNhiData[doiKey][idx];
-
-            document.getElementById("modalThemEmTitle").innerText = "Cập Nhật Thông Tin Thành Viên";
-            document.getElementById("inputTenEm").value = em.hoTen || "";
-            document.getElementById("inputNgaySinhEm").value = em.ngaySinh || "";
-            document.getElementById("inputNganhEm").value = em.nganh || "";
-            document.getElementById("inputSdtEm").value = em.sdtPhuHuynh || "";
-            document.getElementById("modalThemEm").classList.add("active");
-        }
-
-        async function luuThieuNhiMoi() {
-            const ten = document.getElementById("inputTenEm").value.trim();
-            const ngaySinh = document.getElementById("inputNgaySinhEm").value.trim();
-            const nganh = document.getElementById("inputNganhEm").value.trim();
-            const sdt = document.getElementById("inputSdtEm").value.trim();
-
-            if (!ten || !ngaySinh || !nganh || !sdt) {
-                alert("Vui lòng nhập đầy đủ tất cả các thông tin bắt buộc (*): Thánh họ tên, Ngày sinh, Ngành, SĐT phụ huynh!");
-                return;
-            }
-
-            const doiId = currentSelectedDoi;
-            const doiKey = `doi_${doiId}`;
-            if (!thieuNhiData[doiKey]) thieuNhiData[doiKey] = [];
-
-            if (editingEmIdx !== null) {
-                thieuNhiData[doiKey][editingEmIdx].hoTen = ten;
-                thieuNhiData[doiKey][editingEmIdx].ngaySinh = ngaySinh;
-                thieuNhiData[doiKey][editingEmIdx].nganh = nganh;
-                thieuNhiData[doiKey][editingEmIdx].sdtPhuHuynh = sdt;
-            } else {
-                thieuNhiData[doiKey].push({
-                    hoTen: ten,
-                    ngaySinh: ngaySinh,
-                    nganh: nganh,
-                    sdtPhuHuynh: sdt,
-                    diemDanh: {},
-                    lyDoVang: {}
-                });
-            }
-
-            const cleanArray = thieuNhiData[doiKey].map(em => ({
-                hoTen: em.hoTen || "",
-                ngaySinh: em.ngaySinh || "",
-                nganh: em.nganh || "",
-                sdtPhuHuynh: em.sdtPhuHuynh || "",
-                diemDanh: em.diemDanh || {},
-                lyDoVang: em.lyDoVang || {}
-            }));
-
-            try {
-                await db.ref(`quanLyDiemDanhDoanSinh/${doiKey}`).set(cleanArray);
-                alert("Đã lưu thông tin thành công!");
-                dongModal('modalThemEm');
-                if (document.getElementById("chiTietDoiSection").classList.contains("active")) {
-                    hienThiChiTietDoi();
-                }
-                tinhToanTongSoThieuNhi();
-                khoiTaoTheDoi();
-            } catch (error) {
-                alert("Lỗi khi lưu thành viên: " + error.message);
-            }
         }
 
         function moChiTietDoi(doiId) {
             currentSelectedDoi = doiId;
             document.getElementById("danhSachDoiSection").style.display = "none";
             document.getElementById("chiTietDoiSection").classList.add("active");
-            
-            const info = doiTruongMap[doiId] || {};
-            const dtText = info.dt ? `${info.dt} (${info.sdtDt || 'Chưa có SĐT'})` : 'Chưa phân công';
-            const dpText = info.dp ? `${info.dp} (${info.sdtDp || 'Chưa có SĐT'})` : 'Chưa phân công';
-            document.getElementById("currentDoiBanCanSu").innerHTML = `<i class="fa-solid fa-user-tie text-success me-1"></i> Đội trưởng: <strong>${dtText}</strong> &nbsp;|&nbsp; <i class="fa-solid fa-user-shield text-warning me-1"></i> Đội phó: <strong>${dpText}</strong>`;
-
             hienThiChiTietDoi();
         }
 
@@ -896,7 +435,7 @@
 
             const headerRow = document.getElementById("tableHeaderRow");
             let headerHTML = `<th style="width: 50px;">STT</th><th>Thánh Họ Và Tên</th>`;
-            danhSachNgayLe.forEach(ngay => {
+            globalData.ngayLe.forEach(ngay => {
                 headerHTML += `<th style="width: 140px; text-align: center; font-size: 13px;">${ngay}</th>`;
             });
             headerHTML += `<th style="width: 150px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>`;
@@ -906,36 +445,28 @@
             tbody.innerHTML = "";
 
             const doiKey = `doi_${currentSelectedDoi}`;
-            const danhSachEm = thieuNhiData[doiKey] || [];
-            let tongSoNguoiMoiNgay = new Array(danhSachNgayLe.length).fill(0);
+            const danhSachEm = globalData.thieuNhi[doiKey] || [];
+            let tongSoNguoiMoiNgay = new Array(globalData.ngayLe.length).fill(0);
 
             if (danhSachEm.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${danhSachNgayLe.length + 3}" class="text-center text-muted py-4">Chưa có thiếu nhi trong đội.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${globalData.ngayLe.length + 3}" class="text-center text-muted py-4">Chưa có thiếu nhi trong đội này.</td></tr>`;
             } else {
                 danhSachEm.forEach((em, idx) => {
                     const diemsDanhMap = em.diemDanh || {};
                     let tongNgayDiLeEm = 0;
-
                     let colsHTML = "";
-                    danhSachNgayLe.forEach((ngay, nIdx) => {
-                        const safeNgayKey = formatNgayKey(ngay);
-                        const status = diemsDanhMap[safeNgayKey];
-                        const isCoMat = status === true;
-                        const isCoPhep = status === "co_phep";
+
+                    globalData.ngayLe.forEach((ngay, nIdx) => {
+                        const isCoMat = diemsDanhMap[ngay] === true;
                         if (isCoMat) {
                             tongNgayDiLeEm++;
                             tongSoNguoiMoiNgay[nIdx]++;
                         }
 
-                        let lydoText = (isCoPhep && em.lyDoVang && em.lyDoVang[safeNgayKey]) ? `<span class="lydo-note">Phép: ${em.lyDoVang[safeNgayKey]}</span>` : '';
-
                         colsHTML += `
                             <td style="text-align: center;">
                                 <input type="checkbox" class="sheet-checkbox" ${isCoMat ? 'checked' : ''} 
-                                       onchange="toggleDiemDanh(${idx}, '${ngay}')"
-                                       oncontextmenu="moModalLyDoVang(event, ${idx}, '${ngay}', '${em.hoTen}')"
-                                       title="Nhấn chuột phải hoặc chạm giữ để ghi lý do vắng có phép">
-                                ${lydoText}
+                                       onchange="toggleDiemDanh(${idx}, '${ngay}')">
                             </td>
                         `;
                     });
@@ -962,244 +493,37 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh tối ưu chống lỗi dấu chấm tuyệt đối
+        // Gửi dữ liệu điểm danh trực tiếp lên Google Sheets
         async function toggleDiemDanh(index, ngayKey) {
-            try {
-                const doiId = currentSelectedDoi;
-                const doiKey = `doi_${doiId}`;
-                const safeNgayKey = formatNgayKey(ngayKey);
-                
-                if (!thieuNhiData[doiKey]) thieuNhiData[doiKey] = [];
-                if (!thieuNhiData[doiKey][index]) thieuNhiData[doiKey][index] = {};
-                
-                if (!thieuNhiData[doiKey][index].diemDanh || typeof thieuNhiData[doiKey][index].diemDanh !== 'object') {
-                    thieuNhiData[doiKey][index].diemDanh = {};
-                }
-
-                let oldDiemDanh = thieuNhiData[doiKey][index].diemDanh;
-                let newDiemDanh = {};
-                for (let k in oldDiemDanh) {
-                    let cleanedKey = formatNgayKey(k);
-                    newDiemDanh[cleanedKey] = oldDiemDanh[k];
-                }
-
-                const currentVal = newDiemDanh[safeNgayKey];
-                const nextVal = (currentVal === true || currentVal === "co_phep") ? false : true;
-                newDiemDanh[safeNgayKey] = nextVal;
-
-                thieuNhiData[doiKey][index].diemDanh = newDiemDanh;
-
-                const cleanArray = thieuNhiData[doiKey].map(em => {
-                    let cleanedEmDiemDanh = {};
-                    if (em.diemDanh && typeof em.diemDanh === 'object') {
-                        for (let k in em.diemDanh) {
-                            cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
-                        }
-                    }
-                    let cleanedEmLyDo = {};
-                    if (em.lyDoVang && typeof em.lyDoVang === 'object') {
-                        for (let k in em.lyDoVang) {
-                            cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
-                        }
-                    }
-
-                    return {
-                        hoTen: em.hoTen || "",
-                        ngaySinh: em.ngaySinh || "",
-                        nganh: em.nganh || "",
-                        sdtPhuHuynh: em.sdtPhuHuynh || "",
-                        diemDanh: cleanedEmDiemDanh,
-                        lyDoVang: cleanedEmLyDo
-                    };
-                });
-
-                await db.ref(`quanLyDiemDanhDoanSinh/${doiKey}`).set(cleanArray);
-                console.log("Đã làm sạch key và lưu điểm danh thành công lên Firebase!");
-                hienThiChiTietDoi();
-            } catch (error) {
-                console.error("Lỗi ghi Firebase:", error);
-                alert("Lỗi không thể lưu điểm danh: " + error.message);
-            }
-        }
-
-        function moModalLyDoVang(event, emIdx, ngayKey, tenEm) {
-            event.preventDefault();
-            editingLyDo = { emIdx, ngayKey };
-            document.getElementById("lyDoEmName").innerText = `Đoàn sinh: ${tenEm} (${ngayKey})`;
-            document.getElementById("inputLyDoPhep").value = "";
-            document.getElementById("modalLyDoVang").classList.add("active");
-        }
-
-        async function luuLyDoVang() {
-            const lydo = document.getElementById("inputLyDoPhep").value.trim();
-            if (!lydo) { alert("Vui lòng nhập lý do vắng!"); return; }
-
             const doiId = currentSelectedDoi;
             const doiKey = `doi_${doiId}`;
-            const safeNgayKey = formatNgayKey(editingLyDo.ngayKey);
-            const em = thieuNhiData[doiKey][editingLyDo.emIdx];
+            
+            if (!globalData.thieuNhi[doiKey]) globalData.thieuNhi[doiKey] = [];
+            if (!globalData.thieuNhi[doiKey][index].diemDanh) globalData.thieuNhi[doiKey][index].diemDanh = {};
 
-            if (!em.diemDanh) em.diemDanh = {};
-            em.diemDanh[safeNgayKey] = "co_phep";
-            if (!em.lyDoVang) em.lyDoVang = {};
-            em.lyDoVang[safeNgayKey] = lydo;
-
-            const cleanArray = thieuNhiData[doiKey].map(em => {
-                let cleanedEmDiemDanh = {};
-                if (em.diemDanh) {
-                    for (let k in em.diemDanh) {
-                        cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
-                    }
-                }
-                let cleanedEmLyDo = {};
-                if (em.lyDoVang) {
-                    for (let k in em.lyDoVang) {
-                        cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
-                    }
-                }
-
-                return {
-                    hoTen: em.hoTen || "",
-                    ngaySinh: em.ngaySinh || "",
-                    nganh: em.nganh || "",
-                    sdtPhuHuynh: em.sdtPhuHuynh || "",
-                    diemDanh: cleanedEmDiemDanh,
-                    lyDoVang: cleanedEmLyDo
-                };
-            });
+            const currentVal = globalData.thieuNhi[doiKey][index].diemDanh[ngayKey];
+            globalData.thieuNhi[doiKey][index].diemDanh[ngayKey] = !currentVal;
+            hienThiChiTietDoi();
 
             try {
-                await db.ref(`quanLyDiemDanhDoanSinh/${doiKey}`).set(cleanArray);
-                alert("Đã lưu lý do vắng có phép!");
-                dongModal('modalLyDoVang');
-                hienThiChiTietDoi();
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "updateDiemDanh",
+                        doiKey: doiKey,
+                        thieuNhiIndex: index,
+                        ngayKey: ngayKey,
+                        status: !currentVal
+                    })
+                });
+                console.log("Đã đồng bộ lên Google Sheets thành công!");
             } catch (error) {
-                alert("Lỗi lưu lý do: " + error.message);
+                console.error("Lỗi đồng bộ Google Sheets:", error);
+                alert("Lỗi đồng bộ dữ liệu trực tuyến!");
             }
         }
-
-        function tuDongTaoNgayHienTai() {
-            const now = new Date();
-            const dd = String(now.getDate()).padStart(2, '0');
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const yyyy = now.getFullYear();
-            const tenNgayMoi = `CN ${dd}/${mm}/${yyyy}`;
-
-            if (danhSachNgayLe.includes(tenNgayMoi)) {
-                alert(`Cột ngày "${tenNgayMoi}" đã tồn tại!`);
-                return;
-            }
-
-            danhSachNgayLe.push(tenNgayMoi);
-            db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
-                alert(`Đã tự động tạo cột ngày lễ (${tenNgayMoi}) thành công!`);
-            });
-        }
-
-        function moModalAdminDoi() {
-            renderAdminDoiForm();
-            document.getElementById("modalAdminDoi").classList.add("active");
-        }
-
-        function renderAdminDoiForm() {
-            const container = document.getElementById("adminDoiFormContainer");
-            if (!container) return;
-            container.innerHTML = "";
-
-            danhSachDoi.forEach((doi, index) => {
-                const info = doiTruongMap[doi.id] || {};
-                const div = document.createElement("div");
-                div.className = "p-3 mb-3 rounded-3";
-                div.style.cssText = "background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);";
-                div.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="d-flex gap-2 align-items-center flex-grow-1">
-                            <input type="text" class="form-control-custom name-doi-${doi.id}" value="${doi.name}" placeholder="Tên đội..." style="margin-bottom:0; font-weight:bold; color:#38bdf8;">
-                            <input type="text" class="form-control-custom nganh-doi-${doi.id}" value="${doi.nganh || ''}" placeholder="Ngành..." style="margin-bottom:0; width:140px;">
-                        </div>
-                        <button class="btn btn-sm btn-danger ms-2 px-3 py-1 fw-bold" onclick="xoaDoiAdmin(${doi.id})" title="Xóa"><i class="fa-solid fa-trash"></i> Xóa</button>
-                    </div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="small fw-bold text-success">Đội trưởng:</label>
-                            <select class="form-control-custom select-dt" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dt')">
-                                <option value="">-- Chọn Huynh Trưởng --</option>
-                                ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dt === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
-                            </select>
-                            <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="SĐT ĐT...">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="small fw-bold text-warning">Đội phó:</label>
-                            <select class="form-control-custom select-dp" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dp')">
-                                <option value="">-- Chọn Huynh Trưởng --</option>
-                                ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dp === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
-                            </select>
-                            <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="SĐT ĐP...">
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        function themDoiMoiAdmin() {
-            const newId = danhSachDoi.length > 0 ? Math.max(...danhSachDoi.map(d => d.id)) + 1 : 1;
-            danhSachDoi.push({ id: newId, name: `Đội ${newId}`, nganh: "Ngành Thiếu" });
-            renderAdminDoiForm();
-        }
-
-        function xoaDoiAdmin(doiId) {
-            if (confirm("Bạn có chắc chắn muốn xóa đội này không?")) {
-                danhSachDoi = danhSachDoi.filter(d => d.id !== doiId);
-                renderAdminDoiForm();
-            }
-        }
-
-        function chonHtChoDoi(selectElem, doiId, type) {
-            const selectedName = selectElem.value;
-            const found = danhSachGocHT.find(h => h.thanhHoTen === selectedName);
-            if (found) {
-                if (type === 'dt') {
-                    document.querySelector(`.sdt-dt-${doiId}`).value = found.sdt;
-                } else {
-                    document.querySelector(`.sdt-dp-${doiId}`).value = found.sdt;
-                }
-            }
-        }
-
-        function luuQuanLyDoiAdmin() {
-            let updatedDanhSachDoi = [];
-            let newMap = {};
-
-            danhSachDoi.forEach(doi => {
-                const nameInput = document.querySelector(`.name-doi-${doi.id}`);
-                const nganhInput = document.querySelector(`.nganh-doi-${doi.id}`);
-                
-                if (nameInput) {
-                    updatedDanhSachDoi.push({
-                        id: doi.id,
-                        name: nameInput.value.trim() || `Đội ${doi.id}`,
-                        nganh: nganhInput.value.trim() || ""
-                    });
-                }
-
-                const dt = document.querySelector(`.select-dt[data-doi-id="${doi.id}"]`)?.value || "";
-                const sdtDt = document.querySelector(`.sdt-dt-${doi.id}`)?.value.trim() || "";
-
-                const dp = document.querySelector(`.select-dp[data-doi-id="${doi.id}"]`)?.value || "";
-                const sdtDp = document.querySelector(`.sdt-dp-${doi.id}`)?.value.trim() || "";
-
-                newMap[doi.id] = { dt, sdtDt, dp, sdtDp };
-            });
-
-            db.ref("danhSachDoi").set(updatedDanhSachDoi);
-            db.ref("doiTruongMapping").set(newMap).then(() => {
-                alert("Đã cập nhật danh sách đội và phân công thành công!");
-                dongModal("modalAdminDoi");
-            });
-        }
-
-        function dongModal(id) { document.getElementById(id).classList.remove("active"); }
 
         function xuLyTimKiemToanDoan() {
             const keyword = document.getElementById("globalSearchInput").value.toLowerCase().trim();
@@ -1208,26 +532,14 @@
             container.innerHTML = "";
 
             if (!keyword) return;
-
             let matches = [];
+
             danhSachDoi.forEach(doi => {
                 const doiKey = `doi_${doi.id}`;
-                const arr = thieuNhiData[doiKey] || [];
-
+                const arr = globalData.thieuNhi[doiKey] || [];
                 arr.forEach(em => {
                     if (em.hoTen.toLowerCase().includes(keyword)) {
-                        const diemsDanhMap = em.diemDanh || {};
-                        let di = 0, khongp = 0, cophep = 0;
-
-                        danhSachNgayLe.forEach(ngay => {
-                            const safeNgayKey = formatNgayKey(ngay);
-                            const stt = diemsDanhMap[safeNgayKey];
-                            if (stt === true) di++;
-                            else if (stt === "co_phep") cophep++;
-                            else khongp++;
-                        });
-
-                        matches.push({ em, doiInfo: doi, stats: { di, khongp, cophep } });
+                        matches.push({ em, doiInfo: doi });
                     }
                 });
             });
@@ -1243,16 +555,9 @@
                 card.innerHTML = `
                     <div>
                         <strong style="color: #0052d4; font-size: 16px;">${item.em.hoTen}</strong>
-                        <div class="small text-muted">${item.doiInfo.name} (${item.doiInfo.nganh || ''}) - SĐT PH: ${item.em.sdtPhuHuynh || 'Chưa có'}</div>
-                        <div class="search-result-stats">
-                            <span class="badge-s-di">Đi lễ: ${item.stats.di} buổi</span>
-                            <span class="badge-s-khongp">Vắng KP: ${item.stats.khongp} buổi</span>
-                            <span class="badge-s-cop">Vắng CP: ${item.stats.cophep} buổi</span>
-                        </div>
+                        <div class="small text-muted">${item.doiInfo.name}</div>
                     </div>
-                    <button class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="moChiTietDoi(${item.doiInfo.id})">
-                        <i class="fa-solid fa-eye me-1"></i> Xem đội
-                    </button>
+                    <button class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="moChiTietDoi(${item.doiInfo.id})">Xem đội</button>
                 `;
                 container.appendChild(card);
             });

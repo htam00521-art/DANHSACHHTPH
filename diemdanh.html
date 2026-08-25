@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                     url('bg_church.jpg'), url('backgroud.jpg');
+                        url('nen1.jpg'), url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -517,10 +517,10 @@
 
         // Hàm chuẩn hóa key loại bỏ dấu chấm (.) bảo mật tuyệt đối cho Firebase
         function formatNgayKey(ngayStr) {
-            return ngayStr.replace(/\./g, '_');
+            return String(ngayStr || "").replace(/\./g, '_');
         }
 
-        // Lắng nghe dữ liệu Firebase
+        // Lắng nghe dữ liệu Firebase với cơ chế tự động làm sạch sâu
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -541,30 +541,33 @@
             let cleanedData = {};
             
             for (let doiKey in rawData) {
-                if (Array.isArray(rawData[doiKey])) {
-                    cleanedData[doiKey] = rawData[doiKey].map(em => {
-                        let cDiemDanh = {};
-                        if (em.diemDanh && typeof em.diemDanh === 'object') {
-                            for (let k in em.diemDanh) {
-                                cDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
-                            }
-                        }
-                        let cLyDo = {};
-                        if (em.lyDoVang && typeof em.lyDoVang === 'object') {
-                            for (let k in em.lyDoVang) {
-                                cLyDo[formatNgayKey(k)] = em.lyDoVang[k];
-                            }
-                        }
-                        return {
-                            hoTen: em.hoTen || "",
-                            ngaySinh: em.ngaySinh || "",
-                            nganh: em.nganh || "",
-                            sdtPhuHuynh: em.sdtPhuHuynh || "",
-                            diemDanh: cDiemDanh,
-                            lyDoVang: cLyDo
-                        };
-                    });
+                let listEm = rawData[doiKey];
+                if (!Array.isArray(listEm)) {
+                    listEm = Object.values(listEm || {});
                 }
+                
+                cleanedData[doiKey] = listEm.map(em => {
+                    let cDiemDanh = {};
+                    if (em.diemDanh && typeof em.diemDanh === 'object') {
+                        for (let k in em.diemDanh) {
+                            cDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
+                        }
+                    }
+                    let cLyDo = {};
+                    if (em.lyDoVang && typeof em.lyDoVang === 'object') {
+                        for (let k in em.lyDoVang) {
+                            cLyDo[formatNgayKey(k)] = em.lyDoVang[k];
+                        }
+                    }
+                    return {
+                        hoTen: em.hoTen || "",
+                        ngaySinh: em.ngaySinh || "",
+                        nganh: em.nganh || "",
+                        sdtPhuHuynh: em.sdtPhuHuynh || "",
+                        diemDanh: cDiemDanh,
+                        lyDoVang: cLyDo
+                    };
+                });
             }
             thieuNhiData = cleanedData;
             capNhatGiaoDien();
@@ -718,7 +721,7 @@
             danhSachDoi.forEach(doi => {
                 total += (thieuNhiData[`doi_${doi.id}`] || []).length;
             });
-            const elem = document.getElementById("statTongThieuNhi");
+            const elem = document.getElementById("statTongSoThieuNhi");
             if (elem) elem.innerText = `${total} em`;
         }
 
@@ -959,7 +962,7 @@
             footerRow.innerHTML = footerHTML;
         }
 
-        // Hàm điểm danh tối ưu tự động dọn dẹp key cũ chứa dấu chấm và lưu điểm danh vĩnh viễn
+        // Hàm điểm danh tối ưu chống lỗi dấu chấm tuyệt đối
         async function toggleDiemDanh(index, ngayKey) {
             try {
                 const doiId = currentSelectedDoi;
@@ -976,7 +979,7 @@
                 let oldDiemDanh = thieuNhiData[doiKey][index].diemDanh;
                 let newDiemDanh = {};
                 for (let k in oldDiemDanh) {
-                    let cleanedKey = k.replace(/\./g, '_');
+                    let cleanedKey = formatNgayKey(k);
                     newDiemDanh[cleanedKey] = oldDiemDanh[k];
                 }
 
@@ -990,13 +993,13 @@
                     let cleanedEmDiemDanh = {};
                     if (em.diemDanh && typeof em.diemDanh === 'object') {
                         for (let k in em.diemDanh) {
-                            cleanedEmDiemDanh[k.replace(/\./g, '_')] = em.diemDanh[k];
+                            cleanedEmDiemDanh[formatNgayKey(k)] = em.diemDanh[k];
                         }
                     }
                     let cleanedEmLyDo = {};
                     if (em.lyDoVang && typeof em.lyDoVang === 'object') {
                         for (let k in em.lyDoVang) {
-                            cleanedEmLyDo[k.replace(/\./g, '_')] = em.lyDoVang[k];
+                            cleanedEmLyDo[formatNgayKey(k)] = em.lyDoVang[k];
                         }
                     }
 

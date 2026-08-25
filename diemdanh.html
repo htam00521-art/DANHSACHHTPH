@@ -688,7 +688,6 @@
             document.getElementById("statTongThieuNhi").innerText = `${total} em`;
         }
 
-        // 1. Mở modal xem danh sách hồ sơ chi tiết của đội
         function moModalXemDanhSach(doiId) {
             currentSelectedDoi = doiId;
             const doiObj = danhSachDoi.find(d => d.id === doiId);
@@ -821,7 +820,6 @@
             });
         }
 
-        // 2. Mở bảng điểm danh chi tiết đội
         function moChiTietDoi(doiId) {
             currentSelectedDoi = doiId;
             document.getElementById("danhSachDoiSection").style.display = "none";
@@ -933,7 +931,11 @@
             const nextVal = (currentVal === true || currentVal === "co_phep") ? false : true;
             
             thieuNhiData[doiKey][index].diemDanh[ngayKey] = nextVal;
-            db.ref(`diemDanhThieuNhi/${doiKey}`).set(thieuNhiData[doiKey]);
+            db.ref(`diemDanhThieuNhi/${doiKey}`).set(thieuNhiData[doiKey]).then(() => {
+                console.log("Đã lưu điểm danh thành công lên Firebase!");
+            }).catch((error) => {
+                alert("Lỗi không thể lưu điểm danh lên Firebase: " + error.message);
+            });
         }
 
         function moModalLyDoVang(event, emIdx, ngayKey, tenEm) {
@@ -970,6 +972,8 @@
             db.ref(`diemDanhThieuNhi/${doiKey}`).set(thieuNhiData[doiKey]).then(() => {
                 alert("Đã lưu lý do vắng có phép!");
                 dongModal('modalLyDoVang');
+            }).catch((error) => {
+                alert("Lỗi lưu lý do: " + error.message);
             });
         }
 

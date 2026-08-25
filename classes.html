@@ -161,7 +161,6 @@
         .thieunhi-table tr:hover { background: rgba(255, 255, 255, 0.04); }
 
         .sheet-checkbox { width: 22px; height: 22px; border: 2px solid #38bdf8; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; accent-color: #0072ff; }
-        .sheet-checkbox:disabled { cursor: not-allowed; opacity: 0.5; }
 
         .btn-action-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-custom-action {
@@ -215,7 +214,7 @@
         <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
-                <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
+                <span style="font-size: 20px; margin-right: 4px;">⛪</span>
                 <span>TNTT PHƯỚC HẢO</span>
             </a>
             <nav class="d-flex gap-2 flex-wrap">
@@ -230,17 +229,13 @@
             <div class="user-status">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
                 <div>
-                    <span id="userNameDisplay" style="font-weight: 600;">Khách</span>
-                    <span id="roleBadge" class="role-tag role-viewer">Người xem</span>
+                    <span id="userNameDisplay" style="font-weight: 600;">Quản Trị Viên</span>
+                    <span id="roleBadge" class="role-tag role-admin">Toàn Quyền</span>
                 </div>
             </div>
             <div class="auth-actions">
-                <button id="adminConfigDoiBtn" class="btn-auth-action" style="display:none; background:#d97706;" onclick="moModalAdminDoi()">
-                    <i class="fa-solid fa-shield-halved"></i> Admin: Quản Lý & Cấu Hình Đội
-                </button>
-                <div id="googleBtnContainer"></div>
-                <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
-                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                <button id="adminConfigDoiBtn" class="btn-auth-action" style="background:#d97706;" onclick="moModalAdminDoi()">
+                    <i class="fa-solid fa-shield-halved"></i> Quản Lý & Cấu Hình Đội
                 </button>
             </div>
         </div>
@@ -302,8 +297,8 @@
                     </div>
                     <div class="btn-action-group">
                         <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
-                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ (Hôm nay)</button>
-                        <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
+                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ (Hôm nay)</button>
+                        <button id="btnThemThieuNhi" class="btn-custom-action" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
                     </div>
                 </div>
 
@@ -329,12 +324,12 @@
         </div>
     </div>
 
-    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT & NÚT THÊM THÀNH VIÊN NGANG HÀNG -->
+    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT -->
     <div class="modal-overlay" id="modalXemDanhSach" onclick="dongModal('modalXemDanhSach')">
         <div class="modal-card" style="max-width: 820px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
                 <h3 id="modalXemDsTitle" style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 20px;">Hồ Sơ Thành Viên</h3>
-                <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
+                <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
                     <i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên
                 </button>
             </div>
@@ -383,7 +378,7 @@
 
             <div class="d-flex gap-3 mt-4">
                 <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalThemEm')">Hủy</button>
-                <button class="btn-modal-action btn-confirm" id="btnLuuThanhVien" onclick="luuThieuNhiMoi()">Lưu thành viên</button>
+                <button class="btn-modal-action btn-confirm" onclick="luuThieuNhiMoi()">Lưu thành viên</button>
             </div>
         </div>
     </div>
@@ -430,9 +425,6 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
-        const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
-        const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
 
         const defaultDanhSachDoi = [
             { id: 1, name: "Đội 1 (Giuse)", nganh: "Ngành Ấu" }, { id: 2, name: "Đội 2 (Maria)", nganh: "Ngành Ấu" },
@@ -512,10 +504,7 @@
         let editingLyDo = { emIdx: null, ngayKey: null };
         let editingEmIdx = null; 
 
-        let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {
-            name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
-        };
-
+        // Lắng nghe dữ liệu thời gian thực từ Firebase Realtime Database
         db.ref("danhSachDoi").on("value", (snapshot) => {
             if (snapshot.exists()) {
                 danhSachDoi = snapshot.val();
@@ -538,108 +527,8 @@
 
         db.ref("doiTruongMapping").on("value", (snapshot) => {
             doiTruongMap = snapshot.val() || {};
-            xacDinhQuyenTruyCap();
             capNhatGiaoDien();
         });
-
-        function handleCredentialResponse(response) {
-            try {
-                const payload = jwt_decode(response.credential);
-                const email = payload.email.toLowerCase().trim();
-
-                let role = "viewer";
-                if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
-                    role = "admin";
-                } else {
-                    for (let id in doiTruongMap) {
-                        const info = doiTruongMap[id] || {};
-                        if ((info.emailDt && info.emailDt.toLowerCase().trim() === email) || (info.emailDp && info.emailDp.toLowerCase().trim() === email)) {
-                            role = "doitruong";
-                            break;
-                        }
-                    }
-                }
-
-                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
-                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
-                xacDinhQuyenTruyCap();
-                alert(`Đăng nhập thành công! Chào ${payload.name}`);
-            } catch (e) { console.error(e); }
-        }
-
-        window.onload = function () {
-            if (window.google) {
-                google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
-                google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
-            }
-            xacDinhQuyenTruyCap();
-        };
-
-        function xuLyDangXuat() {
-            currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
-            localStorage.removeItem("ht_user_session");
-            xacDinhQuyenTruyCap();
-            alert("Đã đăng xuất!");
-        }
-
-        function xacDinhQuyenTruyCap() {
-            document.getElementById("userNameDisplay").innerText = currentUser.name;
-            document.getElementById("userAvatarMini").src = currentUser.picture;
-
-            const badge = document.getElementById("roleBadge");
-            const googleBtn = document.getElementById("googleBtnContainer");
-            const logoutBtn = document.getElementById("logoutBtn");
-            const adminConfigBtn = document.getElementById("adminConfigDoiBtn");
-
-            badge.className = "role-tag";
-            if (currentUser.role === "admin") {
-                badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
-                adminConfigBtn.style.display = "inline-flex";
-            } else if (currentUser.role === "doitruong") {
-                badge.classList.add("role-doitruong"); badge.innerText = "Đội Trưởng/Phó";
-                adminConfigBtn.style.display = "none";
-            } else {
-                badge.classList.add("role-viewer"); badge.innerText = "Người xem";
-                adminConfigBtn.style.display = "none";
-            }
-
-            if (currentUser.email) {
-                googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex";
-            } else {
-                googleBtn.style.display = "block"; logoutBtn.style.display = "none";
-            }
-
-            kiemTraQuyenThaoTacDoi();
-        }
-
-        function kiemTraQuyenThaoTacDoi() {
-            const btnThemNgay = document.getElementById("btnThemNgayLe");
-            const btnThemEm = document.getElementById("btnThemThieuNhi");
-            const btnModalThemEm = document.getElementById("btnModalThemThanhVien");
-
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") {
-                duocPhepSua = true;
-            } else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const emailDt = (info.emailDt || "").toLowerCase().trim();
-                const emailDp = (info.emailDp || "").toLowerCase().trim();
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((emailDt && emailDt === myEmail) || (emailDp && emailDp === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
-
-            if (duocPhepSua) {
-                if(btnThemNgay) btnThemNgay.style.display = "inline-block";
-                if(btnThemEm) btnThemEm.style.display = "inline-block";
-                if(btnModalThemEm) btnModalThemEm.style.display = "inline-block";
-            } else {
-                if(btnThemNgay) btnThemNgay.style.display = "none";
-                if(btnThemEm) btnThemEm.style.display = "none";
-                if(btnModalThemEm) btnModalThemEm.style.display = "none";
-            }
-        }
 
         function capNhatGiaoDien() {
             khoiTaoTheDoi();
@@ -654,6 +543,7 @@
 
         function khoiTaoTheDoi() {
             const grid = document.getElementById("doiGridContainer");
+            if (!grid) return;
             grid.innerHTML = "";
             document.getElementById("statTongSoDoi").innerText = `${danhSachDoi.length} Đội`;
 
@@ -662,14 +552,12 @@
                 const siSo = (thieuNhiData[doiKey] || []).length;
                 const info = doiTruongMap[doi.id] || {};
                 const tenDt = info.dt || "Chưa phân công";
-                const tenDp = info.dp || "Chưa phân công";
 
                 const card = document.createElement("div");
                 card.className = "doi-card";
                 card.innerHTML = `
                     <h4>${doi.name}</h4>
                     <span class="doitruong-lbl"><i class="fa-solid fa-user-tie me-1"></i> ĐT: ${tenDt}</span>
-                    <span class="doipho-lbl"><i class="fa-solid fa-user-shield me-1"></i> ĐP: ${tenDp}</span>
                     <p>${doi.nganh || 'Chưa phân ngành'} • Sĩ số: <strong>${siSo} em</strong></p>
                     <div class="doi-card-actions">
                         <button class="btn-card-action btn-xem-ds" onclick="moModalXemDanhSach(${doi.id})"><i class="fa-solid fa-address-book"></i> Xem danh sách</button>
@@ -685,34 +573,24 @@
             danhSachDoi.forEach(doi => {
                 total += (thieuNhiData[`doi_${doi.id}`] || []).length;
             });
-            document.getElementById("statTongThieuNhi").innerText = `${total} em`;
+            const elem = document.getElementById("statTongThieuNhi");
+            if (elem) elem.innerText = `${total} em`;
         }
 
         function moModalXemDanhSach(doiId) {
             currentSelectedDoi = doiId;
             const doiObj = danhSachDoi.find(d => d.id === doiId);
             document.getElementById("modalXemDsTitle").innerText = `Hồ Sơ Thành Viên - ${doiObj ? doiObj.name : ''}`;
-            
-            kiemTraQuyenThaoTacDoi();
             renderModalHosoTable();
             document.getElementById("modalXemDanhSach").classList.add("active");
         }
 
         function renderModalHosoTable() {
             const tbody = document.getElementById("modalHosoTableBody");
+            if (!tbody) return;
             tbody.innerHTML = "";
             const doiKey = `doi_${currentSelectedDoi}`;
             const danhSachEm = thieuNhiData[doiKey] || [];
-
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") duocPhepSua = true;
-            else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((info.emailDt && info.emailDt.toLowerCase().trim() === myEmail) || (info.emailDp && info.emailDp.toLowerCase().trim() === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
 
             if (danhSachEm.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted py-3">Chưa có thành viên nào trong đội.</td></tr>`;
@@ -728,10 +606,8 @@
                     <td class="text-warning">${em.nganh || 'Chưa cập nhật'}</td>
                     <td class="text-success">${em.sdtPhuHuynh || 'Chưa cập nhật'}</td>
                     <td style="text-align: center;">
-                        ${duocPhepSua ? `
-                            <button class="btn btn-sm btn-primary px-2 py-1 me-1" onclick="moModalSuaThieuNhi(${idx})" title="Cập nhật thông tin"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="btn btn-sm btn-danger px-2 py-1" onclick="xoaThieuNhi(${idx})" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                        ` : '<span class="text-muted">-</span>'}
+                        <button class="btn btn-sm btn-primary px-2 py-1 me-1" onclick="moModalSuaThieuNhi(${idx})" title="Cập nhật"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-sm btn-danger px-2 py-1" onclick="xoaThieuNhi(${idx})" title="Xóa"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -829,7 +705,7 @@
             }));
 
             db.ref(`diemDanhThieuNhi/${doiKey}`).set(cleanData).then(() => {
-                alert("Đã lưu thông tin thành công và đồng bộ dữ liệu!");
+                alert("Đã lưu thông tin thành công!");
                 dongModal('modalThemEm');
                 if (document.getElementById("chiTietDoiSection").classList.contains("active")) {
                     hienThiChiTietDoi();
@@ -851,7 +727,6 @@
             const dpText = info.dp ? `${info.dp} (${info.sdtDp || 'Chưa có SĐT'})` : 'Chưa phân công';
             document.getElementById("currentDoiBanCanSu").innerHTML = `<i class="fa-solid fa-user-tie text-success me-1"></i> Đội trưởng: <strong>${dtText}</strong> &nbsp;|&nbsp; <i class="fa-solid fa-user-shield text-warning me-1"></i> Đội phó: <strong>${dpText}</strong>`;
 
-            kiemTraQuyenThaoTacDoi();
             hienThiChiTietDoi();
         }
 
@@ -872,16 +747,6 @@
             });
             headerHTML += `<th style="width: 150px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>`;
             headerRow.innerHTML = headerHTML;
-
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") duocPhepSua = true;
-            else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((info.emailDt && info.emailDt.toLowerCase().trim() === myEmail) || (info.emailDp && info.emailDp.toLowerCase().trim() === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
 
             const tbody = document.getElementById("thieuNhiTableBody");
             tbody.innerHTML = "";
@@ -912,7 +777,6 @@
                         colsHTML += `
                             <td style="text-align: center;">
                                 <input type="checkbox" class="sheet-checkbox" ${isCoMat ? 'checked' : ''} 
-                                       ${!duocPhepSua ? 'disabled title="Bạn không có quyền điểm danh đội này"' : ''}
                                        onchange="toggleDiemDanh(${idx}, '${ngay}')"
                                        oncontextmenu="moModalLyDoVang(event, ${idx}, '${ngay}', '${em.hoTen}')"
                                        title="Nhấn chuột phải hoặc chạm giữ để ghi lý do vắng có phép">
@@ -943,6 +807,7 @@
             footerRow.innerHTML = footerHTML;
         }
 
+        // Hàm xử lý điểm danh đã được làm sạch data tuyệt đối tránh lỗi undefined
         function toggleDiemDanh(index, ngayKey) {
             const doiKey = `doi_${currentSelectedDoi}`;
             
@@ -974,18 +839,6 @@
 
         function moModalLyDoVang(event, emIdx, ngayKey, tenEm) {
             event.preventDefault();
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") duocPhepSua = true;
-            else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((info.emailDt && info.emailDt.toLowerCase().trim() === myEmail) || (info.emailDp && info.emailDp.toLowerCase().trim() === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
-
-            if (!duocPhepSua) { alert("Bạn không có quyền ghi lý do vắng cho đội này!"); return; }
-
             editingLyDo = { emIdx, ngayKey };
             document.getElementById("lyDoEmName").innerText = `Đoàn sinh: ${tenEm} (${ngayKey})`;
             document.getElementById("inputLyDoPhep").value = "";
@@ -1046,6 +899,7 @@
 
         function renderAdminDoiForm() {
             const container = document.getElementById("adminDoiFormContainer");
+            if (!container) return;
             container.innerHTML = "";
 
             danhSachDoi.forEach((doi, index) => {
@@ -1059,7 +913,7 @@
                             <input type="text" class="form-control-custom name-doi-${doi.id}" value="${doi.name}" placeholder="Tên đội..." style="margin-bottom:0; font-weight:bold; color:#38bdf8;">
                             <input type="text" class="form-control-custom nganh-doi-${doi.id}" value="${doi.nganh || ''}" placeholder="Ngành..." style="margin-bottom:0; width:140px;">
                         </div>
-                        <button class="btn btn-sm btn-danger ms-2 px-3 py-1 fw-bold" onclick="xoaDoiAdmin(${doi.id})" title="Xóa đội này"><i class="fa-solid fa-trash"></i> Xóa</button>
+                        <button class="btn btn-sm btn-danger ms-2 px-3 py-1 fw-bold" onclick="xoaDoiAdmin(${doi.id})" title="Xóa"><i class="fa-solid fa-trash"></i> Xóa</button>
                     </div>
                     <div class="row g-2">
                         <div class="col-md-6">
@@ -1068,7 +922,6 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dt === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="email" class="form-control-custom email-dt-${doi.id}" value="${info.emailDt || ''}" placeholder="Gmail ĐT...">
                             <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="SĐT ĐT...">
                         </div>
                         <div class="col-md-6">
@@ -1077,7 +930,6 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dp === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="email" class="form-control-custom email-dp-${doi.id}" value="${info.emailDp || ''}" placeholder="Gmail ĐP...">
                             <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="SĐT ĐP...">
                         </div>
                     </div>
@@ -1128,14 +980,12 @@
                 }
 
                 const dt = document.querySelector(`.select-dt[data-doi-id="${doi.id}"]`)?.value || "";
-                const emailDt = document.querySelector(`.email-dt-${doi.id}`)?.value.toLowerCase().trim() || "";
                 const sdtDt = document.querySelector(`.sdt-dt-${doi.id}`)?.value.trim() || "";
 
                 const dp = document.querySelector(`.select-dp[data-doi-id="${doi.id}"]`)?.value || "";
-                const emailDp = document.querySelector(`.email-dp-${doi.id}`)?.value.toLowerCase().trim() || "";
                 const sdtDp = document.querySelector(`.sdt-dp-${doi.id}`)?.value.trim() || "";
 
-                newMap[doi.id] = { dt, emailDt, sdtDt, dp, emailDp, sdtDp };
+                newMap[doi.id] = { dt, sdtDt, dp, sdtDp };
             });
 
             db.ref("danhSachDoi").set(updatedDanhSachDoi);
@@ -1150,6 +1000,7 @@
         function xuLyTimKiemToanDoan() {
             const keyword = document.getElementById("globalSearchInput").value.toLowerCase().trim();
             const container = document.getElementById("globalSearchResultContainer");
+            if (!container) return;
             container.innerHTML = "";
 
             if (!keyword) return;

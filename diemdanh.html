@@ -6,22 +6,17 @@
     <title>Quản Lý & Điểm Danh Đoàn Sinh - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
-    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Identity Services & JWT Decode -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
-    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-    <!-- Thư viện SheetJS để xuất file Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
@@ -163,7 +158,7 @@
 
         /* ================= TÍNH NĂNG GHIM CỘT & HÀNG BẢNG ĐIỂM DANH ================= */
         .table-responsive { 
-            max-height: 65vh; /* Chiều cao cố định để kích hoạt cuộn dọc */
+            max-height: 65vh; 
             overflow-y: auto; 
             overflow-x: auto; 
             border-radius: 8px; 
@@ -173,14 +168,14 @@
 
         .thieunhi-table { 
             width: 100%; 
-            border-collapse: separate; /* Bắt buộc dùng separate để sticky hoạt động với border */
+            border-collapse: separate; 
             border-spacing: 0; 
             font-size: 15px; 
-            min-width: 800px; /* Đảm bảo đủ rộng để xuất hiện thanh cuộn ngang */
+            min-width: 800px; 
         }
         
         .thieunhi-table th { 
-            background: #1e293b; /* Nền đặc (solid) chống xuyên thấu chữ */
+            background: #1e293b; 
             color: #38bdf8; 
             font-weight: 700; 
             padding: 12px 14px; 
@@ -189,7 +184,7 @@
         }
         
         .thieunhi-table td { 
-            background: #0f172a; /* Nền đặc tối màu */
+            background: #0f172a; 
             padding: 12px 14px; 
             border-bottom: 1px solid rgba(255, 255, 255, 0.06); 
             vertical-align: middle; 
@@ -197,7 +192,7 @@
         
         .thieunhi-table tr:hover td { background: #1e293b; }
 
-        /* 1. Ghim hàng tiêu đề trên cùng */
+        /* Ghim hàng tiêu đề trên cùng */
         .thieunhi-table thead th { 
             position: sticky; 
             top: 0; 
@@ -206,7 +201,7 @@
             border-bottom: 2px solid #38bdf8; 
         }
 
-        /* 2. Ghim cột 1 (STT) và 2 (Họ Tên) cố định bên trái */
+        /* Ghim cột 1 (STT) và 2 (Họ Tên) cố định bên trái */
         .thieunhi-table tbody td:nth-child(1),
         .thieunhi-table thead th:nth-child(1) { 
             position: sticky; 
@@ -217,20 +212,20 @@
         .thieunhi-table tbody td:nth-child(2),
         .thieunhi-table thead th:nth-child(2) { 
             position: sticky; 
-            left: 50px; /* Bằng với độ rộng của cột STT */
+            left: 50px; 
             z-index: 11; 
-            border-right: 2px solid #38bdf8; /* Vạch ranh giới để biết phần đang bị ghim */
+            border-right: 2px solid #38bdf8; 
             box-shadow: 2px 0 8px rgba(0,0,0,0.3);
         }
 
-        /* 3. Góc trên cùng bên trái giao nhau phải cao nhất */
+        /* Góc trên cùng bên trái giao nhau phải cao nhất */
         .thieunhi-table thead th:nth-child(1),
         .thieunhi-table thead th:nth-child(2) { 
             z-index: 15; 
             background: #0f172a; 
         }
 
-        /* 4. Ghim hàng TỔNG KẾT dưới cùng */
+        /* Ghim hàng TỔNG KẾT dưới cùng */
         .thieunhi-table tfoot td { 
             position: sticky; 
             bottom: 0; 
@@ -293,22 +288,11 @@
             border: 1px solid rgba(255, 255, 255, 0.25); flex: 1;
         }
         .btn-modal-action.btn-dismiss:hover { background: rgba(255, 255, 255, 0.25); color: #fff; }
-
-        /* VÙNG THÔNG BÁO CẤM TRUY CẬP */
-        #accessDeniedArea {
-            display: none; 
-            height: 70vh; 
-            text-align: center; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -322,134 +306,110 @@
             </nav>
         </div>
 
-        <!-- MÀN HÌNH BÁO LỖI: CHỈ HIỆN KHI KHÔNG PHẢI ADMIN VÀ ĐỘI TRƯỞNG -->
-        <div id="accessDeniedArea">
-            <i class="fa-solid fa-lock" style="font-size: 80px; color: #ef4444; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(239, 68, 68, 0.3));"></i>
-            <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">KHU VỰC BẢO MẬT</h2>
-            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin-bottom: 30px; line-height: 1.6;">
-                Chức năng Quản lý Điểm Danh chỉ dành cho tài khoản Ban Quản Trị và các Đội trưởng/Đội phó được cấp quyền.
-            </p>
-            <a href="index.html" class="btn btn-primary rounded-pill px-4 py-2 fw-bold" style="background: linear-gradient(135deg, #0d47a1, #1565c0); border: none; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);">
-                <i class="fa-solid fa-arrow-left me-2"></i>Quay lại Trang Chủ
-            </a>
+        <div class="auth-bar">
+            <div class="user-status d-flex align-items-center gap-2">
+                <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <div class="d-flex align-items-center gap-2">
+                    <span id="userNameDisplay" style="font-weight: 600;">Khách</span>
+                    <span id="roleBadge" class="role-tag role-viewer">Người xem</span>
+                </div>
+            </div>
+            <div class="auth-actions d-flex gap-2">
+                <button id="adminConfigDoiBtn" class="btn-auth-action" style="display:none; background:#d97706;" onclick="moModalAdminDoi()">
+                    <i class="fa-solid fa-shield-halved"></i> Admin: Quản Lý Đội
+                </button>
+                <div id="googleBtnContainer"></div>
+                <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                </button>
+            </div>
         </div>
 
-        <!-- VÙNG NỘI DUNG CHÍNH (JS sẽ ẩn đi nếu người xem là Khách) -->
-        <div id="mainAdminArea" style="display: none;">
-            <!-- AUTH BAR -->
-            <div class="auth-bar">
-                <div class="user-status d-flex align-items-center gap-2">
-                    <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
-                    <div class="d-flex align-items-center gap-2">
-                        <span id="userNameDisplay" style="font-weight: 600;">Khách</span>
-                        <span id="roleBadge" class="role-tag role-viewer">Người xem</span>
-                    </div>
-                </div>
-                <div class="auth-actions d-flex gap-2">
-                    <button id="adminConfigDoiBtn" class="btn-auth-action" style="display:none; background:#d97706;" onclick="moModalAdminDoi()">
-                        <i class="fa-solid fa-shield-halved"></i> Admin: Quản Lý Đội
-                    </button>
-                    <div id="googleBtnContainer"></div>
-                    <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
-                        <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
-                    </button>
+        <div class="dashboard-header">
+            <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Đoàn Sinh</h2>
+            <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh toàn đoàn</p>
+        </div>
+
+        <div class="stats-overview-grid">
+            <div class="overview-card">
+                <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="overview-info">
+                    <div class="val" id="statTongThieuNhi">0 em</div>
+                    <div class="lbl">TỔNG THIẾU NHI</div>
                 </div>
             </div>
-
-            <!-- HEADER BANNER -->
-            <div class="dashboard-header">
-                <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Đoàn Sinh</h2>
-                <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh toàn đoàn</p>
-            </div>
-
-            <!-- 3 Ô THỐNG KÊ TỔNG QUAN -->
-            <div class="stats-overview-grid">
-                <div class="overview-card">
-                    <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
-                    <div class="overview-info">
-                        <div class="val" id="statTongThieuNhi">0 em</div>
-                        <div class="lbl">TỔNG THIẾU NHI</div>
-                    </div>
-                </div>
-                <div class="overview-card">
-                    <div class="overview-icon" style="background: linear-gradient(135deg, #059669, #34d399);"><i class="fa-solid fa-layer-group"></i></div>
-                    <div class="overview-info">
-                        <div class="val" style="color: #059669;">3 Ngành</div>
-                        <div class="lbl">NGÀNH (Ấu - Thiếu - Nghĩa)</div>
-                    </div>
-                </div>
-                <div class="overview-card">
-                    <div class="overview-icon" style="background: linear-gradient(135deg, #d97706, #fbbf24);"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div class="overview-info">
-                        <div class="val" style="color: #d97706;" id="statTongSoDoi">13 Đội</div>
-                        <div class="lbl">TỔNG SỐ ĐỘI</div>
-                    </div>
+            <div class="overview-card">
+                <div class="overview-icon" style="background: linear-gradient(135deg, #059669, #34d399);"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="overview-info">
+                    <div class="val" style="color: #059669;">3 Ngành</div>
+                    <div class="lbl">NGÀNH (Ấu - Thiếu - Nghĩa)</div>
                 </div>
             </div>
-
-            <!-- Ô TÌM KIẾM TOÀN ĐOÀN -->
-            <div class="search-panel-global">
-                <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu đoàn sinh toàn đoàn</h4>
-                <div class="search-bar-wrap">
-                    <i class="fa-solid fa-search"></i>
-                    <input type="text" id="globalSearchInput" placeholder="Nhập tên thiếu nhi để tìm kiếm nhanh..." oninput="xuLyTimKiemToanDoan()">
-                </div>
-                <div id="globalSearchResultContainer"></div>
-            </div>
-
-            <!-- GIAO DIỆN CHÍNH: DANH SÁCH CÁC ĐỘI -->
-            <div id="danhSachDoiSection">
-                <div class="section-heading"><i class="fa-solid fa-list-check"></i> Danh Sách Các Đội Trong Xứ Đoàn</div>
-                <div class="doi-grid" id="doiGridContainer"></div>
-            </div>
-
-            <!-- GIAO DIỆN CHI TIẾT ĐIỂM DANH TỪNG ĐỘI -->
-            <div class="diemdanh-detail-section" id="chiTietDoiSection">
-                <div class="diemdanh-container">
-                    <div class="doi-header-bar">
-                        <div>
-                            <h3 id="currentDoiName">Đội 1</h3>
-                            <p class="small text-info mt-1" id="currentDoiBanCanSu" style="font-weight: 600;">Đội trưởng: ... | Đội phó: ...</p>
-                        </div>
-                        <div class="btn-action-group">
-                            <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
-                            
-                            <!-- NÚT XUẤT EXCEL ĐIỂM DANH -->
-                            <button class="btn-custom-action" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);" onclick="xuatExcelDiemDanh()">
-                                <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Điểm Danh
-                            </button>
-
-                            <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ</button>
-                            <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="thieunhi-table">
-                            <thead>
-                                <tr id="tableHeaderRow">
-                                    <th style="width: 50px;">STT</th>
-                                    <!-- Đặt độ rộng tối thiểu để Tên không bị co rúm -->
-                                    <th style="min-width: 180px;">Thánh Họ Và Tên</th>
-                                    <th style="width: 150px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>
-                                </tr>
-                            </thead>
-                            <tbody id="thieuNhiTableBody"></tbody>
-                            <tfoot>
-                                <tr style="font-weight: 800;" id="tableFooterRow">
-                                    <!-- Chỗ này cột Tổng Số sẽ được tự động trượt bám dưới cùng -->
-                                    <td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>
-                                    <td></td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+            <div class="overview-card">
+                <div class="overview-icon" style="background: linear-gradient(135deg, #d97706, #fbbf24);"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="overview-info">
+                    <div class="val" style="color: #d97706;" id="statTongSoDoi">13 Đội</div>
+                    <div class="lbl">TỔNG SỐ ĐỘI</div>
                 </div>
             </div>
         </div>
+
+        <div class="search-panel-global">
+            <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu đoàn sinh toàn đoàn</h4>
+            <div class="search-bar-wrap">
+                <i class="fa-solid fa-search"></i>
+                <input type="text" id="globalSearchInput" placeholder="Nhập tên thiếu nhi để tìm kiếm nhanh..." oninput="xuLyTimKiemToanDoan()">
+            </div>
+            <div id="globalSearchResultContainer"></div>
+        </div>
+
+        <div id="danhSachDoiSection">
+            <div class="section-heading"><i class="fa-solid fa-list-check"></i> Danh Sách Các Đội Trong Xứ Đoàn</div>
+            <div class="doi-grid" id="doiGridContainer"></div>
+        </div>
+
+        <div class="diemdanh-detail-section" id="chiTietDoiSection">
+            <div class="diemdanh-container">
+                <div class="doi-header-bar">
+                    <div>
+                        <h3 id="currentDoiName">Đội 1</h3>
+                        <p class="small text-info mt-1" id="currentDoiBanCanSu" style="font-weight: 600;">Đội trưởng: ... | Đội phó: ...</p>
+                    </div>
+                    <div class="btn-action-group">
+                        <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
+                        
+                        <button class="btn-custom-action" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);" onclick="xuatExcelDiemDanh()">
+                            <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Điểm Danh
+                        </button>
+
+                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ</button>
+                        <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="thieunhi-table">
+                        <thead>
+                            <tr id="tableHeaderRow">
+                                <th style="width: 50px;">STT</th>
+                                <th style="min-width: 180px;">Thánh Họ Và Tên</th>
+                                <th style="width: 150px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="thieuNhiTableBody"></tbody>
+                        <tfoot>
+                            <tr style="font-weight: 800;" id="tableFooterRow">
+                                <td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT -->
     <div class="modal-overlay" id="modalXemDanhSach" onclick="dongModal('modalXemDanhSach')">
         <div class="modal-card" style="max-width: 900px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
@@ -474,8 +434,7 @@
                             <th>Ngày Sinh</th>
                             <th>Ngành</th>
                             <th>SĐT Phụ Huynh</th>
-                            <!-- Cột hành động sẽ hiển thị/ẩn bằng JS -->
-                        </tr>
+                            </tr>
                     </thead>
                     <tbody id="modalHosoTableBody"></tbody>
                 </table>
@@ -486,7 +445,6 @@
         </div>
     </div>
 
-    <!-- MODAL THÊM / CẬP NHẬT THÀNH VIÊN -->
     <div class="modal-overlay" id="modalThemEm" onclick="dongModal('modalThemEm')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 id="modalThemEmTitle" style="color: #38bdf8; text-align: center; margin-bottom: 16px; font-weight: 800;">Thêm Thành Viên Mới</h3>
@@ -522,7 +480,6 @@
         </div>
     </div>
 
-    <!-- MODAL NHẬP LÝ DO VẮNG CÓ PHÉP -->
     <div class="modal-overlay" id="modalLyDoVang" onclick="dongModal('modalLyDoVang')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 style="color: #fbbf24; text-align: center; margin-bottom: 12px; font-weight: 800;">Ghi Nhận Vắng Có Phép</h3>
@@ -535,7 +492,6 @@
         </div>
     </div>
 
-    <!-- MODAL ADMIN QUẢN LÝ DANH SÁCH ĐỘI & ĐỘI TRƯỞNG/PHÓ -->
     <div class="modal-overlay" id="modalAdminDoi" onclick="dongModal('modalAdminDoi')">
         <div class="modal-card" style="max-width: 780px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary flex-wrap gap-2">
@@ -757,28 +713,11 @@
                 localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
                 xacDinhQuyenTruyCap();
                 alert(`Đăng nhập thành công! Chào ${payload.name}`);
-                location.reload(); // Tải lại trang để áp dụng quyền
+                location.reload(); 
             } catch (e) { console.error(e); }
         }
 
         window.onload = function () {
-            // =========== KIỂM TRA PHÂN QUYỀN TRUY CẬP TRANG ===========
-            let session = JSON.parse(localStorage.getItem("ht_user_session")) || { role: "viewer" };
-            if (session.role === "viewer") {
-                document.getElementById("mainAdminArea").style.display = "none";
-                document.getElementById("accessDeniedArea").style.display = "flex";
-                
-                if (window.google) {
-                    google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
-                    google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
-                }
-                return; 
-            } else {
-                document.getElementById("mainAdminArea").style.display = "block";
-                document.getElementById("accessDeniedArea").style.display = "none";
-            }
-            // ==========================================================
-
             if (window.google) {
                 google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
                 google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
@@ -790,7 +729,7 @@
             currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
             localStorage.removeItem("ht_user_session");
             alert("Đã đăng xuất!");
-            location.reload(); // Ép tải lại trang về trạng thái khóa
+            location.reload(); 
         }
 
         function xacDinhQuyenTruyCap() {

@@ -20,7 +20,7 @@
             min-height: 100vh;
         }
 
-        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT (OCEAN AURORA GRADIENT) */
+        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT (OCEAN AURORA GRADIENT) - GIAO DIỆN PC */
         .cls-topbar {
             background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75));
             backdrop-filter: blur(18px);
@@ -82,8 +82,8 @@
 
         /* KHUNG KÍNH MỜ LÀM NỔI BẬT CHỮ */
         .hero-content-box {
-            background: rgba(0, 0, 0, 0.45); /* Lớp nền đen mờ */
-            backdrop-filter: blur(6px); /* Làm mờ nhẹ ảnh phía sau để tách biệt chữ */
+            background: rgba(0, 0, 0, 0.45); 
+            backdrop-filter: blur(6px); 
             -webkit-backdrop-filter: blur(6px);
             padding: 40px 30px;
             border-radius: 24px;
@@ -206,11 +206,69 @@
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        @media(max-width: 768px){ 
-            .hero-title { font-size: 2.3rem; } 
-            .hero-subtitle { font-size: 1.05rem; }
+        /* ================= TỐI ƯU GIAO DIỆN DI ĐỘNG (MOBILE & TABLET) ================= */
+        @media (max-width: 991px) {
+            /* Thanh điều hướng dạng Thẻ (Card) giống thiết kế App */
+            .cls-topbar {
+                margin: 16px;
+                border-radius: 24px !important;
+                padding: 24px 16px;
+                position: relative; /* Không dính trên mobile để nhường không gian cuộn */
+                background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important; /* Xanh dương đậm chuẩn App */
+                box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important;
+            }
+            
+            .cls-topbar .container {
+                flex-direction: column !important;
+                gap: 20px;
+            }
+
+            .cls-brand {
+                justify-content: center;
+                width: 100%;
+                text-align: center;
+                gap: 12px;
+            }
+            
+            .cls-brand img { width: 50px; height: 50px; }
+            .cls-brand span { font-size: 1.15rem; white-space: normal; }
+
+            .cls-topbar nav {
+                flex-direction: column !important;
+                width: 100%;
+                gap: 8px !important;
+            }
+
+            .cls-nav-link {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 12px 20px !important;
+                font-size: 1rem !important;
+                border: none !important;
+                background: transparent !important;
+                border-radius: 50px !important;
+            }
+
+            /* Nút đang Active sẽ hiển thị khung bao quanh */
+            .cls-nav-link.active {
+                background: rgba(255, 255, 255, 0.25) !important;
+                box-shadow: none !important;
+                font-weight: 800;
+            }
+
+            /* Căn chỉnh các phần tử bên dưới Header cho đẹp */
+            .hero-title { font-size: 2.2rem !important; }
+            .hero-subtitle { font-size: 1rem !important; }
+            .hero-content-box { padding: 25px 15px; width: 92%; margin-top: 10px; }
+            .liquid-glass-card { padding: 30px 20px; }
             .hero-section { background-attachment: scroll; } 
-            .hero-content-box { padding: 30px 20px; margin: 0 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.8rem !important; }
+            .cls-brand span { font-size: 1.05rem; }
         }
     </style>
 </head>
@@ -221,11 +279,12 @@
                 <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
                 <span>THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO</span>
             </a>
+            
             <nav class="d-flex gap-2 flex-wrap">
+                <!-- Nút trang chủ có class 'active' -->
                 <a href="index.html" class="cls-nav-link active"><i class="fas fa-home me-1"></i>Trang chủ</a>
                 <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i>Huynh Trưởng & Lịch Trực</a>
                 <a href="diemdanh.html" class="cls-nav-link"><i class="fas fa-clipboard-user me-1"></i>Điểm Danh Đội</a>
-                
                 <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i>Chia Đội</a>
             </nav>
         </div>
@@ -234,10 +293,7 @@
     <section class="hero-section">
         <div class="hero-content-box">
             <h1 class="hero-title">THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO</h1>
-            <p class="hero-subtitle">"Xin cho con trái tim của Chúa biết cho đi không hề toan tính.
-Biết cảm thông với người khổ đau cùng khốn.
-Xin cho con trái tim rộng mở biết yêu thương như là lẽ sống.
-Biết sẻ chia với người đớn đau lầm than." (Cho con trái tim của Chúa - Đinh Công Huỳnh)</p>
+            <p class="hero-subtitle">"Xin cho con trái tim của Chúa biết cho đi không hề toan tính. Biết cảm thông với người khổ đau cùng khốn. Xin cho con trái tim rộng mở biết yêu thương như là lẽ sống. Biết sẻ chia với người đớn đau lầm than."</p>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
                 <a href="classes.html" class="btn-hero primary"><i class="fas fa-calendar-check"></i>Xem Danh Sách & Lịch Trực</a>
             </div>
@@ -254,7 +310,7 @@ Biết sẻ chia với người đớn đau lầm than." (Cho con trái tim củ
                 <div class="liquid-glass-card reveal-on-scroll delay-1">
                     <div class="feature-icon"><i class="fas fa-user-check"></i></div>
                     <h4 class="fw-bold mb-3" style="color: #0052d4;">Danh Sách Huynh Trưởng</h4>
-                    <p class="text-muted mb-4">Tra cứu thông tin, cấp bậc, chức vụ, ngày sinh và liên lạc của các Huynh Trưởng trong họ đạo.</p>
+                    <p class="text-muted mb-4">Tra cứu thông kho hồ sơ, cấp bậc, chức vụ, ngày sinh và liên lạc của các Huynh Trưởng trong họ đạo.</p>
                     <a href="classes.html" class="btn-liquid">Xem Danh Sách</a>
                 </div>
             </div>
@@ -278,33 +334,27 @@ Biết sẻ chia với người đớn đau lầm than." (Cho con trái tim củ
     </main>
 
     <footer style="background: linear-gradient(135deg, #0d47a1, #1565c0); color: #fff; padding: 40px 20px 20px; text-align: center; margin-top: 40px; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);">
-            <h3 style="font-weight: 800; font-size: 22px; margin-bottom: 8px;">Thiếu Nhi Thánh Thể Phước Hảo</h3>
-            <p style="font-size: 15px; margin-bottom: 24px; color: rgba(255,255,255,0.8);">Giáo Phận Vĩnh Long <br>Giáo Hạt Trà Vinh</br><br>Địa chỉ: Quốc lộ 53, ấp Hòa Hảo, xã Hưng Mỹ, tỉnh Vĩnh Long</br></p>
-            <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;">
-                
-                <a href="https://www.facebook.com/share/1Hu8WHwzGe/" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#1877F2'; this.style.borderColor='#1877F2'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-                    <i class="fa-brands fa-facebook-f" style="font-size: 16px;"></i> Facebook
-                </a>
-                
-                <a href="https://www.tiktok.com/@tntt_hodaophuochao?_r=1&_t=ZS-99CFsHuVAIS" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#000000'; this.style.borderColor='#000000'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-                    <i class="fa-brands fa-tiktok" style="font-size: 16px;"></i> TikTok
-                </a>
-                
-                <a href="tel:0395800581" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-                    <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0395800581 (Trưởng: Patriciô Thiên Ân)
-                </a>
-                <a href="tel:0921786312" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
-                    <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0921786312 (Phó: Phêrô Hiếu Tâm )
-                </a>
-
-            </div>
-
-            <div style="border-top: 1px dashed rgba(255,255,255,0.3); width: 100%; max-width: 600px; margin: 0 auto 16px;"></div>
-            
-            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">
-                &copy; 2026 Thiếu Nhi Thánh Thể Phước Hảo. 
-            </p>
-        </footer>
+        <h3 style="font-weight: 800; font-size: 22px; margin-bottom: 8px;">Thiếu Nhi Thánh Thể Phước Hảo</h3>
+        <p style="font-size: 15px; margin-bottom: 24px; color: rgba(255,255,255,0.8);">Giáo Phận Vĩnh Long <br>Giáo Hạt Trà Vinh</br><br>Địa chỉ: Quốc lộ 53, ấp Hòa Hảo, xã Hưng Mỹ, tỉnh Vĩnh Long</br></p>
+        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;">
+            <a href="https://www.facebook.com/share/1Hu8WHwzGe/" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#1877F2'; this.style.borderColor='#1877F2'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                <i class="fa-brands fa-facebook-f" style="font-size: 16px;"></i> Facebook
+            </a>
+            <a href="https://www.tiktok.com/@tntt_hodaophuochao?_r=1&_t=ZS-99CFsHuVAIS" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#000000'; this.style.borderColor='#000000'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                <i class="fa-brands fa-tiktok" style="font-size: 16px;"></i> TikTok
+            </a>
+            <a href="tel:0395800581" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0395800581 (Trưởng: Patriciô Thiên Ân)
+            </a>
+            <a href="tel:0921786312" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0921786312 (Phó: Phêrô Hiếu Tâm )
+            </a>
+        </div>
+        <div style="border-top: 1px dashed rgba(255,255,255,0.3); width: 100%; max-width: 600px; margin: 0 auto 16px;"></div>
+        <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">
+            &copy; 2026 Thiếu Nhi Thánh Thể Phước Hảo. 
+        </p>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

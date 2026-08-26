@@ -20,129 +20,222 @@
             min-height: 100vh;
         }
 
-        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT */
+        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT (OCEAN AURORA GRADIENT) */
         .cls-topbar {
             background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75));
-            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-            color: #fff; padding: 0.7rem 1.2rem; 
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            color: #fff; 
+            padding: 0.7rem 1.2rem; 
             box-shadow: 0 10px 30px rgba(0, 114, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
-            position: sticky; top: 0; z-index: 100;
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
         }
         .cls-brand { 
-            display: flex; align-items: center; gap: 0.75rem; color: #fff; 
-            text-decoration: none; font-weight: 800; font-size: 1.05rem; 
-            letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.25);
-            position: relative; z-index: 102; /* Đảm bảo logo luôn nổi trên menu */
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 1.05rem; 
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.25);
         }
         .cls-brand img { 
-            width: 44px; height: 44px; border-radius: 50%; object-fit: contain; 
-            background: #fff; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 44px; 
+            height: 44px; 
+            border-radius: 50%; 
+            object-fit: contain; 
+            background: #fff; 
+            padding: 2px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.3s ease;
         }
         .cls-brand:hover img { transform: rotate(10deg) scale(1.05); }
 
-        /* ================= TỐI ƯU MENU DI ĐỘNG (CHUẨN APP) ================= */
+        /* Nút Hamburger menu - Mặc định ẩn trên màn hình lớn */
         .mobile-menu-toggle {
             display: none;
-            background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4);
-            color: #fff; font-size: 1.4rem; width: 42px; height: 42px; border-radius: 12px;
-            cursor: pointer; transition: 0.3s ease; position: relative; z-index: 102;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
+            font-size: 1.2rem;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
         }
-        .menu-overlay-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            z-index: 98; opacity: 0; visibility: hidden; transition: 0.3s;
-        }
-        .menu-overlay-bg.show { opacity: 1; visibility: visible; }
 
         .cls-nav-link {
-            color: rgba(255,255,255,0.95); text-decoration: none; font-weight: 700; 
-            font-size: 0.88rem; padding: 0.5rem 1rem; border-radius: 999px; transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25);
+            color: rgba(255,255,255,0.95); 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 0.88rem;
+            padding: 0.5rem 1rem; 
+            border-radius: 999px; 
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
         .cls-nav-link:hover, .cls-nav-link.active { 
-            background: rgba(255,255,255,0.32); color: #fff; 
-            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+            background: rgba(255,255,255,0.32); 
+            color: #fff; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
-
-        @media (max-width: 991px) {
-            .cls-topbar { padding: 12px 20px; z-index: 100; position: fixed; width: 100%; top: 0; border-radius: 0; }
-            body { padding-top: 70px; } /* Tạo khoảng trống không bị che mất content */
-            
-            .mobile-menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
-            /* Hiệu ứng nút X khi mở menu */
-            .mobile-menu-toggle.open { background: #e0f2fe; color: #0284c7; border-color: #e0f2fe; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-
-            .cls-nav-menu {
-                position: fixed; top: -100%; left: 0; width: 100%;
-                background: linear-gradient(135deg, #0d47a1, #1565c0);
-                flex-direction: column; padding: 80px 20px 25px; /* Dịch nội dung xuống dưới Header */
-                box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-                transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                z-index: 99; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;
-                gap: 0 !important;
-            }
-            .cls-nav-menu.show { top: 0; }
-            
-            .cls-nav-link {
-                background: transparent !important; border: none !important;
-                border-bottom: 1px solid rgba(255,255,255,0.1) !important; border-radius: 0 !important; 
-                padding: 18px 15px !important; text-align: left !important; font-size: 1.1rem !important;
-                display: flex; align-items: center; gap: 15px; color: #e2e8f0 !important; margin: 0; transform: none !important; box-shadow: none !important;
-            }
-            .cls-nav-link i { width: 30px; text-align: center; font-size: 1.3rem; color: #38bdf8; }
-            .cls-nav-link:last-child { border-bottom: none !important; }
-            .cls-nav-link.active {
-                background: rgba(255,255,255,0.1) !important; border-radius: 16px !important; 
-                border-bottom: none !important; color: #fff !important; margin: 8px 0;
-            }
-            .cls-nav-link.active i { color: #fff; }
-        }
-        /* ========================================================================= */
 
         /* HERO SECTION VỚI ẢNH NỀN */
         .hero-section {
             height: 90vh; min-height: 550px;
             background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url('nen2.jpg') center center / cover no-repeat fixed;
-            display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px; position: relative;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px;
+            position: relative;
         }
 
+        /* KHUNG KÍNH MỜ LÀM NỔI BẬT CHỮ */
         .hero-content-box {
-            background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-            padding: 40px 30px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2); max-width: 900px; margin: 0 auto; animation: fadeInDown 1s ease-out;
+            background: rgba(0, 0, 0, 0.45); 
+            backdrop-filter: blur(6px); 
+            -webkit-backdrop-filter: blur(6px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInDown 1s ease-out;
         }
 
-        .hero-title { font-family: 'Crimson Text', serif; font-size: 3.6rem; font-weight: 700; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.9); letter-spacing: 1px; }
-        .hero-subtitle { font-size: 1.25rem; max-width: 800px; margin: 0 auto 32px; opacity: 0.95; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-        .btn-hero { padding: 14px 34px; font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.35s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        .hero-title { 
+            font-family: 'Crimson Text', serif; 
+            font-size: 3.6rem; 
+            font-weight: 700; 
+            margin-bottom: 20px; 
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            letter-spacing: 1px;
+        }
+        .hero-subtitle { 
+            font-size: 1.25rem; 
+            max-width: 800px; 
+            margin: 0 auto 32px; 
+            opacity: 0.95; 
+            line-height: 1.6;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+        .btn-hero { 
+            padding: 14px 34px; 
+            font-weight: 700; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.35s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
         .btn-hero.primary { background: #1565c0; color: #fff; border: 2px solid #1565c0; }
-        .btn-hero.primary:hover { background: #fff; color: #0d47a1; border-color: #fff; transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-
-        .section-header { text-align: center; margin-bottom: 50px; }
-        .section-header h2 { font-weight: 800; background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.3rem; position: relative; display: inline-block; padding-bottom: 12px; }
-        .section-header h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(90deg, #00c6ff, #0072ff); border-radius: 4px; }
-
-        .liquid-glass-card {
-            position: relative; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px) saturate(190%); -webkit-backdrop-filter: blur(24px) saturate(190%);
-            border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.75); padding: 42px 32px; text-align: center; height: 100%; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 114, 255, 0.12), 0 1px 0 rgba(255, 255, 255, 0.9) inset; transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .btn-hero.primary:hover { 
+            background: #fff; 
+            color: #0d47a1; 
+            border-color: #fff; 
+            transform: translateY(-3px) scale(1.03); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
         }
-        .liquid-glass-card:hover { transform: translateY(-12px) scale(1.02); background: rgba(255, 255, 255, 0.78); border-color: rgba(255, 255, 255, 1); box-shadow: 0 30px 65px rgba(0, 114, 255, 0.22); }
-        .feature-icon { width: 82px; height: 82px; border-radius: 24px; background: linear-gradient(135deg, #00c6ff, #0072ff); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2.2rem; color: #fff; box-shadow: 0 12px 28px rgba(0, 114, 255, 0.35); transition: all 0.4s ease; }
+
+        /* SECTION TIÊU ĐỀ */
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 {
+            font-weight: 800;
+            background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.3rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 12px;
+        }
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 80px; height: 4px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border-radius: 4px;
+        }
+
+        /* LIQUID GLASS CARDS */
+        .liquid-glass-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            padding: 42px 32px;
+            text-align: center;
+            height: 100%;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 114, 255, 0.12), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+            transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .liquid-glass-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 30px 65px rgba(0, 114, 255, 0.22);
+        }
+        .feature-icon {
+            width: 82px; height: 82px; border-radius: 24px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px; font-size: 2.2rem; color: #fff;
+            box-shadow: 0 12px 28px rgba(0, 114, 255, 0.35);
+            transition: all 0.4s ease;
+        }
         .liquid-glass-card:hover .feature-icon { transform: scale(1.15) rotate(8deg); }
 
-        .btn-liquid { background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff; border: none; padding: 10px 28px; font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-block; box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35); transition: all 0.3s ease; }
+        .btn-liquid {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: #fff; border: none; padding: 10px 28px;
+            font-weight: 700; border-radius: 50px; text-decoration: none;
+            display: inline-block; box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35);
+            transition: all 0.3s ease;
+        }
         .btn-liquid:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 114, 255, 0.5); filter: brightness(1.08); }
 
-        .reveal-on-scroll { opacity: 0; transform: translateY(50px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-on-scroll {
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
         .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
         .delay-1 { transition-delay: 0.15s; }
         .delay-2 { transition-delay: 0.3s; }
         .delay-3 { transition-delay: 0.45s; }
 
+        .modern-footer { background: linear-gradient(135deg, #0a2540, #0052d4); color: white; padding: 45px 0 20px; margin-top: 70px; }
+
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= TỐI ƯU GIAO DIỆN DI ĐỘNG (MOBILE & TABLET) ================= */
+        @media (max-width: 991px) {
+            .cls-topbar .container { flex-direction: row; justify-content: space-between; align-items: center; }
+            .mobile-menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+            
+            .cls-nav-menu {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            .cls-nav-menu.show { display: flex; }
+            .cls-nav-link { width: 100%; text-align: center; }
+        }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 2rem !important; }
@@ -150,6 +243,7 @@
             .hero-content-box { padding: 25px 15px; width: 92%; }
             .hero-section { background-attachment: scroll; } 
         }
+
         @media (max-width: 480px) {
             .cls-brand span { font-size: 0.85rem; }
             .hero-title { font-size: 1.6rem !important; }
@@ -157,17 +251,14 @@
     </style>
 </head>
 <body>
-
-    <div class="menu-overlay-bg" id="menuOverlayBg" onclick="toggleMobileMenu()"></div>
-
     <header class="cls-topbar">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap" style="padding: 0; max-width: 100%;">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
-                <span>TNTT PHƯỚC HẢO</span>
+                <span>THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO</span>
             </a>
             
-            <button class="mobile-menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
 
@@ -247,23 +338,16 @@
     </footer>
 
     <script>
-        // HÀM ĐIỀU KHIỂN MENU DI ĐỘNG (CHUẨN APP)
         function toggleMobileMenu() {
             const menu = document.getElementById("navMenuLinks");
-            const btn = document.getElementById("mobileMenuBtn");
-            const icon = btn.querySelector("i");
-            const overlay = document.getElementById("menuOverlayBg");
-
             menu.classList.toggle("show");
-            overlay.classList.toggle("show");
-            btn.classList.toggle("open");
-
-            if (menu.classList.contains("show")) {
-                icon.className = "fa-solid fa-xmark";
-            } else {
-                icon.className = "fa-solid fa-bars";
-            }
         }
+
+        document.querySelectorAll(".cls-nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("navMenuLinks").classList.remove("show");
+            });
+        });
 
         document.addEventListener("DOMContentLoaded", function () {
             const observer = new IntersectionObserver((entries, obs) => {

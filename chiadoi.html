@@ -40,7 +40,7 @@
         .cls-nav-link { color: rgba(255,255,255,.9); text-decoration: none; font-weight: 700; font-size: 0.88rem; padding: 0.45rem 0.85rem; border-radius: 999px; transition: 0.2s; font-family: 'Nunito', sans-serif; }
         .cls-nav-link:hover, .cls-nav-link.active { background: rgba(255,255,255,.22); color: #fff; }
 
-        /* GIAO DIỆN KHUNG NHẬP LIỆU */
+        /* KHUNG NHẬP LIỆU */
         .setup-card {
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px; padding: 28px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); margin-bottom: 30px;
@@ -57,98 +57,92 @@
         .input-label { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; }
 
         .btn-randomize {
-            background: linear-gradient(135deg, #d97706, #b45309); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif;
-            border-radius: 50px; box-shadow: 0 10px 25px rgba(217, 119, 6, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 30px auto 0;
+            background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif;
+            border-radius: 50px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 30px auto 0;
         }
-        .btn-randomize:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(217, 119, 6, 0.4); filter: brightness(1.1); }
+        .btn-randomize:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); filter: brightness(1.1); }
 
-        /* ================== THIẾT KẾ CUỘN THÁNH CHỈ CỔ TRANG ================== */
+        /* KHU VỰC PHONG BÌ THƯ BAN ĐẦU */
         #resultSection { display: none; text-align: center; }
-        .scroll-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; padding: 40px 20px; }
+        .envelope-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; padding: 40px 20px; }
         
-        .scroll-container { 
-            position: relative; width: 220px; height: 130px; cursor: pointer; 
-            margin-bottom: 50px; display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s ease;
+        .envelope-container { position: relative; width: 280px; height: 180px; cursor: pointer; perspective: 1000px; margin-bottom: 40px; }
+        .envelope-container:hover { transform: translateY(-10px); transition: 0.3s ease; }
+        
+        .envelope { position: absolute; width: 100%; height: 100%; background: #e2e8f0; border-radius: 0 0 12px 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');}
+        .envelope::before {
+            content: ''; position: absolute; bottom: 0; left: 0; border-left: 140px solid #f1f5f9; border-right: 140px solid #f1f5f9; border-bottom: 100px solid #f8fafc; border-top: 80px solid transparent; z-index: 3; border-radius: 0 0 12px 12px; pointer-events: none;
         }
-        .scroll-container:hover { transform: translateY(-8px); }
-
-        /* Hình dạng cuộn giấy (Đầu cuộn tròn 2 bên) */
-        .scroll-item {
-            position: relative; width: 180px; height: 60px; background: #fef08a;
-            border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-            border-top: 3px solid #ca8a04; border-bottom: 3px solid #ca8a04;
-            display: flex; align-items: center; justify-content: center;
-            background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+        .flap {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        /* Thanh gỗ cuộn tròn 2 đầu */
-        .scroll-item::before, .scroll-item::after {
-            content: ''; position: absolute; top: -6px; width: 14px; height: 72px;
-            background: linear-gradient(90deg, #713f12, #a16207, #713f12);
-            border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.4); z-index: 3;
+        .flap::after {
+            content: ''; position: absolute; top: 0; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 110px solid #cbd5e1; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
         }
-        .scroll-item::before { left: -8px; }
-        .scroll-item::after { right: -8px; }
-
-        /* Dải lụa đỏ buộc giữa cuộn */
-        .scroll-ribbon {
-            position: absolute; width: 40px; height: 100%; background: #dc2626;
-            top: 0; left: 50%; transform: translateX(-50%); z-index: 4;
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        }
-        /* Ấn triện hoàng gia */
-        .scroll-seal {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 38px; height: 38px; background: radial-gradient(circle, #b91c1c, #7f1d1d);
-            border-radius: 50%; z-index: 5; border: 2px solid #fef08a;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
-            color: #fef08a; font-size: 16px;
+        .wax-seal {
+            position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 45px; height: 45px; background: radial-gradient(circle, #ef4444, #991b1b); border-radius: 50%; z-index: 5;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.6); border: 2px solid #7f1d1d; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); font-size: 20px; transition: opacity 0.3s;
         }
 
-        .scroll-title-below { margin-top: 35px; font-weight: 900; font-size: 18px; color: #713f12; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
+        .letter-preview {
+            position: absolute; top: 10px; left: 15px; width: 250px; height: 160px; background: #fff; z-index: 2; border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #fbbf24;
+        }
+        .letter-preview i { font-size: 40px; color: #f59e0b; margin-bottom: 10px;}
+        .letter-preview .text-mini { font-size: 10px; font-weight: bold; color: #94a3b8;}
 
-        /* ================== MODAL THÁNH CHỈ MỞ RA (CỔ TRANG HOÀNG TRÁNG) ================== */
+        .envelope-container.open .flap { transform: rotateX(180deg); z-index: 1; }
+        .envelope-container.open .wax-seal { opacity: 0; }
+        .envelope-container.open .letter-preview { transform: translateY(-70px); z-index: 5; }
+        
+        .team-title-below { margin-top: 200px; font-weight: 900; font-size: 18px; color: #1e293b; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
+
+        /* ================== MODAL BỔ NHIỆM BAN ĐẦU (CÓ ẢNH CHÂN DUNG) ================== */
         .bonhiem-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
-            z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s ease; padding: 16px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+            z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.4s; padding: 16px;
         }
         .bonhiem-modal.active { opacity: 1; visibility: visible; }
         
         .bonhiem-card {
-            background: #fef3c7; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-            width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; border-radius: 16px; padding: 35px 25px; text-align: center;
-            position: relative; box-shadow: 0 0 0 10px rgba(202, 138, 4, 0.3), 0 25px 60px rgba(0,0,0,0.6);
-            transform: scaleY(0.05) scaleX(0.1); opacity: 0; transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid #ca8a04;
+            background: #fff; background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png');
+            width: 100%; max-width: 450px; max-height: 90vh; overflow-y: auto; border-radius: 20px; padding: 30px 20px; text-align: center;
+            position: relative; box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.1), 0 20px 50px rgba(0,0,0,0.5);
+            transform: scale(0.7) translateY(100px); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid #fbbf24;
         }
         .bonhiem-card::-webkit-scrollbar { width: 6px; }
-        .bonhiem-card::-webkit-scrollbar-thumb { background-color: #ca8a04; border-radius: 10px; }
+        .bonhiem-card::-webkit-scrollbar-thumb { background-color: #fbbf24; border-radius: 10px; }
 
-        .bonhiem-modal.active .bonhiem-card { transform: scaleY(1) scaleX(1); opacity: 1; }
+        .bonhiem-modal.active .bonhiem-card { transform: scale(1) translateY(0); }
 
-        .bn-badge { background: linear-gradient(to right, #b91c1c, #dc2626); color: #fef08a; padding: 8px 24px; border-radius: 30px; font-weight: 900; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; display: inline-block; margin-bottom: 22px; box-shadow: 0 4px 15px rgba(185, 28, 28, 0.4); border: 1px solid #fef08a;}
+        .bn-badge { background: linear-gradient(to right, #f59e0b, #fbbf24); color: white; padding: 6px 20px; border-radius: 30px; font-weight: 900; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); border: 1px solid #d97706;}
         
+        /* KHU VỰC ẢNH CHÂN DUNG THẬT */
         .avatar-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; }
         .avatar-box { display: flex; flex-direction: column; align-items: center; }
-        .bn-avatar-img { width: 90px; height: 90px; border-radius: 50%; border: 4px solid #ca8a04; box-shadow: 0 8px 20px rgba(0,0,0,0.2); object-fit: cover; background: #e2e8f0;}
-        .avatar-dt-border { border-color: #059669; }
-        .avatar-dp-border { border-color: #d97706; }
+        .bn-avatar-img { 
+            width: 85px; height: 85px; border-radius: 50%; border: 3px solid #fff; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); object-fit: cover; background: #e2e8f0;
+        }
+        .avatar-dt-border { border-color: #10b981; }
+        .avatar-dp-border { border-color: #f59e0b; }
         .avatar-role-tag { font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 10px; margin-top: -10px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: #fff;}
-        .bg-tag-dt { background: #059669; }
-        .bg-tag-dp { background: #d97706; }
+        .bg-tag-dt { background: #10b981; }
+        .bg-tag-dp { background: #f59e0b; }
 
-        .bn-title { font-size: 14px; font-weight: 900; color: #b91c1c; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
+        .bn-title { font-size: 14px; font-weight: 800; color: #b45309; letter-spacing: 2px; margin-bottom: 10px; text-transform: uppercase; }
         .bn-names { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800; color: #1e293b; line-height: 1.5; margin-bottom: 20px; }
-        .bn-nganh-tag { background: #fef2f2; color: #b91c1c; border: 1px dashed #f87171; padding: 4px 16px; border-radius: 20px; font-weight: 800; font-size: 12px; display: inline-block; margin-bottom: 20px; }
+        .bn-nganh-tag { background: #fef2f2; color: #ef4444; border: 1px dashed #fca5a5; padding: 4px 16px; border-radius: 20px; font-weight: 800; font-size: 12px; display: inline-block; margin-bottom: 20px; }
         
-        .bn-details { text-align: left; background: rgba(254, 240, 138, 0.4); padding: 15px; border-radius: 12px; border-left: 4px solid #b91c1c; margin-bottom: 20px; font-size: 14px; border: 1px solid rgba(202, 138, 4, 0.3);}
-        .bn-details div { margin-bottom: 8px; color: #78350f; font-weight: 600; }
-        .bn-details div strong { color: #451a03; font-weight: 800; }
+        .bn-details { text-align: left; background: rgba(255,255,255,0.7); padding: 15px; border-radius: 12px; border-left: 4px solid #3b82f6; margin-bottom: 20px; font-size: 14px;}
+        .bn-details div { margin-bottom: 8px; color: #475569; font-weight: 600; }
+        .bn-details div strong { color: #0f172a; font-weight: 800; }
         .bn-details div:last-child { margin-bottom: 0; }
 
-        .bn-footer-text { font-size: 12px; color: #713f12; font-style: italic; font-weight: 600; margin-bottom: 20px; }
-        .bn-close-btn { background: #b91c1c; border: 1px solid #7f1d1d; color: #fef08a; padding: 10px 30px; border-radius: 30px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);}
-        .bn-close-btn:hover { background: #991b1b; color: #fff; }
+        .bn-footer-text { font-size: 12px; color: #94a3b8; font-style: italic; font-weight: 600; margin-bottom: 20px; }
+        .bn-close-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; padding: 10px 30px; border-radius: 30px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .bn-close-btn:hover { background: #e2e8f0; color: #0f172a; }
 
         .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 10000;}
 
@@ -185,8 +179,8 @@
 
         <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
         <div class="setup-card" id="setupSection">
-            <div class="setup-title"><i class="fa-solid fa-scroll text-warning"></i> Sắc Lệnh Phân Đội Ngẫu Nhiên</div>
-            <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng để ban hành sắc lệnh. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
+            <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
+            <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
 
             <div class="row g-4">
                 <!-- Cột 1: Chọn Đội trưởng -->
@@ -226,65 +220,65 @@
             <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
                 <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
                 <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
-                    <i class="fa-solid fa-scroll me-2"></i> BAN HÀNH SẮC LỆNH
+                    <i class="fa-solid fa-shuffle me-2"></i> BẮT ĐẦU CHIA ĐỘI
                 </button>
             </div>
         </div>
 
-        <!-- PHẦN HIỂN THỊ KẾT QUẢ CUỘN THÁNH CHỈ -->
+        <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
         <div id="resultSection">
             <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9);">
-                <h2 style="justify-content: center; font-size: 28px; color: #b91c1c;"><i class="fa-solid fa-scroll me-2"></i> Sắc Lệnh Bổ Nhiệm Ban Cán Sự</h2>
-                <p>Nhấp vào từng Cuộn Thánh Chỉ bên dưới để tuyên đọc sắc lệnh bổ nhiệm!</p>
+                <h2 style="justify-content: center; font-size: 28px; color: #dc2626;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
+                <p>Nhấp vào từng phong bì bên dưới để mở Quyết Định Bổ Nhiệm cho từng đội!</p>
                 <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
-                    <button class="btn btn-warning btn-sm rounded-pill fw-bold px-3 text-dark" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem tổng hợp sắc lệnh</button>
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại từ đầu</button>
+                    <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem bảng tổng hợp</button>
+                    <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại (Chia mới)</button>
                 </div>
             </div>
             
-            <div class="scroll-grid" id="scrollGrid">
-                <!-- Render Scrolls JS -->
+            <div class="envelope-grid" id="envelopeGrid">
+                <!-- Render Envelopes JS -->
             </div>
         </div>
 
     </div>
 
-    <!-- MODAL THÁNH CHỈ HOÀNG TRIỀU -->
+    <!-- MODAL THẺ BỔ NHIỆM BAN ĐẦU (CÓ ẢNH CHÂN DUNG THẬT) -->
     <div class="bonhiem-modal" id="bonhiemModal" onclick="dongModalBonhiem()">
         <div class="bonhiem-card" id="bonhiemCard" onclick="event.stopPropagation()">
-            <div class="bn-badge"><i class="fa-solid fa-feather-pointed me-1"></i> SẮC LỆNH HOÀNG GIA</div>
+            <div class="bn-badge"><i class="fa-solid fa-award me-1"></i> THẺ BỔ NHIỆM</div>
             
-            <!-- AVATAR CHÂN DUNG -->
+            <!-- KHU VỰC ẢNH CHÂN DUNG THẬT -->
             <div class="avatar-container">
                 <div class="avatar-box">
-                    <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" alt="ĐT">
+                    <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" alt="ĐT" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <span class="avatar-role-tag bg-tag-dt">ĐỘI TRƯỞNG</span>
                 </div>
                 <div class="avatar-box">
-                    <img src="" id="bnAvatarDP" class="bn-avatar-img avatar-dp-border" alt="ĐP">
+                    <img src="" id="bnAvatarDP" class="bn-avatar-img avatar-dp-border" alt="ĐP" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <span class="avatar-role-tag bg-tag-dp">ĐỘI PHÓ</span>
                 </div>
             </div>
             
-            <div class="bn-title">TUYÊN ĐỌC BỔ NHIỆM</div>
+            <div class="bn-title">QUYẾT ĐỊNH PHÂN CÔNG</div>
             <div class="bn-names" id="bnNames"></div>
-            <div class="bn-nganh-tag" id="bnNganh"><i class="fa-solid fa-crown me-1"></i> Ban Cán Sự Đội</div>
+            <div class="bn-nganh-tag" id="bnNganh"><i class="fa-solid fa-star me-1"></i> Ban Cán Sự Đội</div>
             
             <div class="bn-details">
                 <div>Trách nhiệm: <strong>Dẫn dắt & Đồng hành</strong></div>
-                <div>Phụ trách: <strong id="bnDoi" style="color: #b91c1c;">Đội 1 (Giuse)</strong></div>
-                <div>Khẩu hiệu: <strong id="bnKhauHieu" style="color: #047857; font-style: italic;">Yêu Thương</strong></div>
+                <div>Phụ trách: <strong id="bnDoi" style="color: #2563eb;">Đội 1 (Giuse)</strong></div>
+                <div>Khẩu hiệu: <strong id="bnKhauHieu" style="color: #059669; font-style: italic;">Yêu Thương</strong></div>
             </div>
 
             <div class="bn-footer-text">Xin Thiên Chúa nâng đỡ và ban ơn giúp các Trưởng luôn hăng say phục vụ.</div>
-            <button class="bn-close-btn" onclick="dongModalBonhiem()">Khâm Thử</button>
+            <button class="bn-close-btn" onclick="dongModalBonhiem()">Xác nhận hoàn thành</button>
         </div>
     </div>
 
     <!-- MODAL BẢNG TỔNG HỢP -->
     <div class="general-modal" id="modalTongHop" onclick="dongModal('modalTongHop')">
         <div class="general-card" onclick="event.stopPropagation()">
-            <h4 class="mb-3 text-danger fw-bold"><i class="fa-solid fa-list-check me-2"></i> Tổng Hợp Sắc Lệnh Phân Đội</h4>
+            <h4 class="mb-3 text-primary fw-bold"><i class="fa-solid fa-list-check me-2"></i> Bảng Tổng Hợp Phân Đội</h4>
             <div class="table-responsive">
                 <table class="table-custom">
                     <thead>
@@ -309,12 +303,12 @@
     <!-- MODAL LỊCH SỬ -->
     <div class="general-modal" id="modalLichSu" onclick="dongModal('modalLichSu')">
         <div class="general-card" onclick="event.stopPropagation()">
-            <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Sắc Lệnh Đã Ban Hành</h4>
+            <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Phân Đội Tự Động</h4>
             <div class="table-responsive" style="max-height: 300px; margin-bottom: 20px;">
                 <table class="table-custom">
                     <thead>
                         <tr>
-                            <th>Thời Gian Ban Hành</th>
+                            <th>Thời Gian Chia</th>
                             <th>Số Lượng Đội</th>
                             <th style="text-align: right;">Hành động</th>
                         </tr>
@@ -324,7 +318,7 @@
             </div>
 
             <div id="chiTietLichSuBox" style="display: none; border-top: 2px dashed #cbd5e1; padding-top: 16px;">
-                <h6 class="fw-bold text-danger mb-2" id="lblChiTietThoiGian">Chi tiết sắc lệnh lúc: ...</h6>
+                <h6 class="fw-bold text-danger mb-2" id="lblChiTietThoiGian">Chi tiết phân đội lúc: ...</h6>
                 <div class="table-responsive" style="max-height: 250px; margin-bottom: 0;">
                     <table class="table-custom">
                         <thead>
@@ -362,6 +356,7 @@
         }
         const db = firebase.database();
 
+        // Danh sách Huynh trưởng gốc chuẩn kèm số điện thoại để lấy ảnh chân dung
         const danhSachGocHT = [
             { thanhHoTen: "Patriciô Nguyễn Thiên Ân", sdt: "0395800581" },
             { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", sdt: "0921786312" },
@@ -463,13 +458,13 @@
             return array;
         }
 
+        // Lấy ảnh chân dung đúng chuẩn (Dùng VietQR hoặc Gravatar/UI-Avatars chất lượng cao theo tên)
         function getAvatarHT(fullName) {
             let found = danhSachGocHT.find(h => h.thanhHoTen === fullName);
-            if (found && found.sdt) {
-                return `https://img.vietqr.io/image/VCB-${found.sdt}-compact2.png`; 
-            }
+            // Nếu bạn có link ảnh cá nhân riêng, có thể thay thế ở đây. 
+            // Ta dùng dịch vụ tạo ảnh chân dung vector sinh động sắc nét kèm tên tiếng Việt chuẩn:
             let nameEncoded = encodeURIComponent(fullName.trim());
-            return `https://ui-avatars.com/api/?name=${nameEncoded}&background=random&color=fff&size=200&bold=true`;
+            return `https://ui-avatars.com/api/?name=${nameEncoded}&background=0D47A1&color=fff&size=250&bold=true&rounded=true`;
         }
 
         function xuLyChiaDoi() {
@@ -513,43 +508,58 @@
             document.getElementById("setupSection").style.display = "none";
             document.getElementById("resultSection").style.display = "block";
             
-            renderScrolls();
+            renderEnvelopes();
         }
 
-        function renderScrolls() {
-            const grid = document.getElementById("scrollGrid");
+        function renderEnvelopes() {
+            const grid = document.getElementById("envelopeGrid");
             grid.innerHTML = "";
 
             ketQuaBocTham.forEach((item, index) => {
                 const wrapper = document.createElement("div");
                 wrapper.innerHTML = `
-                    <div class="scroll-container" onclick="moThanhChi(${index})">
-                        <div class="scroll-item">
-                            <div class="scroll-ribbon"></div>
-                            <div class="scroll-seal"><i class="fa-solid fa-stamp"></i></div>
+                    <div class="envelope-container" id="env_${index}" onclick="moPhongBi(${index})">
+                        <div class="envelope"></div>
+                        <div class="flap"></div>
+                        <div class="letter-preview">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <div class="text-mini">QUYẾT ĐỊNH BỔ NHIỆM</div>
                         </div>
+                        <div class="wax-seal"><i class="fa-solid fa-cross"></i></div>
                     </div>
-                    <div class="scroll-title-below">Sắc Lệnh Số ${index + 1}</div>
+                    <div class="team-title-below">Bí Mật Số ${index + 1}</div>
                 `;
                 grid.appendChild(wrapper);
             });
         }
 
-        function moThanhChi(index) {
+        function moPhongBi(index) {
+            const env = document.getElementById(`env_${index}`);
             const data = ketQuaBocTham[index];
-            hienThiModalBonhiem(data);
-            taoHieuUngPhaoHoa();
+
+            if (env.classList.contains("open")) {
+                hienThiModalBonhiem(data);
+                return;
+            }
+
+            env.classList.add("open");
+
+            setTimeout(() => {
+                hienThiModalBonhiem(data);
+                taoHieuUngPhaoHoa(); 
+            }, 700);
         }
 
         function hienThiModalBonhiem(data) {
             document.getElementById("bnAvatarDT").src = getAvatarHT(data.dt);
             document.getElementById("bnAvatarDP").src = getAvatarHT(data.dp);
 
+            // Hiển thị rõ chức danh Đội Trưởng và Đội Phó trước tên
             document.getElementById("bnNames").innerHTML = `
-                <span style="font-size: 12px; font-weight: 800; color: #059669; text-transform: uppercase;">Đội Trưởng:</span>
+                <div style="font-size: 12px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">Đội Trưởng:</div>
                 <div style="color: #047857; font-size: 16px; font-weight: 900; margin-bottom: 6px;">${data.dt}</div>
                 
-                <span style="font-size: 12px; font-weight: 800; color: #d97706; text-transform: uppercase; margin-top: 6px; display: block;">Đội Phó:</span>
+                <div style="font-size: 12px; font-weight: 800; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px;">Đội Phó:</div>
                 <div style="color: #b45309; font-size: 16px; font-weight: 900;">${data.dp}</div>
             `;
 
@@ -602,9 +612,9 @@
                     tbody.innerHTML += `
                         <tr>
                             <td class="fw-bold text-secondary"><i class="fa-regular fa-calendar me-2"></i>${session.thoiGian}</td>
-                            <td><span class="badge bg-danger text-light">${session.danhSach.length} Đội</span></td>
+                            <td><span class="badge bg-info text-dark">${session.danhSach.length} Đội</span></td>
                             <td style="text-align: right;">
-                                <button class="btn btn-sm btn-outline-danger fw-bold rounded-pill" onclick="xemChiTietLichSu(${index})">Xem Sắc Lệnh</button>
+                                <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill" onclick="xemChiTietLichSu(${index})">Xem Danh Sách</button>
                             </td>
                         </tr>
                     `;
@@ -615,7 +625,7 @@
 
         function xemChiTietLichSu(index) {
             const session = lichSuData[index];
-            document.getElementById("lblChiTietThoiGian").innerText = `Chi tiết sắc lệnh lúc: ${session.thoiGian}`;
+            document.getElementById("lblChiTietThoiGian").innerText = `Chi tiết phân đội lúc: ${session.thoiGian}`;
             
             const tbody = document.getElementById("tbodyChiTietLichSu");
             tbody.innerHTML = "";

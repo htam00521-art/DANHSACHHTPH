@@ -6,11 +6,14 @@
     <title>Phân Chia Đội Ngẫu Nhiên - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
+    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -94,7 +97,7 @@
         
         .team-title-below { margin-top: 200px; font-weight: 900; font-size: 18px; color: #1e293b; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
 
-        /* ================== MODAL BỔ NHIỆM BAN ĐẦU (CÓ ẢNH CHÂN DUNG) ================== */
+        /* ================== MODAL BỔ NHIỆM BAN ĐẦU ================== */
         .bonhiem-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
             z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.4s; padding: 16px;
@@ -160,6 +163,7 @@
 <body>
 
     <div class="container">
+        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -173,6 +177,7 @@
             </nav>
         </div>
 
+        <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
         <div class="setup-card" id="setupSection">
             <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
             <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
@@ -216,6 +221,7 @@
             </div>
         </div>
 
+        <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
         <div id="resultSection">
             <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9);">
                 <h2 style="justify-content: center; font-size: 28px; color: #dc2626;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
@@ -227,15 +233,18 @@
             </div>
             
             <div class="envelope-grid" id="envelopeGrid">
-                </div>
+                <!-- Render Envelopes JS -->
+            </div>
         </div>
 
     </div>
 
+    <!-- MODAL THẺ BỔ NHIỆM -->
     <div class="bonhiem-modal" id="bonhiemModal" onclick="dongModalBonhiem()">
         <div class="bonhiem-card" id="bonhiemCard" onclick="event.stopPropagation()">
             <div class="bn-badge"><i class="fa-solid fa-award me-1"></i> THẺ BỔ NHIỆM</div>
             
+            <!-- KHU VỰC ẢNH CHÂN DUNG THẬT TỪ GITHUB -->
             <div class="avatar-container">
                 <div class="avatar-box">
                     <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" alt="ĐT" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
@@ -262,6 +271,7 @@
         </div>
     </div>
 
+    <!-- MODAL BẢNG TỔNG HỢP -->
     <div class="general-modal" id="modalTongHop" onclick="dongModal('modalTongHop')">
         <div class="general-card" onclick="event.stopPropagation()">
             <h4 class="mb-3 text-primary fw-bold"><i class="fa-solid fa-list-check me-2"></i> Bảng Tổng Hợp Phân Đội</h4>
@@ -286,6 +296,7 @@
         </div>
     </div>
 
+    <!-- MODAL LỊCH SỬ -->
     <div class="general-modal" id="modalLichSu" onclick="dongModal('modalLichSu')">
         <div class="general-card" onclick="event.stopPropagation()">
             <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Phân Đội Tự Động</h4>
@@ -341,71 +352,72 @@
         }
         const db = firebase.database();
 
-        // 🌟 DANH SÁCH HUYNH TRƯỞNG KÈM LINK ẢNH CHÂN DUNG 🌟
-        // Bạn hãy dán link ảnh thật (từ Zalo, Drive, Imgur, Facebook...) vào mục avatar: "" nhé.
-        // Nếu để trống "", hệ thống sẽ dùng icon người màu xám mặc định.
+        // 🌟 CẬP NHẬT TÊN FILE ẢNH TRỰC TIẾP TRÊN GITHUB 🌟
+        // Tôi đã điền sẵn tên các file ảnh theo đúng hình ảnh chụp kho GitHub của bạn.
+        // Đối với những người chưa có ảnh, hệ thống sẽ hiển thị ảnh mặc định!
         const danhSachGocHT = [
-            { thanhHoTen: "Patriciô Nguyễn Thiên Ân", sdt: "0395800581", avatar: "" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", sdt: "0921786312", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", sdt: "0834577510", avatar: "" },
-            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", sdt: "0343351327", avatar: "" },
-            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", sdt: "0366548104", avatar: "" },
-            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", sdt: "0346328816", avatar: "" },
-            { thanhHoTen: "Phêrô Đoàn Minh Phát", sdt: "0364521171", avatar: "" },
-            { thanhHoTen: "Matta Trương Thị Diễm Hương", sdt: "0349356330", avatar: "" },
-            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", sdt: "0343481454", avatar: "" },
-            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", sdt: "0338595144", avatar: "" },
-            { thanhHoTen: "Têrêsa Trần Thanh Uyên", sdt: "0357667730", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Bảo Thy", sdt: "0349735441", avatar: "" },
-            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", sdt: "0385966649", avatar: "" },
-            { thanhHoTen: "Maria Diệp Thanh Thoảng", sdt: "0948673652", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Minh Vũ", sdt: "0382961153", avatar: "" },
-            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", sdt: "0337383298", avatar: "" },
-            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", sdt: "0792394746", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", sdt: "0396462484", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Tân", sdt: "0896416291", avatar: "" },
-            { thanhHoTen: "Phêrô Trần Tấn Tài", sdt: "0396191605", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", sdt: "0972756505", avatar: "" },
-            { thanhHoTen: "Giuse Nguyễn Phúc Khang", sdt: "0368902575", avatar: "" },
-            { thanhHoTen: "Maria Hứa Thanh Thảo", sdt: "0972546881", avatar: "" },
-            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", sdt: "0799320036", avatar: "" },
-            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", sdt: "0345204809", avatar: "" },
-            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", sdt: "0983525538", avatar: "" },
-            { thanhHoTen: "Maria Trương Anh Phong Nhi", sdt: "0363673929", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", sdt: "0987974107", avatar: "" },
-            { thanhHoTen: "Maria Sơn Thị Thảo Vy", sdt: "0374246153", avatar: "" },
-            { thanhHoTen: "Raymonđô Trương Công Hậu", sdt: "0358319506", avatar: "" },
-            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", sdt: "0773913619", avatar: "" },
-            { thanhHoTen: "Matta Nguyễn Yến Lan", sdt: "0769640742", avatar: "" },
-            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", sdt: "0382530494", avatar: "" },
-            { thanhHoTen: "Phêrô Lê Minh Tiến", sdt: "0966908232", avatar: "" },
-            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", sdt: "0332183247", avatar: "" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", sdt: "0949344205", avatar: "" },
-            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", sdt: "0704964207", avatar: "" },
-            { thanhHoTen: "Maria Trần Huỳnh Trâm", sdt: "0704964207", avatar: "" },
-            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", sdt: "0765993928", avatar: "" },
-            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", sdt: "0963981148", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Như Thùy", sdt: "0395382387", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Kiều Duyên", sdt: "0797852698", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", sdt: "0932471359", avatar: "" },
-            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", sdt: "0785801705", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", sdt: "0909107132", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", sdt: "0369902728", avatar: "" },
-            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", sdt: "0966265200", avatar: "" },
-            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", sdt: "0326271470", avatar: "" },
-            { thanhHoTen: "Matta Nguyễn Phương Thảo My", sdt: "0338158231", avatar: "" },
-            { thanhHoTen: "Giuse Nguyễn Thái Sơn", sdt: "0365656063", avatar: "" },
-            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", sdt: "0345344063", avatar: "" },
-            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", sdt: "0326395940", avatar: "" },
-            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", sdt: "0355749059", avatar: "" },
-            { thanhHoTen: "Maria Trần Thị Kiều Trang", sdt: "0385627732", avatar: "" },
-            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", sdt: "0586075828", avatar: "" },
-            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", sdt: "0907037009", avatar: "" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", sdt: "0814657029", avatar: "" }
+            { thanhHoTen: "Patriciô Nguyễn Thiên Ân", avatar: "thienan.jpg" },
+            { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", avatar: "hieutam.jpg" },
+            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", avatar: "kieuvy.jpg" },
+            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", avatar: "phuongnam.jpg" },
+            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", avatar: "yennhu.jpg" },
+            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", avatar: "hieunghia.jpg" },
+            { thanhHoTen: "Phêrô Đoàn Minh Phát", avatar: "minhphat.jpg" },
+            { thanhHoTen: "Matta Trương Thị Diễm Hương", avatar: "diemhuong.jpg" },
+            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", avatar: "thinhdat.jpg" },
+            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", avatar: "phuongha.jpg" },
+            { thanhHoTen: "Têrêsa Trần Thanh Uyên", avatar: "thanhuyen.jpg" },
+            { thanhHoTen: "Maria Nguyễn Bảo Thy", avatar: "baothy.jpeg" },
+            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", avatar: "hongchau.jpeg" },
+            { thanhHoTen: "Maria Diệp Thanh Thoảng", avatar: "thanhthoang.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Minh Vũ", avatar: "minhvu.jpg" },
+            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", avatar: "ngoctram.jpg" },
+            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", avatar: "hongyen.jpg" },
+            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", avatar: "camhuong.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Tân", avatar: "duytan.jpg" },
+            { thanhHoTen: "Phêrô Trần Tấn Tài", avatar: "tantai.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", avatar: "tienkhoa.jpeg" },
+            { thanhHoTen: "Giuse Nguyễn Phúc Khang", avatar: "phuckhang.jpg" },
+            { thanhHoTen: "Maria Hứa Thanh Thảo", avatar: "huathao.jpg" },
+            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", avatar: "giahan.jpg" },
+            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", avatar: "hoanguyen.jpg" },
+            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", avatar: "nhattam.jpg" },
+            { thanhHoTen: "Maria Trương Anh Phong Nhi", avatar: "phongnhi.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", avatar: "huyvu.png" },
+            { thanhHoTen: "Maria Sơn Thị Thảo Vy", avatar: "sonvy.jpg" },
+            { thanhHoTen: "Raymonđô Trương Công Hậu", avatar: "conghau.jpg" },
+            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", avatar: "haihuynh.jpg" },
+            { thanhHoTen: "Matta Nguyễn Yến Lan", avatar: "yenlan.jpg" },
+            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", avatar: "tuonglam.jpg" },
+            { thanhHoTen: "Phêrô Lê Minh Tiến", avatar: "minhtien.jpg" },
+            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", avatar: "huonggiang.jpg" },
+            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", avatar: "singuyen.jpg" },
+            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", avatar: "thaihao.jpg" },
+            { thanhHoTen: "Maria Trần Huỳnh Trâm", avatar: "huynhtram.jpg" },
+            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", avatar: "ngoctan.jpeg" },
+            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", avatar: "nguyenthaovy.jpg" },
+            { thanhHoTen: "Maria Nguyễn Như Thùy", avatar: "nhuthuy.jpg" },
+            { thanhHoTen: "Maria Nguyễn Kiều Duyên", avatar: "kieuduyen.jpeg" },
+            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", avatar: "ngochan.jpg" },
+            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", avatar: "nguyenkhang.jpg" },
+            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", avatar: "andy.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", avatar: "nhattrung.jpg" },
+            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", avatar: "quanglac.jpg" },
+            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", avatar: "duylu.jpg" },
+            { thanhHoTen: "Matta Nguyễn Phương Thảo My", avatar: "thaomy.jpg" },
+            { thanhHoTen: "Giuse Nguyễn Thái Sơn", avatar: "thaison.jpeg" },
+            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", avatar: "datphu.jpg" },
+            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", avatar: "honghai.png" },
+            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", avatar: "giahuy.jpeg" },
+            { thanhHoTen: "Maria Trần Thị Kiều Trang", avatar: "kieutrang.jpg" },
+            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", avatar: "tramanh.jpg" },
+            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", avatar: "huyentran.jpg" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", avatar: "duynguyen.jpg" }
         ];
 
         let ketQuaBocTham = [];
         let lichSuData = [];
+        let thongTinHuynhTruongTuFirebase = [];
 
         window.onload = function() {
             const listDT = document.getElementById("listDoiTruong");
@@ -428,6 +440,14 @@
                     lichSuData = [];
                 }
             });
+
+            // Tự động đồng bộ với Firebase (để phòng trường hợp có link ảnh từ đó)
+            db.ref("danhSachHT").on("value", (snapshot) => {
+                if (snapshot.exists()) {
+                    let data = snapshot.val();
+                    thongTinHuynhTruongTuFirebase = Array.isArray(data) ? data : Object.values(data);
+                }
+            });
         };
 
         function demSoLuong() {
@@ -445,14 +465,29 @@
             return array;
         }
 
-        // HÀM TÌM LINK ẢNH CHÂN DUNG TỪ DANH SÁCH
+        // HÀM LẤY ẢNH CHÂN DUNG ƯU TIÊN ẢNH LƯU TRÊN GITHUB (CÙNG CẤP THƯ MỤC)
         function getAvatarHT(fullName) {
-            let found = danhSachGocHT.find(h => h.thanhHoTen === fullName);
-            // Nếu bạn đã điền link ảnh thật vào `avatar:` thì nó sẽ lấy
-            if (found && found.avatar && found.avatar.trim() !== "") {
-                return found.avatar; 
+            let foundLocal = danhSachGocHT.find(h => h.thanhHoTen === fullName);
+            
+            // Ưu tiên 1: Lấy tên file ảnh đã khai báo trong danhSachGocHT (Ví dụ: "andy.jpg")
+            if (foundLocal && foundLocal.avatar && foundLocal.avatar.trim() !== "") {
+                return foundLocal.avatar;
             }
-            // Nếu chưa điền, mặc định nó sẽ trả về 1 cái ảnh icon người vô danh
+
+            // Ưu tiên 2: Tìm trong Firebase (phòng khi sau này bạn có up ảnh lên đó)
+            if (thongTinHuynhTruongTuFirebase.length > 0) {
+                let foundInFb = thongTinHuynhTruongTuFirebase.find(h => 
+                    (h.thanhHoTen === fullName || h.hoTen === fullName || h.name === fullName)
+                );
+                if (foundInFb) {
+                    let urlAnhThucTe = foundInFb.avatar || foundInFb.hinhAnh || foundInFb.image || foundInFb.picture || foundInFb.img;
+                    if (urlAnhThucTe && urlAnhThucTe.trim() !== "") {
+                        return urlAnhThucTe;
+                    }
+                }
+            }
+
+            // Mặc định: Trả về ảnh icon người mẫu màu xám nếu chưa khai báo tên file ảnh
             return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
         }
 
@@ -540,7 +575,7 @@
         }
 
         function hienThiModalBonhiem(data) {
-            // Lấy ảnh chân dung (sẽ tải ảnh nếu có link, nếu chưa có link sẽ hiện ảnh người mẫu màu xám)
+            // Tải ảnh chân dung trực tiếp từ các file đã upload trên Github
             document.getElementById("bnAvatarDT").src = getAvatarHT(data.dt);
             document.getElementById("bnAvatarDP").src = getAvatarHT(data.dp);
 

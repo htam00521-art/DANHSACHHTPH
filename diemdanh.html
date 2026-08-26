@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- BỔ SUNG BOOTSTRAP ĐỂ ĐỒNG BỘ GIAO DIỆN VỚI CÁC TRANG KHÁC -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Identity Services & JWT Decode -->
@@ -20,6 +20,9 @@
     <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <!-- Thư viện SheetJS để xuất file Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
@@ -33,7 +36,7 @@
 
         .container { max-width: 1200px; margin: 0 auto; }
 
-        /* THANH ĐIỀU HƯỚNG SÁNG MÁT MẺ (TRẢ VỀ NGUYÊN BẢN GỐC) */
+        /* THANH ĐIỀU HƯỚNG */
         .cls-topbar {
             background: linear-gradient(135deg, #0d47a1, #1565c0 50%, #42a5f5);
             color: #fff; padding: 0.65rem 1rem; border-radius: 16px; margin-bottom: 20px;
@@ -44,7 +47,7 @@
         .cls-nav-link { color: rgba(255,255,255,.9); text-decoration: none; font-weight: 700; font-size: 0.88rem; padding: 0.45rem 0.85rem; border-radius: 999px; transition: 0.2s; font-family: 'Nunito', sans-serif; }
         .cls-nav-link:hover, .cls-nav-link.active { background: rgba(255,255,255,.22); color: #fff; }
 
-        /* AUTH BAR (TRẢ VỀ NGUYÊN BẢN GỐC) */
+        /* AUTH BAR */
         .auth-bar {
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px);
@@ -129,7 +132,8 @@
         }
         .doi-card:hover { transform: translateY(-5px); background: #ffffff; box-shadow: 0 14px 35px rgba(0,114,255,0.18); border-color: #93c5fd; }
         .doi-card h4 { color: #0052d4; font-size: 18px; font-weight: 800; margin-bottom: 4px; }
-        .doi-card .doitruong-lbl { color: #059669; font-size: 12px; font-weight: 700; display: block; }
+        .doi-card .doitruong-lbl { color: #059669; font-size: 12px; font-weight: 700; display: block; margin-bottom: 2px;}
+        .doi-card .doipho-lbl { color: #d97706; font-size: 12px; font-weight: 700; display: block; margin-bottom: 8px;}
         .doi-card p { color: #64748b; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
         
         .doi-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
@@ -213,7 +217,7 @@
 <body>
 
     <div class="container">
-      <!-- TOPBAR NAVIGATION: PHỤC HỒI CODE GỐC ĐỒNG BỘ -->
+        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -226,7 +230,7 @@
             </nav>
         </div>
 
-        <!-- AUTH BAR: PHỤC HỒI CODE GỐC ĐỒNG BỘ -->
+        <!-- AUTH BAR -->
         <div class="auth-bar">
             <div class="user-status d-flex align-items-center gap-2">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -303,6 +307,12 @@
                     </div>
                     <div class="btn-action-group">
                         <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
+                        
+                        <!-- NÚT XUẤT EXCEL ĐIỂM DANH -->
+                        <button class="btn-custom-action" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);" onclick="xuatExcelDiemDanh()">
+                            <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Điểm Danh
+                        </button>
+
                         <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ (Hôm nay)</button>
                         <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
                     </div>
@@ -335,9 +345,16 @@
         <div class="modal-card" style="max-width: 820px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
                 <h3 id="modalXemDsTitle" style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 20px;">Hồ Sơ Thành Viên</h3>
-                <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
-                    <i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên
-                </button>
+                <div class="d-flex gap-2">
+                    <!-- NÚT XUẤT EXCEL DANH SÁCH HỒ SƠ -->
+                    <button class="btn btn-sm rounded-pill px-3 py-2 fw-bold" onclick="xuatExcelDanhSach()" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); border: none; color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
+                        <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Danh Sách
+                    </button>
+
+                    <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
+                        <i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên
+                    </button>
+                </div>
             </div>
             <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                 <table class="thieunhi-table">
@@ -709,14 +726,18 @@
                 const doiKey = `doi_${doi.id}`;
                 const siSo = (thieuNhiData[doiKey] || []).length;
                 const info = doiTruongMap[doi.id] || {};
+                
+                // Thêm biến Đội phó
                 const tenDt = info.dt || "Chưa phân công";
+                const tenDp = info.dp || "Chưa phân công";
 
                 const card = document.createElement("div");
                 card.className = "doi-card";
                 card.innerHTML = `
                     <h4>${doi.name}</h4>
-                    <span class="doitruong-lbl"><i class="fa-solid fa-user-tie me-1"></i> ĐT: ${tenDt}</span>
-                    <p>${doi.nganh || 'Chưa phân ngành'} • Sĩ số: <strong>${siSo} em</strong></p>
+                    <span class="doitruong-lbl" style="color: #059669; font-size: 12px; font-weight: 700; display: block; margin-bottom: 2px;"><i class="fa-solid fa-user-tie me-1"></i> ĐT: ${tenDt}</span>
+                    <span class="doipho-lbl" style="color: #d97706; font-size: 12px; font-weight: 700; display: block; margin-bottom: 8px;"><i class="fa-solid fa-user-shield me-1"></i> ĐP: ${tenDp}</span>
+                    <p style="margin-bottom: 14px;">${doi.nganh || 'Chưa phân ngành'} • Sĩ số: <strong>${siSo} em</strong></p>
                     <div class="doi-card-actions">
                         <button class="btn-card-action btn-xem-ds" onclick="moModalXemDanhSach(${doi.id})"><i class="fa-solid fa-address-book"></i> Xem danh sách</button>
                         <button class="btn-card-action btn-diem-danh" onclick="moChiTietDoi(${doi.id})"><i class="fa-solid fa-clipboard-user"></i> Điểm danh</button>
@@ -1137,46 +1158,110 @@
         function tuDongTaoNgayHienTai() {
             const now = new Date();
             
-            // Tự động nhận diện Thứ trong tuần
             const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
             const dayName = days[now.getDay()]; 
             
-            // Lấy ngày, tháng, năm hiện tại
             const dd = String(now.getDate()).padStart(2, '0');
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const yyyy = now.getFullYear();
             
-            // Chuỗi ngày gốc (Ví dụ: T4 26/08/2026)
             const baseName = `${dayName} ${dd}/${mm}/${yyyy}`;
             let tenNgayMoi = baseName;
             let counter = 1;
 
-            // Kiểm tra trùng lặp: Nếu đã có thì tự động cộng thêm (Lần 2), (Lần 3)...
             while (danhSachNgayLe.includes(tenNgayMoi)) {
                 counter++;
                 tenNgayMoi = `${baseName} (Lần ${counter})`;
             }
 
-            // Đẩy lên Firebase
             danhSachNgayLe.push(tenNgayMoi);
             db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
                 alert(`Đã tự động tạo cột điểm danh: ${tenNgayMoi}`);
             });
         }
 
-        // Hàm xóa cột ngày điểm danh (Chỉ Admin mới thấy nút và dùng được)
         function xoaNgayLe(ngayCanXoa) {
             if (confirm(`Bạn có chắc chắn muốn xóa cột điểm danh "${ngayCanXoa}" trên toàn hệ thống không?`)) {
-                // Lọc bỏ ngày cần xóa khỏi mảng
                 danhSachNgayLe = danhSachNgayLe.filter(ngay => ngay !== ngayCanXoa);
                 
-                // Cập nhật lại mảng mới lên Firebase
                 db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
                     alert(`Đã xóa cột điểm danh "${ngayCanXoa}" thành công!`);
                 }).catch(error => {
                     alert("Lỗi khi xóa ngày: " + error.message);
                 });
             }
+        }
+
+        // ================== HÀM XUẤT EXCEL DANH SÁCH ==================
+        function xuatExcelDanhSach() {
+            const doiKey = `doi_${currentSelectedDoi}`;
+            const danhSachEm = thieuNhiData[doiKey] || [];
+            const doiObj = danhSachDoi.find(d => d.id === currentSelectedDoi);
+            const tenDoi = doiObj ? doiObj.name : `Doi_${currentSelectedDoi}`;
+
+            if (danhSachEm.length === 0) {
+                alert("Không có dữ liệu đoàn sinh để xuất!");
+                return;
+            }
+
+            const data = danhSachEm.map((em, index) => ({
+                "STT": index + 1,
+                "Thánh Họ Và Tên": em.hoTen,
+                "Ngày Sinh": em.ngaySinh,
+                "Ngành": em.nganh,
+                "SĐT Phụ Huynh": em.sdtPhuHuynh
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "DanhSachHoso");
+            XLSX.writeFile(workbook, `DanhSachHoSo_${tenDoi}.xlsx`);
+        }
+
+        // ================== HÀM XUẤT EXCEL ĐIỂM DANH ==================
+        function xuatExcelDiemDanh() {
+            const doiKey = `doi_${currentSelectedDoi}`;
+            const danhSachEm = thieuNhiData[doiKey] || [];
+            const doiObj = danhSachDoi.find(d => d.id === currentSelectedDoi);
+            const tenDoi = doiObj ? doiObj.name : `Doi_${currentSelectedDoi}`;
+
+            if (danhSachEm.length === 0) {
+                alert("Không có dữ liệu điểm danh để xuất!");
+                return;
+            }
+
+            const data = danhSachEm.map((em, index) => {
+                let row = {
+                    "STT": index + 1,
+                    "Thánh Họ Và Tên": em.hoTen
+                };
+                
+                let tongNgayDiLe = 0;
+                
+                danhSachNgayLe.forEach(ngay => {
+                    const safeNgayKey = formatNgayKey(ngay);
+                    const status = (em.diemDanh || {})[safeNgayKey];
+                    let trangThaiText = "Vắng mặt"; 
+                    
+                    if (status === true || status === "true") {
+                        trangThaiText = "Có mặt";
+                        tongNgayDiLe++;
+                    } else if (status === "co_phep") {
+                        let lyDo = (em.lyDoVang || {})[safeNgayKey] || "";
+                        trangThaiText = `Vắng (Phép: ${lyDo})`;
+                    }
+                    
+                    row[ngay] = trangThaiText;
+                });
+                
+                row["Tổng số ngày đi lễ"] = tongNgayDiLe;
+                return row;
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(data);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "DiemDanh");
+            XLSX.writeFile(workbook, `BangDiemDanh_${tenDoi}.xlsx`);
         }
 
         function moModalAdminDoi() {
@@ -1192,11 +1277,9 @@
             danhSachDoi.forEach((doi, index) => {
                 const info = doiTruongMap[doi.id] || {};
                 const div = document.createElement("div");
-                // Khung viền bọc xung quanh mỗi đội
                 div.style.cssText = "background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);";
                 
                 div.innerHTML = `
-                    <!-- Hàng 1: Tên đội, Ngành, Nút Xóa -->
                     <div class="d-flex align-items-center flex-wrap mb-3" style="gap: 12px;">
                         <input type="text" class="form-control-custom name-doi-${doi.id}" value="${doi.name}" placeholder="Nhập tên đội..." style="flex: 2; min-width: 200px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
                         
@@ -1207,9 +1290,7 @@
                         </button>
                     </div>
 
-                    <!-- Hàng 2: Đội trưởng và Đội phó -->
                     <div class="d-flex flex-wrap" style="gap: 16px;">
-                        <!-- Thẻ thông tin Đội Trưởng -->
                         <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 16px; border-radius: 12px; border-left: 4px solid #34d399;">
                             <label style="font-size: 12px; font-weight: 800; color: #34d399; margin-bottom: 10px; display: block; letter-spacing: 0.5px;">
                                 <i class="fa-solid fa-user-tie me-1"></i> ĐỘI TRƯỞNG
@@ -1221,7 +1302,6 @@
                             <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="Số điện thoại..." style="margin-bottom: 0;">
                         </div>
 
-                        <!-- Thẻ thông tin Đội Phó -->
                         <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 16px; border-radius: 12px; border-left: 4px solid #fbbf24;">
                             <label style="font-size: 12px; font-weight: 800; color: #fbbf24; margin-bottom: 10px; display: block; letter-spacing: 0.5px;">
                                 <i class="fa-solid fa-user-shield me-1"></i> ĐỘI PHÓ

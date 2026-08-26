@@ -6,17 +6,22 @@
     <title>Quản Lý & Điểm Danh Đoàn Sinh - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
+    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- Google Identity Services & JWT Decode -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
+    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
+    <!-- Thư viện SheetJS để xuất file Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
@@ -162,6 +167,7 @@
         .thieunhi-table tr:hover { background: rgba(255, 255, 255, 0.04); }
 
         .sheet-checkbox { width: 22px; height: 22px; border: 2px solid #38bdf8; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; accent-color: #0072ff; }
+        .sheet-checkbox:disabled { opacity: 0.5; cursor: not-allowed; border-color: #64748b; }
 
         .btn-action-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-custom-action {
@@ -212,6 +218,7 @@
 <body>
 
     <div class="container">
+        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -221,11 +228,11 @@
                 <a href="index.html" class="cls-nav-link"><i class="fas fa-home me-1"></i>Trang chủ</a>
                 <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i>Huynh Trưởng & Lịch Trực</a>
                 <a href="diemdanh.html" class="cls-nav-link active"><i class="fas fa-clipboard-user me-1"></i>Điểm Danh Đội</a>
-                
                 <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i>Chia Đội</a>
             </nav>
         </div>
 
+        <!-- AUTH BAR -->
         <div class="auth-bar">
             <div class="user-status d-flex align-items-center gap-2">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -245,11 +252,13 @@
             </div>
         </div>
 
+        <!-- HEADER BANNER -->
         <div class="dashboard-header">
             <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Đoàn Sinh</h2>
             <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh toàn đoàn</p>
         </div>
 
+        <!-- 3 Ô THỐNG KÊ TỔNG QUAN -->
         <div class="stats-overview-grid">
             <div class="overview-card">
                 <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
@@ -274,6 +283,7 @@
             </div>
         </div>
 
+        <!-- Ô TÌM KIẾM TOÀN ĐOÀN -->
         <div class="search-panel-global">
             <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu đoàn sinh toàn đoàn</h4>
             <div class="search-bar-wrap">
@@ -283,11 +293,13 @@
             <div id="globalSearchResultContainer"></div>
         </div>
 
+        <!-- GIAO DIỆN CHÍNH: DANH SÁCH CÁC ĐỘI -->
         <div id="danhSachDoiSection">
             <div class="section-heading"><i class="fa-solid fa-list-check"></i> Danh Sách Các Đội Trong Xứ Đoàn</div>
             <div class="doi-grid" id="doiGridContainer"></div>
         </div>
 
+        <!-- GIAO DIỆN CHI TIẾT ĐIỂM DANH TỪNG ĐỘI -->
         <div class="diemdanh-detail-section" id="chiTietDoiSection">
             <div class="diemdanh-container">
                 <div class="doi-header-bar">
@@ -298,11 +310,12 @@
                     <div class="btn-action-group">
                         <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
                         
+                        <!-- NÚT XUẤT EXCEL ĐIỂM DANH -->
                         <button class="btn-custom-action" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);" onclick="xuatExcelDiemDanh()">
                             <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Điểm Danh
                         </button>
 
-                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ (Hôm nay)</button>
+                        <button id="btnThemNgayLe" class="btn-custom-action btn-them-ngay" style="display:none;" onclick="tuDongTaoNgayHienTai()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày Lễ</button>
                         <button id="btnThemThieuNhi" class="btn-custom-action" style="display:none;" onclick="moModalThemThieuNhi()"><i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên</button>
                     </div>
                 </div>
@@ -329,6 +342,7 @@
         </div>
     </div>
 
+    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT -->
     <div class="modal-overlay" id="modalXemDanhSach" onclick="dongModal('modalXemDanhSach')">
         <div class="modal-card" style="max-width: 900px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
@@ -338,7 +352,7 @@
                         <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Danh Sách
                     </button>
 
-                    <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3);">
+                    <button class="btn btn-sm btn-success rounded-pill px-4 py-2 fw-bold" id="btnModalThemThanhVien" onclick="moModalThemThieuNhiTuModal()" style="background: linear-gradient(135deg, #059669, #34d399); border: none; box-shadow: 0 4px 12px rgba(5,150,105,0.3); display: none;">
                         <i class="fa-solid fa-user-plus me-1"></i> Thêm Thành Viên
                     </button>
                 </div>
@@ -346,14 +360,14 @@
             <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                 <table class="thieunhi-table">
                     <thead>
-                        <tr>
+                        <tr id="hosoTableHeaderRow">
                             <th style="width: 50px;">STT</th>
                             <th>Thánh Họ Và Tên</th>
                             <th>Giới Tính</th>
                             <th>Ngày Sinh</th>
                             <th>Ngành</th>
                             <th>SĐT Phụ Huynh</th>
-                            <th style="width: 100px; text-align: center;">Hành động</th>
+                            <!-- Cột hành động sẽ hiển thị/ẩn bằng JS -->
                         </tr>
                     </thead>
                     <tbody id="modalHosoTableBody"></tbody>
@@ -365,6 +379,7 @@
         </div>
     </div>
 
+    <!-- MODAL THÊM / CẬP NHẬT THÀNH VIÊN -->
     <div class="modal-overlay" id="modalThemEm" onclick="dongModal('modalThemEm')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 id="modalThemEmTitle" style="color: #38bdf8; text-align: center; margin-bottom: 16px; font-weight: 800;">Thêm Thành Viên Mới</h3>
@@ -400,6 +415,7 @@
         </div>
     </div>
 
+    <!-- MODAL NHẬP LÝ DO VẮNG CÓ PHÉP -->
     <div class="modal-overlay" id="modalLyDoVang" onclick="dongModal('modalLyDoVang')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 style="color: #fbbf24; text-align: center; margin-bottom: 12px; font-weight: 800;">Ghi Nhận Vắng Có Phép</h3>
@@ -412,8 +428,10 @@
         </div>
     </div>
 
+    <!-- MODAL ADMIN QUẢN LÝ DANH SÁCH ĐỘI & ĐỘI TRƯỞNG/PHÓ -->
     <div class="modal-overlay" id="modalAdminDoi" onclick="dongModal('modalAdminDoi')">
         <div class="modal-card" style="max-width: 780px;" onclick="event.stopPropagation()">
+            <!-- Header Modal -->
             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary flex-wrap gap-2">
                 <h3 style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 22px;">
                     <i class="fa-solid fa-users-gear me-2"></i> Quản Lý & Phân Công Đội
@@ -535,6 +553,23 @@
         // Hàm chuẩn hóa quét sạch TẤT CẢ các ký tự cấm của Firebase
         function formatNgayKey(ngayStr) {
             return String(ngayStr || "").replace(/[\.\#\$\/\[\]]/g, '_');
+        }
+
+        // ================= KIỂM TRA QUYỀN TRUY CẬP ĐỘI HIỆN TẠI =================
+        function checkQuyenSuaDoi(doiId) {
+            if (currentUser.role === "admin") return true;
+            if (currentUser.role === "doitruong") {
+                const info = doiTruongMap[doiId] || {};
+                const emailDt = (info.emailDt || "").toLowerCase().trim();
+                const emailDp = (info.emailDp || "").toLowerCase().trim();
+                const myEmail = (currentUser.email || "").toLowerCase().trim();
+                
+                // Đội trưởng/Đội phó chỉ được sửa nếu đúng là của đội họ quản lý
+                if (myEmail && ((emailDt === myEmail) || (emailDp === myEmail))) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         db.ref("danhSachDoi").on("value", (snapshot) => {
@@ -671,18 +706,7 @@
             const btnThemEm = document.getElementById("btnThemThieuNhi");
             const btnModalThemEm = document.getElementById("btnModalThemThanhVien");
 
-            let duocPhepSua = false;
-            if (currentUser.role === "admin") {
-                duocPhepSua = true;
-            } else if (currentUser.role === "doitruong") {
-                const info = doiTruongMap[currentSelectedDoi] || {};
-                const emailDt = (info.emailDt || "").toLowerCase().trim();
-                const emailDp = (info.emailDp || "").toLowerCase().trim();
-                const myEmail = currentUser.email.toLowerCase().trim();
-                if ((emailDt && emailDt === myEmail) || (emailDp && emailDp === myEmail)) {
-                    duocPhepSua = true;
-                }
-            }
+            let duocPhepSua = checkQuyenSuaDoi(currentSelectedDoi);
 
             if (duocPhepSua) {
                 if(btnThemNgay) btnThemNgay.style.display = "inline-block";
@@ -693,17 +717,20 @@
                 if(btnThemEm) btnThemEm.style.display = "none";
                 if(btnModalThemEm) btnModalThemEm.style.display = "none";
             }
-        }
-
-        function capNhatGiaoDien() {
-            khoiTaoTheDoi();
-            tinhToanTongSoThieuNhi();
+            
+            // Re-render bảng để khóa/mở các nút xóa/điểm danh
             if (document.getElementById("chiTietDoiSection").classList.contains("active")) {
                 hienThiChiTietDoi();
             }
             if (document.getElementById("modalXemDanhSach").classList.contains("active")) {
                 renderModalHosoTable();
             }
+        }
+
+        function capNhatGiaoDien() {
+            khoiTaoTheDoi();
+            tinhToanTongSoThieuNhi();
+            kiemTraQuyenThaoTacDoi();
         }
 
         function khoiTaoTheDoi() {
@@ -747,6 +774,7 @@
 
         function moModalXemDanhSach(doiId) {
             currentSelectedDoi = doiId;
+            kiemTraQuyenThaoTacDoi(); // Trigger lại để kiểm tra xem có quyền trên đội này không
             const doiObj = danhSachDoi.find(d => d.id === doiId);
             document.getElementById("modalXemDsTitle").innerText = `Hồ Sơ Thành Viên - ${doiObj ? doiObj.name : ''}`;
             renderModalHosoTable();
@@ -755,17 +783,45 @@
 
         function renderModalHosoTable() {
             const tbody = document.getElementById("modalHosoTableBody");
-            if (!tbody) return;
+            const theadRow = document.getElementById("hosoTableHeaderRow");
+            if (!tbody || !theadRow) return;
+            
+            let duocPhepSua = checkQuyenSuaDoi(currentSelectedDoi);
+            
+            // Vẽ lại header (Ẩn/Hiện cột Hành động tùy quyền)
+            let theadHTML = `
+                <th style="width: 50px;">STT</th>
+                <th>Thánh Họ Và Tên</th>
+                <th>Giới Tính</th>
+                <th>Ngày Sinh</th>
+                <th>Ngành</th>
+                <th>SĐT Phụ Huynh</th>
+            `;
+            if (duocPhepSua) {
+                theadHTML += `<th style="width: 100px; text-align: center;">Hành động</th>`;
+            }
+            theadRow.innerHTML = theadHTML;
+
             tbody.innerHTML = "";
             const doiKey = `doi_${currentSelectedDoi}`;
             const danhSachEm = thieuNhiData[doiKey] || [];
 
             if (danhSachEm.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-3">Chưa có thành viên nào trong đội.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="${duocPhepSua ? 7 : 6}" class="text-center text-muted py-3">Chưa có thành viên nào trong đội.</td></tr>`;
                 return;
             }
 
             danhSachEm.forEach((em, idx) => {
+                let actionHTML = "";
+                if (duocPhepSua) {
+                    actionHTML = `
+                        <td style="text-align: center;">
+                            <button class="btn btn-sm btn-primary px-2 py-1 me-1" onclick="moModalSuaThieuNhi(${idx})" title="Cập nhật"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="btn btn-sm btn-danger px-2 py-1" onclick="xoaThieuNhi(${idx})" title="Xóa"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                }
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td class="fw-bold text-muted">${idx + 1}</td>
@@ -774,16 +830,15 @@
                     <td class="text-info">${em.ngaySinh || 'Chưa cập nhật'}</td>
                     <td class="text-warning">${em.nganh || 'Chưa cập nhật'}</td>
                     <td class="text-success">${em.sdtPhuHuynh || 'Chưa cập nhật'}</td>
-                    <td style="text-align: center;">
-                        <button class="btn btn-sm btn-primary px-2 py-1 me-1" onclick="moModalSuaThieuNhi(${idx})" title="Cập nhật"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button class="btn btn-sm btn-danger px-2 py-1" onclick="xoaThieuNhi(${idx})" title="Xóa"><i class="fa-solid fa-trash"></i></button>
-                    </td>
+                    ${actionHTML}
                 `;
                 tbody.appendChild(tr);
             });
         }
 
         async function xoaThieuNhi(index) {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thao tác trên đội này!");
+
             if (confirm("Bạn có chắc chắn muốn xóa thành viên này khỏi đội không?")) {
                 const doiId = currentSelectedDoi;
                 const doiKey = `doi_${doiId}`;
@@ -857,6 +912,8 @@
         }
 
         async function luuThieuNhiMoi() {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thao tác trên đội này!");
+
             const ten = document.getElementById("inputTenEm").value.trim();
             const gioiTinh = document.getElementById("inputGioiTinhEm").value.trim();
             const ngaySinh = document.getElementById("inputNgaySinhEm").value.trim();
@@ -931,6 +988,8 @@
 
         function moChiTietDoi(doiId) {
             currentSelectedDoi = doiId;
+            kiemTraQuyenThaoTacDoi(); // Kích hoạt kiểm tra quyền riêng cho đội
+            
             document.getElementById("danhSachDoiSection").style.display = "none";
             document.getElementById("chiTietDoiSection").classList.add("active");
             
@@ -951,6 +1010,8 @@
         function hienThiChiTietDoi() {
             const doiObj = danhSachDoi.find(d => d.id === currentSelectedDoi);
             document.getElementById("currentDoiName").innerText = doiObj ? `${doiObj.name} (${doiObj.nganh || ''})` : `Đội ${currentSelectedDoi}`;
+            
+            let duocPhepSua = checkQuyenSuaDoi(currentSelectedDoi);
 
             const headerRow = document.getElementById("tableHeaderRow");
             let headerHTML = `<th style="width: 50px;">STT</th><th>Thánh Họ Và Tên</th>`;
@@ -1001,13 +1062,19 @@
                         }
 
                         let lydoText = (isCoPhep && em.lyDoVang && em.lyDoVang[safeNgayKey]) ? `<span class="lydo-note">Phép: ${em.lyDoVang[safeNgayKey]}</span>` : '';
+                        
+                        // Kiểm tra quyền: Vô hiệu hóa checkbox, chuột phải nếu không phải quản trị/đội trưởng
+                        let disabledAttr = duocPhepSua ? "" : "disabled";
+                        let contextMenuAttr = duocPhepSua ? `oncontextmenu="moModalLyDoVang(event, ${idx}, '${ngay}', '${em.hoTen}')"` : `oncontextmenu="return false;"`;
+                        let titleText = duocPhepSua ? 'Nhấn chuột phải hoặc chạm giữ để ghi lý do vắng có phép' : 'Bạn không có quyền thao tác trên đội này';
 
                         colsHTML += `
                             <td style="text-align: center;">
                                 <input type="checkbox" class="sheet-checkbox" ${isCoMat ? 'checked' : ''} 
                                        onchange="toggleDiemDanh(${idx}, '${ngay}')"
-                                       oncontextmenu="moModalLyDoVang(event, ${idx}, '${ngay}', '${em.hoTen}')"
-                                       title="Nhấn chuột phải hoặc chạm giữ để ghi lý do vắng có phép">
+                                       ${contextMenuAttr}
+                                       title="${titleText}"
+                                       ${disabledAttr}>
                                 ${lydoText}
                             </td>
                         `;
@@ -1036,6 +1103,8 @@
         }
 
         async function toggleDiemDanh(index, ngayKey) {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thao tác trên đội này!");
+
             try {
                 const doiId = currentSelectedDoi;
                 const doiKey = `doi_${doiId}`;
@@ -1099,6 +1168,8 @@
 
         function moModalLyDoVang(event, emIdx, ngayKey, tenEm) {
             event.preventDefault();
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thao tác trên đội này!");
+            
             editingLyDo = { emIdx, ngayKey };
             document.getElementById("lyDoEmName").innerText = `Đoàn sinh: ${tenEm} (${ngayKey})`;
             document.getElementById("inputLyDoPhep").value = "";
@@ -1106,6 +1177,8 @@
         }
 
         async function luuLyDoVang() {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thao tác trên đội này!");
+
             const lydo = document.getElementById("inputLyDoPhep").value.trim();
             if (!lydo) { alert("Vui lòng nhập lý do vắng!"); return; }
 
@@ -1155,6 +1228,8 @@
         }
 
         function tuDongTaoNgayHienTai() {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền tạo ngày lễ!");
+
             const now = new Date();
             
             const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
@@ -1180,6 +1255,9 @@
         }
 
         function xoaNgayLe(ngayCanXoa) {
+            if (currentUser.role !== "admin") {
+                return alert("Rất tiếc! Chỉ tài khoản Admin toàn quyền mới được phép xóa cột ngày điểm danh!");
+            }
             if (confirm(`Bạn có chắc chắn muốn xóa cột điểm danh "${ngayCanXoa}" trên toàn hệ thống không?`)) {
                 danhSachNgayLe = danhSachNgayLe.filter(ngay => ngay !== ngayCanXoa);
                 

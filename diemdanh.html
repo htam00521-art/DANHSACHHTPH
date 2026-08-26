@@ -6,22 +6,17 @@
     <title>Quản Lý & Điểm Danh Đoàn Sinh - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
-    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Identity Services & JWT Decode -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 
-    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
-    <!-- Thư viện SheetJS để xuất file Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <style>
@@ -217,7 +212,6 @@
 <body>
 
     <div class="container">
-        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -228,12 +222,10 @@
                 <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i>Huynh Trưởng & Lịch Trực</a>
                 <a href="diemdanh.html" class="cls-nav-link active"><i class="fas fa-clipboard-user me-1"></i>Điểm Danh Đội</a>
                 
-                <!-- NÚT CHIA ĐỘI MỚI ĐƯỢC THÊM VÀO ĐÂY -->
                 <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i>Chia Đội</a>
             </nav>
         </div>
 
-        <!-- AUTH BAR -->
         <div class="auth-bar">
             <div class="user-status d-flex align-items-center gap-2">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -253,13 +245,11 @@
             </div>
         </div>
 
-        <!-- HEADER BANNER -->
         <div class="dashboard-header">
             <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Đoàn Sinh</h2>
             <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh toàn đoàn</p>
         </div>
 
-        <!-- 3 Ô THỐNG KÊ TỔNG QUAN -->
         <div class="stats-overview-grid">
             <div class="overview-card">
                 <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
@@ -284,7 +274,6 @@
             </div>
         </div>
 
-        <!-- Ô TÌM KIẾM TOÀN ĐOÀN -->
         <div class="search-panel-global">
             <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu đoàn sinh toàn đoàn</h4>
             <div class="search-bar-wrap">
@@ -294,13 +283,11 @@
             <div id="globalSearchResultContainer"></div>
         </div>
 
-        <!-- GIAO DIỆN CHÍNH: DANH SÁCH CÁC ĐỘI -->
         <div id="danhSachDoiSection">
             <div class="section-heading"><i class="fa-solid fa-list-check"></i> Danh Sách Các Đội Trong Xứ Đoàn</div>
             <div class="doi-grid" id="doiGridContainer"></div>
         </div>
 
-        <!-- GIAO DIỆN CHI TIẾT ĐIỂM DANH TỪNG ĐỘI -->
         <div class="diemdanh-detail-section" id="chiTietDoiSection">
             <div class="diemdanh-container">
                 <div class="doi-header-bar">
@@ -311,7 +298,6 @@
                     <div class="btn-action-group">
                         <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
                         
-                        <!-- NÚT XUẤT EXCEL ĐIỂM DANH -->
                         <button class="btn-custom-action" style="background: linear-gradient(135deg, #0284c7, #0ea5e9);" onclick="xuatExcelDiemDanh()">
                             <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Điểm Danh
                         </button>
@@ -343,13 +329,11 @@
         </div>
     </div>
 
-    <!-- MODAL XEM DANH SÁCH HỒ SƠ CHI TIẾT -->
     <div class="modal-overlay" id="modalXemDanhSach" onclick="dongModal('modalXemDanhSach')">
         <div class="modal-card" style="max-width: 900px;" onclick="event.stopPropagation()">
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
                 <h3 id="modalXemDsTitle" style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 20px;">Hồ Sơ Thành Viên</h3>
                 <div class="d-flex gap-2">
-                    <!-- NÚT XUẤT EXCEL DANH SÁCH HỒ SƠ -->
                     <button class="btn btn-sm rounded-pill px-3 py-2 fw-bold" onclick="xuatExcelDanhSach()" style="background: linear-gradient(135deg, #0284c7, #0ea5e9); border: none; color: white; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
                         <i class="fa-solid fa-file-excel me-1"></i> Xuất Excel Danh Sách
                     </button>
@@ -381,7 +365,6 @@
         </div>
     </div>
 
-    <!-- MODAL THÊM / CẬP NHẬT THÀNH VIÊN -->
     <div class="modal-overlay" id="modalThemEm" onclick="dongModal('modalThemEm')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 id="modalThemEmTitle" style="color: #38bdf8; text-align: center; margin-bottom: 16px; font-weight: 800;">Thêm Thành Viên Mới</h3>
@@ -417,7 +400,6 @@
         </div>
     </div>
 
-    <!-- MODAL NHẬP LÝ DO VẮNG CÓ PHÉP -->
     <div class="modal-overlay" id="modalLyDoVang" onclick="dongModal('modalLyDoVang')">
         <div class="modal-card" onclick="event.stopPropagation()">
             <h3 style="color: #fbbf24; text-align: center; margin-bottom: 12px; font-weight: 800;">Ghi Nhận Vắng Có Phép</h3>
@@ -430,10 +412,8 @@
         </div>
     </div>
 
-    <!-- MODAL ADMIN QUẢN LÝ DANH SÁCH ĐỘI & ĐỘI TRƯỞNG/PHÓ -->
     <div class="modal-overlay" id="modalAdminDoi" onclick="dongModal('modalAdminDoi')">
         <div class="modal-card" style="max-width: 780px;" onclick="event.stopPropagation()">
-            <!-- Header Modal -->
             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom border-secondary flex-wrap gap-2">
                 <h3 style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 22px;">
                     <i class="fa-solid fa-users-gear me-2"></i> Quản Lý & Phân Công Đội
@@ -443,10 +423,8 @@
                 </button>
             </div>
             
-            <!-- Vùng chứa danh sách các đội -->
             <div id="adminDoiFormContainer" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;"></div>
             
-            <!-- Footer Modal -->
             <div class="d-flex justify-content-end gap-3 mt-4">
                 <button class="btn-modal-action btn-dismiss" style="flex: initial; padding: 10px 24px;" onclick="dongModal('modalAdminDoi')">Đóng</button>
                 <button class="btn-modal-action btn-confirm" style="flex: initial; padding: 10px 32px;" onclick="luuQuanLyDoiAdmin()"><i class="fa-solid fa-floppy-disk me-1"></i> Lưu thay đổi</button>
@@ -1322,7 +1300,8 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dt === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="Số điện thoại..." style="margin-bottom: 0;">
+                            <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="Số điện thoại..." style="margin-bottom: 12px;">
+                            <input type="text" class="form-control-custom email-dt-${doi.id}" value="${info.emailDt || ''}" placeholder="Email Gmail đội trưởng..." style="margin-bottom: 0;">
                         </div>
 
                         <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 16px; border-radius: 12px; border-left: 4px solid #fbbf24;">
@@ -1333,7 +1312,8 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dp === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="Số điện thoại..." style="margin-bottom: 0;">
+                            <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="Số điện thoại..." style="margin-bottom: 12px;">
+                            <input type="text" class="form-control-custom email-dp-${doi.id}" value="${info.emailDp || ''}" placeholder="Email Gmail đội phó..." style="margin-bottom: 0;">
                         </div>
                     </div>
                 `;
@@ -1384,11 +1364,13 @@
 
                 const dt = document.querySelector(`.select-dt[data-doi-id="${doi.id}"]`)?.value || "";
                 const sdtDt = document.querySelector(`.sdt-dt-${doi.id}`)?.value.trim() || "";
+                const emailDt = document.querySelector(`.email-dt-${doi.id}`)?.value.trim() || "";
 
                 const dp = document.querySelector(`.select-dp[data-doi-id="${doi.id}"]`)?.value || "";
                 const sdtDp = document.querySelector(`.sdt-dp-${doi.id}`)?.value.trim() || "";
+                const emailDp = document.querySelector(`.email-dp-${doi.id}`)?.value.trim() || "";
 
-                newMap[doi.id] = { dt, sdtDt, dp, sdtDp };
+                newMap[doi.id] = { dt, sdtDt, emailDt, dp, sdtDp, emailDp };
             });
 
             db.ref("danhSachDoi").set(updatedDanhSachDoi);

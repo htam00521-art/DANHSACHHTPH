@@ -401,15 +401,24 @@
 
     <!-- MODAL ADMIN QUẢN LÝ DANH SÁCH ĐỘI & ĐỘI TRƯỞNG/PHÓ -->
     <div class="modal-overlay" id="modalAdminDoi" onclick="dongModal('modalAdminDoi')">
-        <div class="modal-card" style="max-width: 620px;" onclick="event.stopPropagation()">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 style="color: #38bdf8; font-weight: 800; margin: 0;">Quản Lý & Phân Công Đội</h3>
-                <button class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="themDoiMoiAdmin()"><i class="fa-solid fa-plus me-1"></i> Thêm đội mới</button>
+        <div class="modal-card" style="max-width: 780px;" onclick="event.stopPropagation()">
+            <!-- Header Modal -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.2); padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <h3 style="color: #38bdf8; font-weight: 800; margin: 0; font-size: 22px;">
+                    <i class="fa-solid fa-users-gear me-2"></i> Quản Lý & Phân Công Đội
+                </h3>
+                <button style="background: linear-gradient(135deg, #059669, #34d399); color: white; border: none; padding: 10px 20px; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(5,150,105,0.3); transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="themDoiMoiAdmin()">
+                    <i class="fa-solid fa-plus"></i> Thêm đội mới
+                </button>
             </div>
-            <div id="adminDoiFormContainer" style="max-height: 400px; overflow-y: auto; padding-right: 5px;"></div>
-            <div class="d-flex gap-3 mt-4">
-                <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalAdminDoi')">Đóng</button>
-                <button class="btn-modal-action btn-confirm" onclick="luuQuanLyDoiAdmin()">Lưu thay đổi</button>
+            
+            <!-- Vùng chứa danh sách các đội -->
+            <div id="adminDoiFormContainer" style="max-height: 60vh; overflow-y: auto; padding-right: 8px;"></div>
+            
+            <!-- Footer Modal -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+                <button class="btn-modal-action btn-dismiss" style="flex: initial; padding: 12px 24px;" onclick="dongModal('modalAdminDoi')">Đóng</button>
+                <button class="btn-modal-action btn-confirm" style="flex: initial; padding: 12px 32px;" onclick="luuQuanLyDoiAdmin()"><i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi</button>
             </div>
         </div>
     </div>
@@ -1181,32 +1190,45 @@
             danhSachDoi.forEach((doi, index) => {
                 const info = doiTruongMap[doi.id] || {};
                 const div = document.createElement("div");
-                div.className = "p-3 mb-3 rounded-3";
-                div.style.cssText = "background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1);";
+                // Khung viền bọc xung quanh mỗi đội
+                div.style.cssText = "background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);";
+                
                 div.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="d-flex gap-2 align-items-center flex-grow-1">
-                            <input type="text" class="form-control-custom name-doi-${doi.id}" value="${doi.name}" placeholder="Tên đội..." style="margin-bottom:0; font-weight:bold; color:#38bdf8;">
-                            <input type="text" class="form-control-custom nganh-doi-${doi.id}" value="${doi.nganh || ''}" placeholder="Ngành..." style="margin-bottom:0; width:140px;">
-                        </div>
-                        <button class="btn btn-sm btn-danger ms-2 px-3 py-1 fw-bold" onclick="xoaDoiAdmin(${doi.id})" title="Xóa"><i class="fa-solid fa-trash"></i> Xóa</button>
+                    <!-- Hàng 1: Tên đội, Ngành, Nút Xóa -->
+                    <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
+                        <input type="text" class="form-control-custom name-doi-${doi.id}" value="${doi.name}" placeholder="Nhập tên đội..." style="flex: 2; min-width: 200px; margin-bottom: 0; font-size: 16px; font-weight: bold; color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">
+                        
+                        <input type="text" class="form-control-custom nganh-doi-${doi.id}" value="${doi.nganh || ''}" placeholder="Nhập ngành..." style="flex: 1; min-width: 150px; margin-bottom: 0;">
+                        
+                        <button style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); padding: 11px 16px; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='#ef4444'; this.style.color='#fff'" onmouseout="this.style.background='rgba(239, 68, 68, 0.15)'; this.style.color='#ef4444'" onclick="xoaDoiAdmin(${doi.id})" title="Xóa đội này">
+                            <i class="fa-solid fa-trash"></i> Xóa
+                        </button>
                     </div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="small fw-bold text-success">Đội trưởng:</label>
-                            <select class="form-control-custom select-dt" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dt')">
+
+                    <!-- Hàng 2: Đội trưởng và Đội phó -->
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <!-- Thẻ thông tin Đội Trưởng -->
+                        <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 16px; border-radius: 12px; border-left: 4px solid #34d399;">
+                            <label style="font-size: 12px; font-weight: 800; color: #34d399; margin-bottom: 10px; display: block; letter-spacing: 0.5px;">
+                                <i class="fa-solid fa-user-tie me-1"></i> ĐỘI TRƯỞNG
+                            </label>
+                            <select class="form-control-custom select-dt" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dt')" style="margin-bottom: 12px;">
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dt === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="SĐT ĐT...">
+                            <input type="text" class="form-control-custom sdt-dt-${doi.id}" value="${info.sdtDt || ''}" placeholder="Số điện thoại..." style="margin-bottom: 0;">
                         </div>
-                        <div class="col-md-6">
-                            <label class="small fw-bold text-warning">Đội phó:</label>
-                            <select class="form-control-custom select-dp" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dp')">
+
+                        <!-- Thẻ thông tin Đội Phó -->
+                        <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 16px; border-radius: 12px; border-left: 4px solid #fbbf24;">
+                            <label style="font-size: 12px; font-weight: 800; color: #fbbf24; margin-bottom: 10px; display: block; letter-spacing: 0.5px;">
+                                <i class="fa-solid fa-user-shield me-1"></i> ĐỘI PHÓ
+                            </label>
+                            <select class="form-control-custom select-dp" data-doi-id="${doi.id}" onchange="chonHtChoDoi(this, ${doi.id}, 'dp')" style="margin-bottom: 12px;">
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dp === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="SĐT ĐP...">
+                            <input type="text" class="form-control-custom sdt-dp-${doi.id}" value="${info.sdtDp || ''}" placeholder="Số điện thoại..." style="margin-bottom: 0;">
                         </div>
                     </div>
                 `;

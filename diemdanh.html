@@ -1117,18 +1117,20 @@
             const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
             const dayName = days[now.getDay()]; 
             
-            // Lấy ngày, tháng, năm hiện tại (thêm số 0 đằng trước nếu ngày/tháng < 10)
+            // Lấy ngày, tháng, năm hiện tại
             const dd = String(now.getDate()).padStart(2, '0');
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const yyyy = now.getFullYear();
             
-            // Ghép thành chuỗi hoàn chỉnh (Ví dụ: T4 26/08/2026)
-            const tenNgayMoi = `${dayName} ${dd}/${mm}/${yyyy}`;
+            // Chuỗi ngày gốc (Ví dụ: T4 26/08/2026)
+            const baseName = `${dayName} ${dd}/${mm}/${yyyy}`;
+            let tenNgayMoi = baseName;
+            let counter = 1;
 
-            // Kiểm tra xem cột ngày này đã tạo chưa để tránh trùng lặp
-            if (danhSachNgayLe.includes(tenNgayMoi)) {
-                alert(`Cột ngày "${tenNgayMoi}" đã tồn tại!`);
-                return;
+            // Kiểm tra trùng lặp: Nếu đã có thì tự động cộng thêm (Lần 2), (Lần 3)...
+            while (danhSachNgayLe.includes(tenNgayMoi)) {
+                counter++;
+                tenNgayMoi = `${baseName} (Lần ${counter})`;
             }
 
             // Đẩy lên Firebase

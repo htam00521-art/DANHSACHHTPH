@@ -4,65 +4,228 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO - Trang Chủ</title>
+    
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Crimson+Text:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Nunito', sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 50%, #e0e7ff 100%); color: #1e293b; overflow-x: hidden; min-height: 100vh; }
-        .cls-topbar { background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75)); backdrop-filter: blur(18px); color: #fff; padding: 0.7rem 1.2rem; box-shadow: 0 10px 30px rgba(0, 114, 255, 0.25); position: sticky; top: 0; z-index: 100; }
-        .cls-brand { display: flex; align-items: center; gap: 0.75rem; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.05rem; letter-spacing: 0.5px; text-shadow: 0 2px 8px rgba(0,0,0,0.25); }
-        .cls-brand img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; background: #fff; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: 0.3s; }
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdfa 50%, #e0e7ff 100%); 
+            color: #1e293b; 
+            overflow-x: hidden; 
+            min-height: 100vh;
+        }
+
+        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT (OCEAN AURORA GRADIENT) */
+        .cls-topbar {
+            background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75));
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            color: #fff; 
+            padding: 0.7rem 1.2rem; 
+            box-shadow: 0 10px 30px rgba(0, 114, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+        }
+        .cls-brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 1.05rem; 
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+        .cls-brand img { 
+            width: 44px; 
+            height: 44px; 
+            border-radius: 50%; 
+            object-fit: contain; 
+            background: #fff; 
+            padding: 2px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
         .cls-brand:hover img { transform: rotate(10deg) scale(1.05); }
-        .cls-nav-link { color: rgba(255,255,255,0.95); text-decoration: none; font-weight: 700; font-size: 0.88rem; padding: 0.5rem 1rem; border-radius: 999px; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); }
-        .cls-nav-link:hover, .cls-nav-link.active { background: rgba(255,255,255,0.32); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
-        .hero-section { height: 90vh; min-height: 550px; background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url('nen1.jpg') center center / cover no-repeat fixed; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px; position: relative; }
-        .hero-content-box { background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(6px); padding: 40px 30px; border-radius: 24px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.2); max-width: 900px; margin: 0 auto; animation: fadeInDown 1s ease-out; }
-        .hero-title { font-family: 'Crimson Text', serif; font-size: 3.6rem; font-weight: 700; margin-bottom: 20px; text-shadow: 0 4px 15px rgba(0,0,0,0.9); letter-spacing: 1px; }
-        .hero-subtitle { font-size: 1.25rem; max-width: 800px; margin: 0 auto 32px; opacity: 0.95; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-        .btn-hero { padding: 14px 34px; font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; transition: all 0.35s ease; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        .cls-nav-link {
+            color: rgba(255,255,255,0.95); 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 0.88rem;
+            padding: 0.5rem 1rem; 
+            border-radius: 999px; 
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .cls-nav-link:hover, .cls-nav-link.active { 
+            background: rgba(255,255,255,0.32); 
+            color: #fff; 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        /* HERO SECTION VỚI ẢNH NỀN */
+        .hero-section {
+            height: 90vh; min-height: 550px;
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4)), url('nen2.jpg') center center / cover no-repeat fixed;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 0 20px;
+            position: relative;
+        }
+
+        /* KHUNG KÍNH MỜ LÀM NỔI BẬT CHỮ */
+        .hero-content-box {
+            background: rgba(0, 0, 0, 0.45); /* Lớp nền đen mờ */
+            backdrop-filter: blur(6px); /* Làm mờ nhẹ ảnh phía sau để tách biệt chữ */
+            -webkit-backdrop-filter: blur(6px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 900px;
+            margin: 0 auto;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-title { 
+            font-family: 'Crimson Text', serif; 
+            font-size: 3.6rem; 
+            font-weight: 700; 
+            margin-bottom: 20px; 
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            letter-spacing: 1px;
+        }
+        .hero-subtitle { 
+            font-size: 1.25rem; 
+            max-width: 800px; 
+            margin: 0 auto 32px; 
+            opacity: 0.95; 
+            line-height: 1.6;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+        .btn-hero { 
+            padding: 14px 34px; 
+            font-weight: 700; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.35s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
         .btn-hero.primary { background: #1565c0; color: #fff; border: 2px solid #1565c0; }
-        .btn-hero.primary:hover { background: #fff; color: #0d47a1; border-color: #fff; transform: translateY(-3px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .btn-hero.primary:hover { 
+            background: #fff; 
+            color: #0d47a1; 
+            border-color: #fff; 
+            transform: translateY(-3px) scale(1.03); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+        }
+
+        /* SECTION TIÊU ĐỀ */
         .section-header { text-align: center; margin-bottom: 50px; }
-        .section-header h2 { font-weight: 800; background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.3rem; position: relative; display: inline-block; padding-bottom: 12px; }
-        .section-header h2::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 4px; background: linear-gradient(90deg, #00c6ff, #0072ff); border-radius: 4px; }
-        .liquid-glass-card { position: relative; background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(24px) saturate(190%); border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.75); padding: 42px 32px; text-align: center; height: 100%; box-shadow: 0 20px 50px rgba(0, 114, 255, 0.12); transition: 0.45s; }
-        .liquid-glass-card:hover { transform: translateY(-12px) scale(1.02); background: rgba(255, 255, 255, 0.78); border-color: #fff; box-shadow: 0 30px 65px rgba(0, 114, 255, 0.22); }
-        .feature-icon { width: 82px; height: 82px; border-radius: 24px; background: linear-gradient(135deg, #00c6ff, #0072ff); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-size: 2.2rem; color: #fff; box-shadow: 0 12px 28px rgba(0, 114, 255, 0.35); transition: 0.4s; }
+        .section-header h2 {
+            font-weight: 800;
+            background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.3rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 12px;
+        }
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 80px; height: 4px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            border-radius: 4px;
+        }
+
+        /* LIQUID GLASS CARDS */
+        .liquid-glass-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.75);
+            padding: 42px 32px;
+            text-align: center;
+            height: 100%;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 114, 255, 0.12), 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+            transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .liquid-glass-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(255, 255, 255, 1);
+            box-shadow: 0 30px 65px rgba(0, 114, 255, 0.22);
+        }
+        .feature-icon {
+            width: 82px; height: 82px; border-radius: 24px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 24px; font-size: 2.2rem; color: #fff;
+            box-shadow: 0 12px 28px rgba(0, 114, 255, 0.35);
+            transition: all 0.4s ease;
+        }
         .liquid-glass-card:hover .feature-icon { transform: scale(1.15) rotate(8deg); }
-        .btn-liquid { background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff; border: none; padding: 10px 28px; font-weight: 700; border-radius: 50px; text-decoration: none; display: inline-block; box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35); transition: 0.3s; }
-        .btn-liquid:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 114, 255, 0.5); }
-        .reveal-on-scroll { opacity: 0; transform: translateY(50px); transition: opacity 0.8s, transform 0.8s; }
+
+        .btn-liquid {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: #fff; border: none; padding: 10px 28px;
+            font-weight: 700; border-radius: 50px; text-decoration: none;
+            display: inline-block; box-shadow: 0 6px 18px rgba(0, 114, 255, 0.35);
+            transition: all 0.3s ease;
+        }
+        .btn-liquid:hover { color: #fff; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 114, 255, 0.5); filter: brightness(1.08); }
+
+        .reveal-on-scroll {
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
         .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.15s; }
+        .delay-2 { transition-delay: 0.3s; }
+        .delay-3 { transition-delay: 0.45s; }
+
+        .modern-footer { background: linear-gradient(135deg, #0a2540, #0052d4); color: white; padding: 45px 0 20px; margin-top: 70px; }
+
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* RESPONSIVE CSS CHO TẤT CẢ MÀN HÌNH */
-        @media (max-width: 768px) {
-            .cls-topbar { flex-direction: column; padding: 12px; gap: 12px; border-radius: 0 0 16px 16px; }
-            .cls-brand { justify-content: center; width: 100%; text-align: center; }
-            .cls-topbar nav { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px !important; width: 100%; }
-            .cls-nav-link { text-align: center; font-size: 0.75rem; padding: 10px 5px; display: flex; flex-direction: column; gap: 5px; }
-            .cls-nav-link i { margin-right: 0 !important; font-size: 1.2rem; }
-            .hero-title { font-size: 2.2rem; } 
-            .hero-subtitle { font-size: 1rem; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media(max-width: 768px){ 
+            .hero-title { font-size: 2.3rem; } 
+            .hero-subtitle { font-size: 1.05rem; }
             .hero-section { background-attachment: scroll; } 
-            .hero-content-box { padding: 30px 15px; margin: 0 15px; width: 100%; }
-            .liquid-glass-card { padding: 30px 20px; }
+            .hero-content-box { padding: 30px 20px; margin: 0 15px; }
         }
     </style>
 </head>
 <body>
     <header class="cls-topbar">
-        <div class="container d-flex justify-content-between align-items-center flex-wrap">
+        <div class="container d-flex justify-content-between align-items-center">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
-                <span>THIẾU NHI THÁNH THỂ PHƯỚC HẢO</span>
+                <span>THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO</span>
             </a>
             <nav class="d-flex gap-2 flex-wrap">
                 <a href="index.html" class="cls-nav-link active"><i class="fas fa-home me-1"></i>Trang chủ</a>
                 <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i>Huynh Trưởng & Lịch Trực</a>
                 <a href="diemdanh.html" class="cls-nav-link"><i class="fas fa-clipboard-user me-1"></i>Điểm Danh Đội</a>
+                
                 <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i>Chia Đội</a>
             </nav>
         </div>
@@ -71,7 +234,10 @@
     <section class="hero-section">
         <div class="hero-content-box">
             <h1 class="hero-title">THIẾU NHI THÁNH THỂ HỌ ĐẠO PHƯỚC HẢO</h1>
-            <p class="hero-subtitle">"Xin cho con trái tim của Chúa biết cho đi không hề toan tính.<br>Biết cảm thông với người khổ đau cùng khốn.<br>Xin cho con trái tim rộng mở biết yêu thương như là lẽ sống.<br>Biết sẻ chia với người đớn đau lầm than."</p>
+            <p class="hero-subtitle">"Xin cho con trái tim của Chúa biết cho đi không hề toan tính.
+Biết cảm thông với người khổ đau cùng khốn.
+Xin cho con trái tim rộng mở biết yêu thương như là lẽ sống.
+Biết sẻ chia với người đớn đau lầm than." (Cho con trái tim của Chúa - Đinh Công Huỳnh)</p>
             <div class="d-flex justify-content-center gap-3 flex-wrap">
                 <a href="classes.html" class="btn-hero primary"><i class="fas fa-calendar-check"></i>Xem Danh Sách & Lịch Trực</a>
             </div>
@@ -104,7 +270,7 @@
                 <div class="liquid-glass-card reveal-on-scroll delay-3">
                     <div class="feature-icon"><i class="fas fa-clipboard-user"></i></div>
                     <h4 class="fw-bold mb-3" style="color: #0052d4;">Điểm Danh 13 Đội</h4>
-                    <p class="text-muted mb-4">Quản lý danh sách thiếu nhi theo đội, thực hiện điểm danh có mặt/vắng trực tuyến.</p>
+                    <p class="text-muted mb-4">Quản lý danh sách thiếu nhi theo đội, thực hiện điểm danh có mặt/vắng trực tuyến lên hệ thống.</p>
                     <a href="diemdanh.html" class="btn-liquid">Điểm Danh Đội</a>
                 </div>
             </div>
@@ -112,16 +278,33 @@
     </main>
 
     <footer style="background: linear-gradient(135deg, #0d47a1, #1565c0); color: #fff; padding: 40px 20px 20px; text-align: center; margin-top: 40px; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);">
-        <h3 style="font-weight: 800; font-size: 22px; margin-bottom: 8px;">Thiếu Nhi Thánh Thể Phước Hảo</h3>
-        <p style="font-size: 15px; margin-bottom: 24px; color: rgba(255,255,255,0.8);">Giáo Phận Vĩnh Long <br>Giáo Hạt Trà Vinh<br>Địa chỉ: Quốc lộ 53, ấp Hòa Hảo, xã Hưng Mỹ, tỉnh Vĩnh Long</p>
-        <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;">
-            <a href="https://www.facebook.com/share/1Hu8WHwzGe/" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: 0.3s;"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
-            <a href="https://www.tiktok.com/@tntt_hodaophuochao" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: 0.3s;"><i class="fa-brands fa-tiktok"></i> TikTok</a>
-            <a href="tel:0395800581" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: 0.3s;"><i class="fa-solid fa-phone"></i> 0395800581</a>
-        </div>
-        <div style="border-top: 1px dashed rgba(255,255,255,0.3); width: 100%; max-width: 600px; margin: 0 auto 16px;"></div>
-        <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">&copy; 2026 Thiếu Nhi Thánh Thể Phước Hảo.</p>
-    </footer>
+            <h3 style="font-weight: 800; font-size: 22px; margin-bottom: 8px;">Thiếu Nhi Thánh Thể Phước Hảo</h3>
+            <p style="font-size: 15px; margin-bottom: 24px; color: rgba(255,255,255,0.8);">Giáo Phận Vĩnh Long <br>Giáo Hạt Trà Vinh</br><br>Địa chỉ: Quốc lộ 53, ấp Hòa Hảo, xã Hưng Mỹ, tỉnh Vĩnh Long</br></p>
+            <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; flex-wrap: wrap;">
+                
+                <a href="https://www.facebook.com/share/1Hu8WHwzGe/" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#1877F2'; this.style.borderColor='#1877F2'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                    <i class="fa-brands fa-facebook-f" style="font-size: 16px;"></i> Facebook
+                </a>
+                
+                <a href="https://www.tiktok.com/@tntt_hodaophuochao?_r=1&_t=ZS-99CFsHuVAIS" target="_blank" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#000000'; this.style.borderColor='#000000'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                    <i class="fa-brands fa-tiktok" style="font-size: 16px;"></i> TikTok
+                </a>
+                
+                <a href="tel:0395800581" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                    <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0395800581 (Trưởng: Patriciô Thiên Ân)
+                </a>
+                <a href="tel:0921786312" style="color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 10px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'; this.style.borderColor='#059669'; this.style.transform='translateY(-3px)';" onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)'; this.style.transform='translateY(0)';">
+                    <i class="fa-solid fa-phone" style="font-size: 16px;"></i> 0921786312 (Phó: Phêrô Hiếu Tâm )
+                </a>
+
+            </div>
+
+            <div style="border-top: 1px dashed rgba(255,255,255,0.3); width: 100%; max-width: 600px; margin: 0 auto 16px;"></div>
+            
+            <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin: 0;">
+                &copy; 2026 Thiếu Nhi Thánh Thể Phước Hảo. 
+            </p>
+        </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

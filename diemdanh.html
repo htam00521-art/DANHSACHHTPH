@@ -1112,19 +1112,29 @@
 
         function tuDongTaoNgayHienTai() {
             const now = new Date();
+            
+            // Tự động nhận diện Thứ trong tuần
+            const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+            const dayName = days[now.getDay()]; 
+            
+            // Lấy ngày, tháng, năm hiện tại (thêm số 0 đằng trước nếu ngày/tháng < 10)
             const dd = String(now.getDate()).padStart(2, '0');
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const yyyy = now.getFullYear();
-            const tenNgayMoi = `CN ${dd}/${mm}/${yyyy}`;
+            
+            // Ghép thành chuỗi hoàn chỉnh (Ví dụ: T4 26/08/2026)
+            const tenNgayMoi = `${dayName} ${dd}/${mm}/${yyyy}`;
 
+            // Kiểm tra xem cột ngày này đã tạo chưa để tránh trùng lặp
             if (danhSachNgayLe.includes(tenNgayMoi)) {
                 alert(`Cột ngày "${tenNgayMoi}" đã tồn tại!`);
                 return;
             }
 
+            // Đẩy lên Firebase
             danhSachNgayLe.push(tenNgayMoi);
             db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
-                alert(`Đã tự động tạo cột ngày lễ (${tenNgayMoi}) thành công!`);
+                alert(`Đã tự động tạo cột điểm danh: ${tenNgayMoi}`);
             });
         }
 

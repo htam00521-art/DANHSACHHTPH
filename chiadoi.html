@@ -40,7 +40,7 @@
         .cls-nav-link { color: rgba(255,255,255,.9); text-decoration: none; font-weight: 700; font-size: 0.88rem; padding: 0.45rem 0.85rem; border-radius: 999px; transition: 0.2s; font-family: 'Nunito', sans-serif; }
         .cls-nav-link:hover, .cls-nav-link.active { background: rgba(255,255,255,.22); color: #fff; }
 
-        /* KHUNG NHẬP LIỆU */
+        /* GIAO DIỆN KHUNG NHẬP LIỆU */
         .setup-card {
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px; padding: 28px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); margin-bottom: 30px;
@@ -64,13 +64,12 @@
 
         /* KHU VỰC PHONG BÌ THƯ BAN ĐẦU */
         #resultSection { display: none; text-align: center; }
-        .dashboard-header { position: relative; z-index: 5; } /* Đảm bảo header nằm dưới phong bì khi phong bì mở */
+        .dashboard-header { position: relative; z-index: 5; } 
         .envelope-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; padding: 40px 20px; position: relative; z-index: 10; }
         
-        /* Chỉnh lại z-index cho phong bì */
         .envelope-container { position: relative; width: 280px; height: 180px; cursor: pointer; perspective: 1000px; margin-bottom: 40px; z-index: 1; }
         .envelope-container:hover { transform: translateY(-10px); transition: 0.3s ease; z-index: 50; }
-        .envelope-container.open { z-index: 100; } /* Khi thư mở ra, nó sẽ nổi lên trên cùng */
+        .envelope-container.open { z-index: 100; } 
         
         .envelope { position: absolute; width: 100%; height: 100%; background: #e2e8f0; border-radius: 0 0 12px 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');}
         .envelope::before {
@@ -173,6 +172,16 @@
         .table-custom th { background: #f8fafc; padding: 12px; text-align: left; font-weight: 700; color: #1e293b; position: sticky; top: 0; border-bottom: 2px solid #cbd5e1; z-index: 1;}
         .table-custom td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; color: #475569;}
         .table-custom tr:hover { background: #f1f5f9; }
+
+        /* VÙNG THÔNG BÁO CẤM TRUY CẬP */
+        #accessDeniedArea {
+            display: none; /* Mặc định ẩn, được JS điều khiển hiển thị nếu không phải admin */
+            height: 70vh; 
+            text-align: center; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -192,66 +201,80 @@
             </nav>
         </div>
 
-        <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
-        <div class="setup-card" id="setupSection">
-            <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
-            <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
+        <!-- MÀN HÌNH BÁO LỖI: CHỈ HIỆN KHI KHÔNG PHẢI ADMIN -->
+        <div id="accessDeniedArea">
+            <i class="fa-solid fa-lock" style="font-size: 80px; color: #ef4444; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(239, 68, 68, 0.3));"></i>
+            <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">KHU VỰC DÀNH CHO ADMIN</h2>
+            <p style="color: #64748b; font-size: 16px; max-width: 500px; margin-bottom: 30px; line-height: 1.6;">
+                Chức năng Phân Chia Đội Ngẫu Nhiên chứa các thiết lập quan trọng và hệ thống chỉ cấp quyền truy cập dành riêng cho tài khoản Ban Quản Trị.
+            </p>
+            <a href="index.html" class="btn btn-primary rounded-pill px-4 py-2 fw-bold" style="background: linear-gradient(135deg, #0d47a1, #1565c0); border: none; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);">
+                <i class="fa-solid fa-arrow-left me-2"></i>Quay lại Trang Chủ
+            </a>
+        </div>
 
-            <div class="row g-4">
-                <div class="col-md-3">
-                    <label class="input-label text-success"><i class="fa-solid fa-user-tie"></i> Chọn Đội Trưởng</label>
-                    <div class="list-box" id="listDoiTruong"></div>
-                    <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDT">0</strong></div>
-                </div>
+        <!-- VÙNG NỘI DUNG CHÍNH (Được gói gọn lại để JS kiểm tra quyền) -->
+        <div id="mainAdminArea" style="display: none;">
+            <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
+            <div class="setup-card" id="setupSection">
+                <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
+                <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
 
-                <div class="col-md-3">
-                    <label class="input-label text-warning"><i class="fa-solid fa-user-shield"></i> Chọn Đội Phó</label>
-                    <div class="list-box" id="listDoiPho"></div>
-                    <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDP">0</strong></div>
-                </div>
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <label class="input-label text-success"><i class="fa-solid fa-user-tie"></i> Chọn Đội Trưởng</label>
+                        <div class="list-box" id="listDoiTruong"></div>
+                        <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDT">0</strong></div>
+                    </div>
 
-                <div class="col-md-6">
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label class="input-label"><i class="fa-solid fa-flag"></i> Cấp Đội (Mỗi đội 1 dòng)</label>
-                            <textarea id="txtCapDoi" class="form-control" placeholder="VD:&#10;Đội 1&#10;Đội 2&#10;Đội 3"></textarea>
-                        </div>
-                        <div class="col-sm-6">
-                            <label class="input-label"><i class="fa-solid fa-signature"></i> Tên Đội (Mỗi tên 1 dòng)</label>
-                            <textarea id="txtTenDoi" class="form-control" placeholder="VD:&#10;Giuse&#10;Maria&#10;Phêrô"></textarea>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <label class="input-label"><i class="fa-solid fa-quote-left"></i> Khẩu Hiệu (Mỗi câu 1 dòng)</label>
-                            <textarea id="txtKhauHieu" class="form-control" style="height: 100px;" placeholder="VD:&#10;Yêu thương và Phục vụ&#10;Hy sinh vì mọi người&#10;Can đảm và Tự tin"></textarea>
+                    <div class="col-md-3">
+                        <label class="input-label text-warning"><i class="fa-solid fa-user-shield"></i> Chọn Đội Phó</label>
+                        <div class="list-box" id="listDoiPho"></div>
+                        <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDP">0</strong></div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label class="input-label"><i class="fa-solid fa-flag"></i> Cấp Đội (Mỗi đội 1 dòng)</label>
+                                <textarea id="txtCapDoi" class="form-control" placeholder="VD:&#10;Đội 1&#10;Đội 2&#10;Đội 3"></textarea>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="input-label"><i class="fa-solid fa-signature"></i> Tên Đội (Mỗi tên 1 dòng)</label>
+                                <textarea id="txtTenDoi" class="form-control" placeholder="VD:&#10;Giuse&#10;Maria&#10;Phêrô"></textarea>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <label class="input-label"><i class="fa-solid fa-quote-left"></i> Khẩu Hiệu (Mỗi câu 1 dòng)</label>
+                                <textarea id="txtKhauHieu" class="form-control" style="height: 100px;" placeholder="VD:&#10;Yêu thương và Phục vụ&#10;Hy sinh vì mọi người&#10;Can đảm và Tự tin"></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-                <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
-                <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
-                    <i class="fa-solid fa-shuffle me-2"></i> BẮT ĐẦU CHIA ĐỘI
-                </button>
-            </div>
-        </div>
-
-        <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
-        <div id="resultSection">
-            <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9);">
-                <h2 style="justify-content: center; font-size: 28px; color: #dc2626;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
-                <p>Nhấp vào từng phong bì bên dưới để mở Quyết Định Bổ Nhiệm cho từng đội!</p>
-                <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
-                    <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem bảng tổng hợp</button>
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại (Chia mới)</button>
+                <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                    <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
+                    <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
+                        <i class="fa-solid fa-shuffle me-2"></i> BẮT ĐẦU CHIA ĐỘI
+                    </button>
                 </div>
             </div>
-            
-            <div class="envelope-grid" id="envelopeGrid">
-                <!-- Render Envelopes JS -->
+
+            <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
+            <div id="resultSection">
+                <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9);">
+                    <h2 style="justify-content: center; font-size: 28px; color: #dc2626;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
+                    <p>Nhấp vào từng phong bì bên dưới để mở Quyết Định Bổ Nhiệm cho từng đội!</p>
+                    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+                        <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem bảng tổng hợp</button>
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại (Chia mới)</button>
+                    </div>
+                </div>
+                
+                <div class="envelope-grid" id="envelopeGrid">
+                    <!-- Render Envelopes JS -->
+                </div>
             </div>
         </div>
-
     </div>
 
     <!-- MODAL THẺ BỔ NHIỆM CHÍNH THỨC -->
@@ -435,6 +458,21 @@
         let thongTinHuynhTruongTuFirebase = [];
 
         window.onload = function() {
+            // =========== TÍNH NĂNG BẢO MẬT: KIỂM TRA QUYỀN ADMIN ===========
+            let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || { role: "viewer" };
+            
+            // Nếu không phải admin thì hiện ổ khóa và dừng load luôn nội dung chính
+            if (currentUser.role !== "admin") {
+                document.getElementById("mainAdminArea").style.display = "none";
+                document.getElementById("accessDeniedArea").style.display = "flex";
+                return; 
+            } else {
+                // Nếu là Admin thì mở cửa
+                document.getElementById("mainAdminArea").style.display = "block";
+                document.getElementById("accessDeniedArea").style.display = "none";
+            }
+            // ===============================================================
+
             const listDT = document.getElementById("listDoiTruong");
             const listDP = document.getElementById("listDoiPho");
 
@@ -448,11 +486,10 @@
                 listDP.appendChild(lblDP);
             });
 
-            // Tải lịch sử và giữ lại KEY của Firebase để xử lý xóa
+            // Tải lịch sử
             db.ref("lichSuPhanDoi2026").on("value", (snapshot) => {
                 if (snapshot.exists()) {
                     let data = snapshot.val();
-                    // Lưu lại firebaseKey để có thể xóa từng dòng
                     lichSuData = Object.keys(data).map(key => {
                         return { firebaseKey: key, ...data[key] };
                     }).reverse(); 

@@ -6,14 +6,11 @@
     <title>Phân Chia Đội Ngẫu Nhiên - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
-    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Firebase SDK (v9 Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -163,7 +160,6 @@
 <body>
 
     <div class="container">
-        <!-- TOPBAR NAVIGATION -->
         <div class="cls-topbar">
             <a class="cls-brand" href="index.html">
                 <img src="logo_app.jpg" alt="Logo">
@@ -177,27 +173,23 @@
             </nav>
         </div>
 
-        <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
         <div class="setup-card" id="setupSection">
             <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
             <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
 
             <div class="row g-4">
-                <!-- Cột 1: Chọn Đội trưởng -->
                 <div class="col-md-3">
                     <label class="input-label text-success"><i class="fa-solid fa-user-tie"></i> Chọn Đội Trưởng</label>
                     <div class="list-box" id="listDoiTruong"></div>
                     <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDT">0</strong></div>
                 </div>
 
-                <!-- Cột 2: Chọn Đội phó -->
                 <div class="col-md-3">
                     <label class="input-label text-warning"><i class="fa-solid fa-user-shield"></i> Chọn Đội Phó</label>
                     <div class="list-box" id="listDoiPho"></div>
                     <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDP">0</strong></div>
                 </div>
 
-                <!-- Cột 3: Nhập thông tin đội -->
                 <div class="col-md-6">
                     <div class="row g-3">
                         <div class="col-sm-6">
@@ -216,7 +208,6 @@
                 </div>
             </div>
 
-            <!-- Các nút thao tác -->
             <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
                 <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
                 <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
@@ -225,7 +216,6 @@
             </div>
         </div>
 
-        <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
         <div id="resultSection">
             <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9);">
                 <h2 style="justify-content: center; font-size: 28px; color: #dc2626;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
@@ -237,18 +227,15 @@
             </div>
             
             <div class="envelope-grid" id="envelopeGrid">
-                <!-- Render Envelopes JS -->
-            </div>
+                </div>
         </div>
 
     </div>
 
-    <!-- MODAL THẺ BỔ NHIỆM BAN ĐẦU (CÓ ẢNH CHÂN DUNG THẬT) -->
     <div class="bonhiem-modal" id="bonhiemModal" onclick="dongModalBonhiem()">
         <div class="bonhiem-card" id="bonhiemCard" onclick="event.stopPropagation()">
             <div class="bn-badge"><i class="fa-solid fa-award me-1"></i> THẺ BỔ NHIỆM</div>
             
-            <!-- KHU VỰC ẢNH CHÂN DUNG THẬT -->
             <div class="avatar-container">
                 <div class="avatar-box">
                     <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" alt="ĐT" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
@@ -275,7 +262,6 @@
         </div>
     </div>
 
-    <!-- MODAL BẢNG TỔNG HỢP -->
     <div class="general-modal" id="modalTongHop" onclick="dongModal('modalTongHop')">
         <div class="general-card" onclick="event.stopPropagation()">
             <h4 class="mb-3 text-primary fw-bold"><i class="fa-solid fa-list-check me-2"></i> Bảng Tổng Hợp Phân Đội</h4>
@@ -300,7 +286,6 @@
         </div>
     </div>
 
-    <!-- MODAL LỊCH SỬ -->
     <div class="general-modal" id="modalLichSu" onclick="dongModal('modalLichSu')">
         <div class="general-card" onclick="event.stopPropagation()">
             <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Phân Đội Tự Động</h4>
@@ -356,65 +341,67 @@
         }
         const db = firebase.database();
 
-        // Danh sách Huynh trưởng gốc chuẩn kèm số điện thoại để lấy ảnh chân dung
+        // 🌟 DANH SÁCH HUYNH TRƯỞNG KÈM LINK ẢNH CHÂN DUNG 🌟
+        // Bạn hãy dán link ảnh thật (từ Zalo, Drive, Imgur, Facebook...) vào mục avatar: "" nhé.
+        // Nếu để trống "", hệ thống sẽ dùng icon người màu xám mặc định.
         const danhSachGocHT = [
-            { thanhHoTen: "Patriciô Nguyễn Thiên Ân", sdt: "0395800581" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", sdt: "0921786312" },
-            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", sdt: "0834577510" },
-            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", sdt: "0343351327" },
-            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", sdt: "0366548104" },
-            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", sdt: "0346328816" },
-            { thanhHoTen: "Phêrô Đoàn Minh Phát", sdt: "0364521171" },
-            { thanhHoTen: "Matta Trương Thị Diễm Hương", sdt: "0349356330" },
-            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", sdt: "0343481454" },
-            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", sdt: "0338595144" },
-            { thanhHoTen: "Têrêsa Trần Thanh Uyên", sdt: "0357667730" },
-            { thanhHoTen: "Maria Nguyễn Bảo Thy", sdt: "0349735441" },
-            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", sdt: "0385966649" },
-            { thanhHoTen: "Maria Diệp Thanh Thoảng", sdt: "0948673652" },
-            { thanhHoTen: "Phêrô Nguyễn Minh Vũ", sdt: "0382961153" },
-            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", sdt: "0337383298" },
-            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", sdt: "0792394746" },
-            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", sdt: "0396462484" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Tân", sdt: "0896416291" },
-            { thanhHoTen: "Phêrô Trần Tấn Tài", sdt: "0396191605" },
-            { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", sdt: "0972756505" },
-            { thanhHoTen: "Giuse Nguyễn Phúc Khang", sdt: "0368902575" },
-            { thanhHoTen: "Maria Hứa Thanh Thảo", sdt: "0972546881" },
-            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", sdt: "0799320036" },
-            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", sdt: "0345204809" },
-            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", sdt: "0983525538" },
-            { thanhHoTen: "Maria Trương Anh Phong Nhi", sdt: "0363673929" },
-            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", sdt: "0987974107" },
-            { thanhHoTen: "Maria Sơn Thị Thảo Vy", sdt: "0374246153" },
-            { thanhHoTen: "Raymonđô Trương Công Hậu", sdt: "0358319506" },
-            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", sdt: "0773913619" },
-            { thanhHoTen: "Matta Nguyễn Yến Lan", sdt: "0769640742" },
-            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", sdt: "0382530494" },
-            { thanhHoTen: "Phêrô Lê Minh Tiến", sdt: "0966908232" },
-            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", sdt: "0332183247" },
-            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", sdt: "0949344205" },
-            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", sdt: "0704964207" },
-            { thanhHoTen: "Maria Trần Huỳnh Trâm", sdt: "0704964207" },
-            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", sdt: "0765993928" },
-            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", sdt: "0963981148" },
-            { thanhHoTen: "Maria Nguyễn Như Thùy", sdt: "0395382387" },
-            { thanhHoTen: "Maria Nguyễn Kiều Duyên", sdt: "0797852698" },
-            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", sdt: "0932471359" },
-            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", sdt: "0785801705" },
-            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", sdt: "0909107132" },
-            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", sdt: "0369902728" },
-            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", sdt: "0966265200" },
-            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", sdt: "0326271470" },
-            { thanhHoTen: "Matta Nguyễn Phương Thảo My", sdt: "0338158231" },
-            { thanhHoTen: "Giuse Nguyễn Thái Sơn", sdt: "0365656063" },
-            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", sdt: "0345344063" },
-            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", sdt: "0326395940" },
-            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", sdt: "0355749059" },
-            { thanhHoTen: "Maria Trần Thị Kiều Trang", sdt: "0385627732" },
-            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", sdt: "0586075828" },
-            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", sdt: "0907037009" },
-            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", sdt: "0814657029" }
+            { thanhHoTen: "Patriciô Nguyễn Thiên Ân", sdt: "0395800581", avatar: "" },
+            { thanhHoTen: "Phêrô Lê Huỳnh Hiếu Tâm", sdt: "0921786312", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Thị Kiều Vy", sdt: "0834577510", avatar: "" },
+            { thanhHoTen: "Anê Nguyễn Bình Phương Nam", sdt: "0343351327", avatar: "" },
+            { thanhHoTen: "Maria Sơn Nguyễn Yến Như", sdt: "0366548104", avatar: "" },
+            { thanhHoTen: "Đôminicô Huỳnh Lê Hiếu Nghĩa", sdt: "0346328816", avatar: "" },
+            { thanhHoTen: "Phêrô Đoàn Minh Phát", sdt: "0364521171", avatar: "" },
+            { thanhHoTen: "Matta Trương Thị Diễm Hương", sdt: "0349356330", avatar: "" },
+            { thanhHoTen: "Phêrô Trần Bùi Thịnh Đạt", sdt: "0343481454", avatar: "" },
+            { thanhHoTen: "Têrêsa Nguyễn Lâm Phương Hà", sdt: "0338595144", avatar: "" },
+            { thanhHoTen: "Têrêsa Trần Thanh Uyên", sdt: "0357667730", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Bảo Thy", sdt: "0349735441", avatar: "" },
+            { thanhHoTen: "Maria Lê Nguyễn Hồng Châu", sdt: "0385966649", avatar: "" },
+            { thanhHoTen: "Maria Diệp Thanh Thoảng", sdt: "0948673652", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Minh Vũ", sdt: "0382961153", avatar: "" },
+            { thanhHoTen: "Matta Lê Thị Ngọc Trâm", sdt: "0337383298", avatar: "" },
+            { thanhHoTen: "Anê Nguyễn Thị Hồng Yến", sdt: "0792394746", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Lâm Cẩm Hướng", sdt: "0396462484", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Tân", sdt: "0896416291", avatar: "" },
+            { thanhHoTen: "Phêrô Trần Tấn Tài", sdt: "0396191605", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Lê Tiến Khoa", sdt: "0972756505", avatar: "" },
+            { thanhHoTen: "Giuse Nguyễn Phúc Khang", sdt: "0368902575", avatar: "" },
+            { thanhHoTen: "Maria Hứa Thanh Thảo", sdt: "0972546881", avatar: "" },
+            { thanhHoTen: "Phanxica Lê Hoàng Gia Hân", sdt: "0799320036", avatar: "" },
+            { thanhHoTen: "Anna Nguyễn Thị Hoàng Uyên", sdt: "0345204809", avatar: "" },
+            { thanhHoTen: "Giuse Nguyễn Nhất Tâm", sdt: "0983525538", avatar: "" },
+            { thanhHoTen: "Maria Trương Anh Phong Nhi", sdt: "0363673929", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Huy Vũ", sdt: "0987974107", avatar: "" },
+            { thanhHoTen: "Maria Sơn Thị Thảo Vy", sdt: "0374246153", avatar: "" },
+            { thanhHoTen: "Raymonđô Trương Công Hậu", sdt: "0358319506", avatar: "" },
+            { thanhHoTen: "Rôsalima Nguyễn Thủy Hải Huỳnh", sdt: "0773913619", avatar: "" },
+            { thanhHoTen: "Matta Nguyễn Yến Lan", sdt: "0769640742", avatar: "" },
+            { thanhHoTen: "Anna Nguyễn Thị Tường Lam", sdt: "0382530494", avatar: "" },
+            { thanhHoTen: "Phêrô Lê Minh Tiến", sdt: "0966908232", avatar: "" },
+            { thanhHoTen: "Matta Nguyễn Ngọc Hương Giang", sdt: "0332183247", avatar: "" },
+            { thanhHoTen: "Phêrô Lê Huỳnh Sĩ Nguyên", sdt: "0949344205", avatar: "" },
+            { thanhHoTen: "Gioan Baotixita Lê Thái Hào", sdt: "0704964207", avatar: "" },
+            { thanhHoTen: "Maria Trần Huỳnh Trâm", sdt: "0704964207", avatar: "" },
+            { thanhHoTen: "Giuse Lựu Huỳnh Lâm Ngọc Tân", sdt: "0765993928", avatar: "" },
+            { thanhHoTen: "Maria Madalena Nguyễn Lê Thảo Vy", sdt: "0963981148", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Như Thùy", sdt: "0395382387", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Kiều Duyên", sdt: "0797852698", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Ngô Ngọc Hân", sdt: "0932471359", avatar: "" },
+            { thanhHoTen: "Đôminicô Lương Nguyễn Khang", sdt: "0785801705", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Huỳnh An Dy", sdt: "0909107132", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Nhất Trung", sdt: "0369902728", avatar: "" },
+            { thanhHoTen: "Tađêô Nguyễn Quang Lạc", sdt: "0966265200", avatar: "" },
+            { thanhHoTen: "Philipphe Nguyễn Duy Lữ", sdt: "0326271470", avatar: "" },
+            { thanhHoTen: "Matta Nguyễn Phương Thảo My", sdt: "0338158231", avatar: "" },
+            { thanhHoTen: "Giuse Nguyễn Thái Sơn", sdt: "0365656063", avatar: "" },
+            { thanhHoTen: "Đôminicô Trần Bùi Đạt Phú", sdt: "0345344063", avatar: "" },
+            { thanhHoTen: "Giuse Nguyễn Lâm Hồng Hải", sdt: "0326395940", avatar: "" },
+            { thanhHoTen: "Antôn Lê Hoàng Gia Huy", sdt: "0355749059", avatar: "" },
+            { thanhHoTen: "Maria Trần Thị Kiều Trang", sdt: "0385627732", avatar: "" },
+            { thanhHoTen: "Maria Nguyễn Ngọc Trâm Anh", sdt: "0586075828", avatar: "" },
+            { thanhHoTen: "Maria Lê Ngọc Huyền Trân", sdt: "0907037009", avatar: "" },
+            { thanhHoTen: "Phêrô Nguyễn Duy Nguyễn", sdt: "0814657029", avatar: "" }
         ];
 
         let ketQuaBocTham = [];
@@ -458,13 +445,15 @@
             return array;
         }
 
-        // Lấy ảnh chân dung đúng chuẩn (Dùng VietQR hoặc Gravatar/UI-Avatars chất lượng cao theo tên)
+        // HÀM TÌM LINK ẢNH CHÂN DUNG TỪ DANH SÁCH
         function getAvatarHT(fullName) {
             let found = danhSachGocHT.find(h => h.thanhHoTen === fullName);
-            // Nếu bạn có link ảnh cá nhân riêng, có thể thay thế ở đây. 
-            // Ta dùng dịch vụ tạo ảnh chân dung vector sinh động sắc nét kèm tên tiếng Việt chuẩn:
-            let nameEncoded = encodeURIComponent(fullName.trim());
-            return `https://ui-avatars.com/api/?name=${nameEncoded}&background=0D47A1&color=fff&size=250&bold=true&rounded=true`;
+            // Nếu bạn đã điền link ảnh thật vào `avatar:` thì nó sẽ lấy
+            if (found && found.avatar && found.avatar.trim() !== "") {
+                return found.avatar; 
+            }
+            // Nếu chưa điền, mặc định nó sẽ trả về 1 cái ảnh icon người vô danh
+            return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
         }
 
         function xuLyChiaDoi() {
@@ -551,10 +540,11 @@
         }
 
         function hienThiModalBonhiem(data) {
+            // Lấy ảnh chân dung (sẽ tải ảnh nếu có link, nếu chưa có link sẽ hiện ảnh người mẫu màu xám)
             document.getElementById("bnAvatarDT").src = getAvatarHT(data.dt);
             document.getElementById("bnAvatarDP").src = getAvatarHT(data.dp);
 
-            // Hiển thị rõ chức danh Đội Trưởng và Đội Phó trước tên
+            // Ghi rõ "Đội Trưởng:" và "Đội Phó:" trước tên
             document.getElementById("bnNames").innerHTML = `
                 <div style="font-size: 12px; font-weight: 800; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">Đội Trưởng:</div>
                 <div style="color: #047857; font-size: 16px; font-weight: 900; margin-bottom: 6px;">${data.dt}</div>

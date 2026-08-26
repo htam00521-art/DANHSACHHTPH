@@ -23,7 +23,7 @@
 
         body {
             background: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-                       url('bg_church.jpg'), url('backgroud.jpg');
+                        url('bg_church.jpg'), url('backgroud.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
         }
@@ -514,8 +514,7 @@
             name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer"
         };
 
-        // Hàm chuẩn hóa key loại bỏ dấu chấm (.) thành dấu gạch dưới (_) bảo mật tuyệt đối cho Firebase
-       // Hàm chuẩn hóa quét sạch TẤT CẢ các ký tự cấm của Firebase (đặc biệt là dấu gạch chéo /)
+        // Hàm chuẩn hóa quét sạch TẤT CẢ các ký tự cấm của Firebase (đặc biệt là dấu gạch chéo /)
         function formatNgayKey(ngayStr) {
             return String(ngayStr || "").replace(/[\.\#\$\/\[\]]/g, '_');
         }
@@ -926,9 +925,23 @@
 
             const headerRow = document.getElementById("tableHeaderRow");
             let headerHTML = `<th style="width: 50px;">STT</th><th>Thánh Họ Và Tên</th>`;
+            
             danhSachNgayLe.forEach(ngay => {
-                headerHTML += `<th style="width: 140px; text-align: center; font-size: 13px;">${ngay}</th>`;
+                let nutXoaHtml = '';
+                if (currentUser.role === "admin") {
+                    nutXoaHtml = `<div style="margin-top: 5px;">
+                                    <button class="btn btn-sm btn-danger" style="font-size: 10px; padding: 2px 6px; border-radius: 4px;" onclick="xoaNgayLe('${ngay}')">
+                                        <i class="fa-solid fa-trash"></i> Xóa
+                                    </button>
+                                  </div>`;
+                }
+                
+                headerHTML += `<th style="width: 140px; text-align: center; font-size: 13px;">
+                                  ${ngay}
+                                  ${nutXoaHtml}
+                               </th>`;
             });
+            
             headerHTML += `<th style="width: 150px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>`;
             headerRow.innerHTML = headerHTML;
 
@@ -1138,6 +1151,21 @@
             db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
                 alert(`Đã tự động tạo cột điểm danh: ${tenNgayMoi}`);
             });
+        }
+
+        // Hàm xóa cột ngày điểm danh (Chỉ Admin mới thấy nút và dùng được)
+        function xoaNgayLe(ngayCanXoa) {
+            if (confirm(`Bạn có chắc chắn muốn xóa cột điểm danh "${ngayCanXoa}" trên toàn hệ thống không?`)) {
+                // Lọc bỏ ngày cần xóa khỏi mảng
+                danhSachNgayLe = danhSachNgayLe.filter(ngay => ngay !== ngayCanXoa);
+                
+                // Cập nhật lại mảng mới lên Firebase
+                db.ref("danhSachNgayLe").set(danhSachNgayLe).then(() => {
+                    alert(`Đã xóa cột điểm danh "${ngayCanXoa}" thành công!`);
+                }).catch(error => {
+                    alert("Lỗi khi xóa ngày: " + error.message);
+                });
+            }
         }
 
         function moModalAdminDoi() {

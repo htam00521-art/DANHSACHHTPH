@@ -104,6 +104,10 @@
         .article-figure img { width: 100%; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
         .article-figure figcaption { font-size: 14px; color: #64748b; font-style: italic; margin-top: 8px; margin-bottom: 8px; text-align: center; line-height: 1.4; }
 
+        /* VIDEO RESPONSIVE */
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 14px; margin: 15px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .video-container iframe, .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
         /* LIKE & BÌNH LUẬN UI */
         .btn-like { background: transparent; border: 1px solid #cbd5e1; padding: 6px 16px; border-radius: 20px; font-weight: 800; color: #475569; cursor: pointer; transition: 0.2s; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
         .btn-like:hover { background: #f1f5f9; }
@@ -112,11 +116,8 @@
         .comment-name { font-weight: 800; font-size: 13px; color: #0f172a; margin-bottom: 2px; }
         .comment-text { font-size: 14px; color: #334155; line-height: 1.5; }
         .comment-time { font-size: 11px; color: #94a3b8; }
-        
         .btn-cmt-action { background: transparent; border: none; font-size: 11px; font-weight: 800; color: #64748b; cursor: pointer; padding: 0; margin-right: 12px; transition: 0.2s; }
         .btn-cmt-action:hover { color: #0284c7; text-decoration: underline; }
-
-        /* DANH SÁCH NGƯỜI LIKE & PREVIEW AVATAR */
         .like-stats-box { font-size: 14px; color: #64748b; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; padding: 6px 10px; border-radius: 12px; }
         .like-stats-box:hover { background: #f1f5f9; color: #0f172a; }
         
@@ -175,7 +176,6 @@
     </header>
 
     <div class="container">
-        <!-- AUTH BAR -->
         <div class="auth-bar">
             <div class="user-status d-flex align-items-center gap-2">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -192,7 +192,6 @@
             </div>
         </div>
 
-        <!-- HEADER TRANG -->
         <div class="dashboard-header">
             <div>
                 <h2><i class="fa-solid fa-newspaper text-primary"></i> Tin Tức & Thông Báo</h2>
@@ -203,7 +202,6 @@
             </button>
         </div>
 
-        <!-- LƯỚI HIỂN THỊ BÀI VIẾT -->
         <div id="newsGrid" class="row g-4 mb-5">
             <div class="col-12 text-center text-muted py-5"><i class="fa-solid fa-spinner fa-spin fa-2x"></i> Đang tải dữ liệu...</div>
         </div>
@@ -216,6 +214,10 @@
             
             <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Tiêu đề bài viết (*):</label>
             <input type="text" id="inputNewsTitle" class="form-control-custom" placeholder="Nhập tiêu đề thật hấp dẫn...">
+
+            <!-- THÊM Ô NHẬP THỜI GIAN HIỂN THỊ -->
+            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Thời gian hiển thị (*):</label>
+            <input type="text" id="inputNewsTime" class="form-control-custom" placeholder="Ví dụ: 08:30 - 15/08/2026">
 
             <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Hình ảnh minh họa (Link hoặc Tải lên):</label>
             <div class="d-flex gap-2 mb-3">
@@ -230,12 +232,18 @@
             <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Link toàn bộ ảnh (Album sự kiện - Nếu có):</label>
             <input type="text" id="inputNewsAlbum" class="form-control-custom" placeholder="Dán link Google Drive, Photos... để chia sẻ album">
 
+            <!-- THANH CÔNG CỤ CHÈN ẢNH VÀ VIDEO -->
             <div class="d-flex justify-content-between align-items-end mb-2">
                 <label style="font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 0;">Nội dung chi tiết (*):</label>
-                <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap justify-content-end">
                     <div id="loadingChen" style="display: none; font-size: 12px; color: #38bdf8; font-weight: 600;"><i class="fa-solid fa-spinner fa-spin me-1"></i>Đang tải...</div>
+                    
+                    <button type="button" class="btn btn-sm btn-outline-danger" style="font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-bottom: 0;" onclick="chenVideo()">
+                        <i class="fa-brands fa-youtube me-1"></i> Chèn Video
+                    </button>
+
                     <label class="btn btn-sm btn-outline-info" style="font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-bottom: 0;">
-                        <i class="fa-solid fa-camera me-1"></i> Chọn ảnh & Chú thích
+                        <i class="fa-solid fa-camera me-1"></i> Chọn ảnh
                         <input type="file" accept="image/*" style="display: none;" onchange="taiAnhLen(this, 'chen')">
                     </label>
                 </div>
@@ -268,17 +276,13 @@
                 
                 <div class="article-text" id="detailNewsContent">Nội dung bài viết sẽ hiển thị ở đây...</div>
                 
-                <!-- KHU VỰC TƯƠNG TÁC (LIKE & COMMENT) -->
                 <div style="margin-top: 25px; border-top: 1px solid #e2e8f0; padding-top: 15px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                     <button id="btnLikePost" class="btn-like" onclick="toggleLike()">
                         <i class="fa-regular fa-heart" id="likeIcon"></i> Thích
                     </button>
                     
-                    <!-- BẤM VÀO ĐÂY ĐỂ XEM AI ĐÃ THÍCH -->
                     <div class="like-stats-box" onclick="moDanhSachLike()">
-                        <div class="d-flex align-items-center" id="likeAvatarsPreview">
-                            <!-- Avatar thu nhỏ tự sinh ra ở đây -->
-                        </div>
+                        <div class="d-flex align-items-center" id="likeAvatarsPreview"></div>
                         <span id="likeCountText">0 lượt thích</span>
                     </div>
                 </div>
@@ -324,9 +328,7 @@
                 <h5 style="color: #0f172a; margin: 0; font-weight: 800; font-size: 16px;"><i class="fa-solid fa-heart text-danger me-2"></i>Những người đã thích</h5>
                 <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 1.2rem; color: #64748b;" onclick="dongModal('modalDanhSachLike')"></i>
             </div>
-            <div id="danhSachLikeContent" style="max-height: 350px; overflow-y: auto; padding-right: 5px;">
-                <!-- Render list danh sách thả tim vào đây -->
-            </div>
+            <div id="danhSachLikeContent" style="max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
         </div>
     </div>
 
@@ -479,6 +481,48 @@
             }
         }
 
+        // ================= XỬ LÝ CHÈN LINK VIDEO =================
+        function chenVideo() {
+            let url = prompt("Dán link video vào đây (Hỗ trợ link YouTube hoặc Google Drive):");
+            if (!url || url.trim() === "") return;
+            url = url.trim();
+            
+            let embedCode = "";
+            if (url.includes("youtube.com") || url.includes("youtu.be")) {
+                let videoId = "";
+                if (url.includes("v=")) {
+                    videoId = url.split("v=")[1].split("&")[0];
+                } else if (url.includes("youtu.be/")) {
+                    videoId = url.split("youtu.be/")[1].split("?")[0];
+                }
+                if (videoId) {
+                    embedCode = `\n<div class="video-container"><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>\n`;
+                }
+            } 
+            else if (url.endsWith(".mp4") || url.includes(".mp4?")) {
+                embedCode = `\n<div class="video-container" style="padding-bottom: 0; height: auto;"><video controls style="width:100%; border-radius:14px;"><source src="${url}" type="video/mp4">Trình duyệt không hỗ trợ xem video.</video></div>\n`;
+            }
+            else if (url.includes("drive.google.com/file/d/")) {
+                let fileId = url.split("/d/")[1].split("/")[0];
+                embedCode = `\n<div class="video-container"><iframe src="https://drive.google.com/file/d/${fileId}/preview" allowfullscreen></iframe></div>\n`;
+            } else {
+                let proceed = confirm("Hệ thống không nhận diện được đây là link YouTube hay Google Drive. Bạn có muốn chèn như một link liên kết bình thường không?");
+                if(proceed) {
+                    embedCode = `\n<a href="${url}" target="_blank" style="color: #0284c7; font-weight: bold; text-decoration: underline;">👉 Bấm vào đây để xem Video</a>\n`;
+                } else {
+                    return;
+                }
+            }
+
+            if (embedCode !== "") {
+                let textarea = document.getElementById("inputNewsContent");
+                let startPos = textarea.selectionStart;
+                let endPos = textarea.selectionEnd;
+                textarea.value = textarea.value.substring(0, startPos) + embedCode + textarea.value.substring(endPos, textarea.value.length);
+                textarea.focus();
+            }
+        }
+
         // ================= XỬ LÝ BÀI VIẾT =================
         function renderNews() {
             const grid = document.getElementById("newsGrid");
@@ -533,7 +577,7 @@
             });
         }
 
-        // ================= TÍNH NĂNG LIKE & XEM DANH SÁCH LIKE =================
+        // ================= TÍNH NĂNG LIKE & DANH SÁCH LIKE =================
         function toggleLike() {
             if (!currentUser.email) return alert("Vui lòng đăng nhập để thả tim bài viết!");
             
@@ -544,7 +588,6 @@
             if (isLiked) {
                 db.ref(`tinTucSuKien/${currentViewingPostId}/likes/${encodedEmail}`).remove();
             } else {
-                // LƯU CẢ TÊN VÀ HÌNH ẢNH CỦA NGƯỜI LIKE
                 db.ref(`tinTucSuKien/${currentViewingPostId}/likes/${encodedEmail}`).set({
                     name: currentUser.name,
                     picture: currentUser.picture
@@ -569,7 +612,6 @@
                     let name = "Người dùng ẩn danh";
                     let pic = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
                     
-                    // Nếu data là kiểu Object mới (có lưu Tên và Ảnh)
                     if (typeof likeData === 'object') {
                         name = likeData.name || name;
                         pic = likeData.picture || pic;
@@ -660,7 +702,6 @@
             const post = newsData.find(p => p.id === id);
             if (!post) return;
 
-            // ===== CẬP NHẬT GIAO DIỆN THẢ TIM =====
             const likes = post.likes || {};
             const likeKeys = Object.keys(likes);
             const countLikes = likeKeys.length;
@@ -678,7 +719,6 @@
 
             document.getElementById("likeCountText").innerText = countLikes > 0 ? `${countLikes} lượt thích` : `Hãy là người đầu tiên thích`;
 
-            // Sinh ra tối đa 3 Mini Avatars xếp chồng lên nhau
             let previewHtml = "";
             let limit = Math.min(countLikes, 3);
             for(let i=0; i<limit; i++) {
@@ -688,7 +728,6 @@
             }
             document.getElementById("likeAvatarsPreview").innerHTML = previewHtml;
 
-            // ===== CẬP NHẬT GIAO DIỆN BÌNH LUẬN =====
             const commentsObj = post.comments || {};
             const commentsArr = Object.keys(commentsObj).map(k => ({ id: k, ...commentsObj[k] })).sort((a,b) => a.timeValue - b.timeValue);
             
@@ -827,6 +866,8 @@
             let contentHtml = item.content.replace(/\n/g, '<br>');
             contentHtml = contentHtml.replace(/(?:<br>\s*)+<figure/g, '<figure');
             contentHtml = contentHtml.replace(/<\/figure>\s*(?:<br>\s*)+/g, '</figure>');
+            contentHtml = contentHtml.replace(/(?:<br>\s*)+<div class="video-container/g, '<div class="video-container');
+            contentHtml = contentHtml.replace(/<\/div>\s*(?:<br>\s*)+/g, '</div>');
             
             document.getElementById("detailNewsContent").innerHTML = contentHtml;
             
@@ -843,7 +884,6 @@
             }, 100);
         }
 
-        // CÁC HÀM XỬ LÝ KHÁC
         function dongModal(id) { 
             document.getElementById(id).classList.remove("active"); 
             if (id === 'modalXemTin') {
@@ -856,6 +896,12 @@
             editingPostId = null; 
             document.getElementById("modalTitleText").innerHTML = `<i class="fa-solid fa-pen-to-square me-2"></i>Tạo Bài Viết Mới`;
             document.getElementById("inputNewsTitle").value = "";
+            
+            // TỰ ĐỘNG ĐIỀN GIỜ HIỆN TẠI VÀO Ô THỜI GIAN
+            const now = new Date();
+            const timeString = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+            document.getElementById("inputNewsTime").value = timeString;
+
             document.getElementById("inputNewsImg").value = "";
             document.getElementById("inputNewsAlbum").value = "";
             document.getElementById("inputNewsContent").value = "";
@@ -870,6 +916,10 @@
             editingPostId = id;
             document.getElementById("modalTitleText").innerHTML = `<i class="fa-solid fa-pen-to-square me-2"></i>Cập Nhật Bài Viết`;
             document.getElementById("inputNewsTitle").value = post.title || "";
+            
+            // LOAD LẠI THỜI GIAN CŨ CỦA BÀI VIẾT ĐỂ SỬA
+            document.getElementById("inputNewsTime").value = post.timestamp || "";
+
             document.getElementById("inputNewsImg").value = post.imgUrl || "";
             document.getElementById("inputNewsAlbum").value = post.albumUrl || "";
             document.getElementById("inputNewsContent").value = post.content || "";
@@ -878,14 +928,12 @@
 
         function luuBaiViet() {
             const title = document.getElementById("inputNewsTitle").value.trim();
+            const timeString = document.getElementById("inputNewsTime").value.trim(); // Lấy thời gian từ ô nhập
             const imgUrl = document.getElementById("inputNewsImg").value.trim();
             const albumUrl = document.getElementById("inputNewsAlbum").value.trim();
             const content = document.getElementById("inputNewsContent").value.trim();
 
-            if(!title || !content) return alert("Vui lòng nhập đầy đủ Tiêu đề và Nội dung bài viết!");
-
-            const now = new Date();
-            const timeString = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+            if(!title || !content || !timeString) return alert("Vui lòng nhập đầy đủ Tiêu đề, Thời gian hiển thị và Nội dung bài viết!");
 
             const post = { title, imgUrl, albumUrl, content, timestamp: timeString };
 
@@ -907,7 +955,6 @@
             }
         }
 
-        /* --- XỬ LÝ PHÓNG TO ẢNH (LIGHTBOX) --- */
         function moLightbox(src) {
             document.getElementById("lightboxImg").src = src;
             document.getElementById("imageLightbox").classList.add("active");

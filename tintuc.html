@@ -108,10 +108,14 @@
         .btn-like { background: transparent; border: 1px solid #cbd5e1; padding: 6px 16px; border-radius: 20px; font-weight: 800; color: #475569; cursor: pointer; transition: 0.2s; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
         .btn-like:hover { background: #f1f5f9; }
         .btn-like.liked { color: #ef4444; border-color: #fca5a5; background: #fef2f2; }
-        .comment-bubble { background: #f1f5f9; padding: 10px 14px; border-radius: 16px; max-width: 88%; }
+        .comment-bubble { background: #f1f5f9; padding: 10px 14px; border-radius: 16px; display: inline-block;}
         .comment-name { font-weight: 800; font-size: 13px; color: #0f172a; margin-bottom: 2px; }
         .comment-text { font-size: 14px; color: #334155; line-height: 1.5; }
-        .comment-time { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+        .comment-time { font-size: 11px; color: #94a3b8; }
+        
+        /* CÁC NÚT TƯƠNG TÁC BÌNH LUẬN */
+        .btn-cmt-action { background: transparent; border: none; font-size: 11px; font-weight: 800; color: #64748b; cursor: pointer; padding: 0; margin-right: 12px; transition: 0.2s; }
+        .btn-cmt-action:hover { color: #0284c7; text-decoration: underline; }
 
         /* LIGHTBOX PHÓNG TO ẢNH */
         .lightbox-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(6px); z-index: 10000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
@@ -223,7 +227,6 @@
             <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Link toàn bộ ảnh (Album sự kiện - Nếu có):</label>
             <input type="text" id="inputNewsAlbum" class="form-control-custom" placeholder="Dán link Google Drive, Photos... để chia sẻ album">
 
-            <!-- NÚT CHÈN ẢNH VÀO NỘI DUNG KÈM CHÚ THÍCH -->
             <div class="d-flex justify-content-between align-items-end mb-2">
                 <label style="font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 0;">Nội dung chi tiết (*):</label>
                 <div class="d-flex align-items-center gap-2">
@@ -273,23 +276,33 @@
                     <h4 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: #1e293b;">Bình luận (<span id="commentCount">0</span>)</h4>
                     
                     <!-- Danh sách bình luận -->
-                    <div id="commentsList" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px; padding-right: 5px;"></div>
+                    <div id="commentsList" style="margin-bottom: 15px;"></div>
                     
-                    <!-- Ô nhập bình luận -->
-                    <div id="commentInputArea" style="display: none; gap: 10px; align-items: flex-start; background: #f8fafc; padding: 12px; border-radius: 16px;">
-                        <img id="myCommentAvatar" src="" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;" alt="Avatar">
-                        <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px;">
-                            <textarea id="txtComment" class="form-control" placeholder="Viết bình luận của bạn..." style="border-radius: 14px; font-size: 14px; resize: none; overflow: hidden; padding-top: 10px; border-color: #cbd5e1;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
-                            <div class="text-end">
-                                <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold" onclick="guiBinhLuan()"><i class="fa-solid fa-paper-plane me-1"></i> Gửi</button>
+                    <!-- Yêu cầu đăng nhập -->
+                    <div id="loginToCommentMsg" style="display: block; text-align: center; padding: 15px; background: #f1f5f9; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: #64748b; border: 1px dashed #cbd5e1;">
+                        Vui lòng đăng nhập bằng Google ở góc phải phía trên màn hình để thả tim và bình luận.
+                    </div>
+
+                    <!-- Ô nhập bình luận chính -->
+                    <div id="commentInputArea" style="display: none; flex-direction: column; background: #f8fafc; padding: 12px; border-radius: 16px; border: 1px solid #e2e8f0; margin-top: 10px;">
+                        
+                        <!-- Thanh báo hiệu đang trả lời ai -->
+                        <div id="replyingIndicator" style="display:none; font-size: 12px; font-weight: 700; color: #0369a1; background: #e0f2fe; padding: 4px 10px; border-radius: 6px; align-self: flex-start; margin-bottom: 10px;">
+                            Đang trả lời <strong><span id="replyingToName" style="color: #0f172a;"></span></strong>
+                            <i class="fa-solid fa-xmark ms-2" style="cursor:pointer; color: #ef4444;" onclick="huyTraLoi()"></i>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <img id="myCommentAvatar" src="" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;" alt="Avatar">
+                            <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 8px;">
+                                <textarea id="txtComment" class="form-control" placeholder="Viết bình luận của bạn..." style="border-radius: 14px; font-size: 14px; resize: none; overflow: hidden; padding-top: 10px; border-color: #cbd5e1;" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+                                <div class="text-end">
+                                    <button class="btn btn-sm btn-primary rounded-pill px-4 fw-bold" onclick="guiBinhLuan()"><i class="fa-solid fa-paper-plane me-1"></i> Gửi</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Yêu cầu đăng nhập -->
-                    <div id="loginToCommentMsg" style="display: block; text-align: center; padding: 15px; background: #f1f5f9; border-radius: 12px; font-size: 13.5px; font-weight: 600; color: #64748b; border: 1px dashed #cbd5e1;">
-                        Vui lòng đăng nhập bằng Google ở góc phải phía trên màn hình để thả tim và bình luận bài viết này.
-                    </div>
                 </div>
                 
                 <div class="text-end mt-4 pt-3" style="border-top: 1px solid #e2e8f0;">
@@ -331,7 +344,8 @@
         let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || { role: "viewer" };
         let newsData = [];
         let editingPostId = null;
-        let currentViewingPostId = null; // Biến theo dõi bài viết nào đang mở
+        let currentViewingPostId = null; 
+        let replyingToParentId = null; // Cờ theo dõi xem đang trả lời bình luận nào
 
         window.onload = function() {
             if (window.google) {
@@ -473,9 +487,14 @@
 
                 let cleanExcerpt = item.content.replace(/<[^>]*>?/gm, '');
                 
-                // Tính số Like và Comment hiển thị ngoài thẻ
+                // Đếm TỔNG số lượng Bình luận (bao gồm cả các Reply)
                 const countLikes = Object.keys(item.likes || {}).length;
-                const countComments = Object.keys(item.comments || {}).length;
+                let countComments = 0;
+                const commentsObj = item.comments || {};
+                Object.keys(commentsObj).forEach(k => {
+                    countComments++;
+                    if (commentsObj[k].replies) countComments += Object.keys(commentsObj[k].replies).length;
+                });
 
                 grid.innerHTML += `
                     <div class="col-md-6 col-lg-4">
@@ -504,10 +523,8 @@
         function toggleLike() {
             if (!currentUser.email) return alert("Vui lòng đăng nhập để thả tim bài viết!");
             
-            // Firebase không cho lưu Key có dấu chấm '.', nên phải đổi thành dấu phẩy ','
             const encodedEmail = currentUser.email.replace(/\./g, ',');
             const post = newsData.find(p => p.id === currentViewingPostId);
-            
             const isLiked = post && post.likes && post.likes[encodedEmail];
             
             if (isLiked) {
@@ -515,6 +532,24 @@
             } else {
                 db.ref(`tinTucSuKien/${currentViewingPostId}/likes/${encodedEmail}`).set(true);
             }
+        }
+
+        function moKhungTraLoi(parentId, authorName) {
+            replyingToParentId = parentId;
+            document.getElementById("replyingIndicator").style.display = "inline-block";
+            document.getElementById("replyingToName").innerText = authorName;
+            
+            // Cuộn mượt mà xuống ô nhập liệu và focus
+            const txtComment = document.getElementById("txtComment");
+            txtComment.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            txtComment.focus();
+        }
+
+        function huyTraLoi() {
+            replyingToParentId = null;
+            document.getElementById("replyingIndicator").style.display = "none";
+            document.getElementById("txtComment").value = "";
+            document.getElementById("txtComment").style.height = '40px';
         }
 
         function guiBinhLuan() {
@@ -526,24 +561,50 @@
             const now = new Date();
             const timeString = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
 
-            const comment = {
+            const payload = {
                 name: currentUser.name,
                 email: currentUser.email,
                 picture: currentUser.picture,
                 text: text,
                 timestamp: timeString,
-                timeValue: now.getTime() // Để sắp xếp thứ tự bình luận
+                timeValue: now.getTime(),
+                isHidden: false
             };
 
-            db.ref(`tinTucSuKien/${currentViewingPostId}/comments`).push(comment).then(() => {
-                textarea.value = "";
-                textarea.style.height = '40px'; // Reset chiều cao ô nhập
-                // Cuộn xuống cuối để thấy bình luận mới
-                setTimeout(() => {
-                    const cl = document.getElementById("commentsList");
-                    cl.scrollTop = cl.scrollHeight;
-                }, 150);
-            });
+            // Nếu đang trả lời -> Đẩy vào mục replies của bình luận cha
+            if (replyingToParentId) {
+                db.ref(`tinTucSuKien/${currentViewingPostId}/comments/${replyingToParentId}/replies`).push(payload).then(() => {
+                    huyTraLoi();
+                });
+            } else {
+                // Nếu bình luận mới -> Đẩy thẳng vào bài viết
+                db.ref(`tinTucSuKien/${currentViewingPostId}/comments`).push(payload).then(() => {
+                    textarea.value = "";
+                    textarea.style.height = '40px';
+                    setTimeout(() => {
+                        const cl = document.querySelector(".article-content-wrapper");
+                        cl.scrollTop = cl.scrollHeight;
+                    }, 150);
+                });
+            }
+        }
+
+        function toggleAnBinhLuan(commentId, currentStatus, parentId = null) {
+            let path = `tinTucSuKien/${currentViewingPostId}/comments/${commentId}`;
+            if (parentId) {
+                path = `tinTucSuKien/${currentViewingPostId}/comments/${parentId}/replies/${commentId}`;
+            }
+            db.ref(path).update({ isHidden: !currentStatus });
+        }
+
+        function xoaBinhLuan(commentId, parentId = null) {
+            if(confirm("Bạn có chắc chắn muốn xóa bình luận này?")) {
+                let path = `tinTucSuKien/${currentViewingPostId}/comments/${commentId}`;
+                if (parentId) {
+                    path = `tinTucSuKien/${currentViewingPostId}/comments/${parentId}/replies/${commentId}`;
+                }
+                db.ref(path).remove();
+            }
         }
 
         function capNhatLikeVaComment(id) {
@@ -553,7 +614,6 @@
             // Xử lý Thả Tim
             const likes = post.likes || {};
             document.getElementById("likeCount").innerText = Object.keys(likes).length;
-            
             const btnLikePost = document.getElementById("btnLikePost");
             const likeIcon = document.getElementById("likeIcon");
             
@@ -565,29 +625,113 @@
                 btnLikePost.classList.remove("liked");
             }
 
-            // Xử lý Bình luận
+            // Xử lý Render Bình luận đa cấp
             const commentsObj = post.comments || {};
-            const commentsArr = Object.keys(commentsObj).map(k => commentsObj[k]).sort((a,b) => a.timeValue - b.timeValue);
-            document.getElementById("commentCount").innerText = commentsArr.length;
-
+            const commentsArr = Object.keys(commentsObj).map(k => ({ id: k, ...commentsObj[k] })).sort((a,b) => a.timeValue - b.timeValue);
+            
+            let totalComments = 0;
             const cl = document.getElementById("commentsList");
             cl.innerHTML = "";
+
             if (commentsArr.length === 0) {
                 cl.innerHTML = `<div style="text-align: center; color: #94a3b8; font-size: 13px; font-style: italic; margin-bottom:10px;">Chưa có bình luận nào. Hãy là người đầu tiên!</div>`;
             } else {
                 commentsArr.forEach(c => {
-                    cl.innerHTML += `
-                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                            <img src="${c.picture || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                            <div class="comment-bubble">
-                                <div class="comment-name">${c.name}</div>
-                                <div class="comment-text">${c.text.replace(/\n/g, '<br>')}</div>
-                                <div class="comment-time">${c.timestamp}</div>
+                    totalComments++;
+                    
+                    let cText = c.text.replace(/\n/g, '<br>');
+                    let isHiddenBadge = "";
+                    let actionsHtml = "";
+
+                    // Xử lý logic Ẩn/Hiện
+                    if (c.isHidden) {
+                        if (currentUser.role === 'admin') {
+                            isHiddenBadge = `<span class="badge bg-secondary ms-2" style="font-size: 10px;">Đã ẩn</span>`;
+                        } else {
+                            cText = `<i style="color: #94a3b8;">Bình luận này đã bị ẩn bởi Quản trị viên.</i>`;
+                        }
+                    }
+
+                    // Nút Hành Động (Chỉ cấp quyền khi đăng nhập)
+                    if (currentUser.email && (!c.isHidden || currentUser.role === 'admin')) {
+                        actionsHtml += `<button class="btn-cmt-action" onclick="moKhungTraLoi('${c.id}', '${c.name}')">Phản hồi</button>`;
+                    }
+                    if (currentUser.role === 'admin') {
+                        let actionText = c.isHidden ? "Hiện" : "Ẩn";
+                        actionsHtml += `<button class="btn-cmt-action text-warning" onclick="toggleAnBinhLuan('${c.id}', ${c.isHidden})">${actionText}</button>`;
+                    }
+                    if (currentUser.role === 'admin' || (currentUser.email === c.email)) {
+                        actionsHtml += `<button class="btn-cmt-action text-danger" onclick="xoaBinhLuan('${c.id}')">Xóa</button>`;
+                    }
+
+                    // Render thẻ Bình luận Gốc
+                    let htmlBuilder = `
+                        <div style="display: flex; gap: 10px; margin-bottom: ${c.replies ? '10px' : '15px'};">
+                            <img src="${c.picture || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                            <div style="flex-grow: 1;">
+                                <div class="comment-bubble">
+                                    <div class="comment-name">${c.name} ${isHiddenBadge}</div>
+                                    <div class="comment-text">${cText}</div>
+                                </div>
+                                <div style="margin-top: 4px; margin-left: 12px; display: flex; align-items: center;">
+                                    <span class="comment-time me-3">${c.timestamp}</span>
+                                    ${actionsHtml}
+                                </div>
                             </div>
                         </div>
                     `;
+
+                    // Render thẻ Phản Hồi (Nằm thụt lề bên trong)
+                    if (c.replies) {
+                        const repArr = Object.keys(c.replies).map(k => ({ id: k, ...c.replies[k] })).sort((a,b) => a.timeValue - b.timeValue);
+                        repArr.forEach(r => {
+                            totalComments++;
+                            let rText = r.text.replace(/\n/g, '<br>');
+                            let rHiddenBadge = "";
+                            let rActionsHtml = "";
+
+                            if (r.isHidden) {
+                                if (currentUser.role === 'admin') {
+                                    rHiddenBadge = `<span class="badge bg-secondary ms-2" style="font-size: 10px;">Đã ẩn</span>`;
+                                } else {
+                                    rText = `<i style="color: #94a3b8;">Bình luận này đã bị ẩn.</i>`;
+                                }
+                            }
+
+                            if (currentUser.email && (!r.isHidden || currentUser.role === 'admin')) {
+                                // Phản hồi lại của phản hồi vẫn sẽ chĩa về bình luận Gốc
+                                rActionsHtml += `<button class="btn-cmt-action" onclick="moKhungTraLoi('${c.id}', '${r.name}')">Phản hồi</button>`;
+                            }
+                            if (currentUser.role === 'admin') {
+                                let actionText = r.isHidden ? "Hiện" : "Ẩn";
+                                rActionsHtml += `<button class="btn-cmt-action text-warning" onclick="toggleAnBinhLuan('${r.id}', ${r.isHidden}, '${c.id}')">${actionText}</button>`;
+                            }
+                            if (currentUser.role === 'admin' || (currentUser.email === r.email)) {
+                                rActionsHtml += `<button class="btn-cmt-action text-danger" onclick="xoaBinhLuan('${r.id}', '${c.id}')">Xóa</button>`;
+                            }
+
+                            htmlBuilder += `
+                                <div style="display: flex; gap: 8px; margin-bottom: 10px; margin-left: 46px;">
+                                    <img src="${r.picture || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                                    <div style="flex-grow: 1;">
+                                        <div class="comment-bubble" style="background: #e2e8f0;">
+                                            <div class="comment-name" style="font-size: 12px;">${r.name} ${rHiddenBadge}</div>
+                                            <div class="comment-text" style="font-size: 13.5px;">${rText}</div>
+                                        </div>
+                                        <div style="margin-top: 4px; margin-left: 12px; display: flex; align-items: center;">
+                                            <span class="comment-time me-3">${r.timestamp}</span>
+                                            ${rActionsHtml}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    cl.innerHTML += htmlBuilder;
                 });
             }
+
+            document.getElementById("commentCount").innerText = totalComments;
 
             // Ẩn/hiện khu vực nhập bình luận dựa vào việc đã đăng nhập hay chưa
             if (currentUser.email) {
@@ -602,7 +746,9 @@
 
         // ================= XEM CHI TIẾT BÀI VIẾT =================
         function xemChiTietBaiViet(id) {
-            currentViewingPostId = id; // Đánh dấu bài đang mở
+            currentViewingPostId = id; 
+            huyTraLoi(); // Khởi tạo lại ô trả lời
+            
             const item = newsData.find(n => n.id === id);
             if(!item) return;
 
@@ -628,36 +774,26 @@
             
             document.getElementById("detailNewsContent").innerHTML = contentHtml;
             
-            // Cập nhật Tim và Bình luận trước khi mở
+            // Cập nhật Tim và Bình luận trước khi mở Modal
             capNhatLikeVaComment(id);
 
             document.getElementById("modalXemTin").classList.add("active");
             document.body.style.overflow = "hidden"; 
 
-            // Chờ render xong để gắn sự kiện bấm vào ảnh phóng to
+            // Cài đặt Lightbox cho ảnh mới load
             setTimeout(() => {
                 const allImages = document.querySelectorAll("#detailNewsImg, #detailNewsContent img");
                 allImages.forEach(img => {
-                    img.onclick = function(e) {
-                        e.stopPropagation();
-                        moLightbox(this.src);
-                    };
+                    img.onclick = function(e) { e.stopPropagation(); moLightbox(this.src); };
                 });
             }, 100);
         }
 
-        // Các hàm xử lý Modal cơ bản
+        // CÁC HÀM XỬ LÝ KHÁC (Admin, Đóng mở cửa sổ)
         function dongModal(id) { 
             document.getElementById(id).classList.remove("active"); 
             document.body.style.overflow = "auto";
-            if (id === 'modalXemTin') currentViewingPostId = null; // Xóa trạng thái đang xem
-        }
-
-        function xoaBaiViet(id, event) {
-            event.stopPropagation();
-            if(confirm("Cảnh báo: Bạn có chắc chắn muốn xóa bài viết này không? Không thể khôi phục lại được đâu nhé!")) {
-                db.ref("tinTucSuKien/" + id).remove().then(() => { alert("Đã xóa bài viết thành công!"); });
-            }
+            if (id === 'modalXemTin') currentViewingPostId = null; 
         }
 
         function moModalDangBai() {
@@ -705,6 +841,13 @@
                 db.ref("tinTucSuKien").push(post).then(() => {
                     alert("Đã đăng bài viết thành công lên hệ thống!"); dongModal('modalDangBai');
                 }).catch(err => alert("Lỗi hệ thống: " + err.message));
+            }
+        }
+
+        function xoaBaiViet(id, event) {
+            event.stopPropagation();
+            if(confirm("Cảnh báo: Bạn có chắc chắn muốn xóa bài viết này không? Không thể khôi phục lại được đâu nhé!")) {
+                db.ref("tinTucSuKien/" + id).remove().then(() => { alert("Đã xóa bài viết thành công!"); });
             }
         }
 

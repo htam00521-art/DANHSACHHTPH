@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức & Thông Báo - Đoàn TNTT Phước Hảo</title>
+    
+    <link rel="icon" type="image/jpeg" href="logo_app.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Firebase SDK & Google Auth -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('bg_church.jpg');
+            background-position: center center; background-size: cover; background-repeat: no-repeat;
+            background-attachment: fixed; min-height: 100vh; padding: 16px; color: #1e293b;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT */
+        .cls-topbar {
+            background: linear-gradient(135deg, #0d47a1, #1565c0 50%, #42a5f5);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            color: #fff; padding: 0.7rem 1.2rem; border-radius: 20px; margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 114, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .cls-brand { display: flex; align-items: center; gap: 0.75rem; color: #fff; text-decoration: none; font-weight: 800; font-size: 1.05rem; font-family: 'Nunito', sans-serif; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.25); position: relative; z-index: 102; }
+        .cls-brand img { width: 44px; height: 44px; border-radius: 50%; object-fit: contain; background: #fff; padding: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.3s ease; }
+        .cls-brand:hover img { transform: rotate(10deg) scale(1.05); }
+
+        .mobile-menu-toggle { display: none; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); color: #fff; font-size: 1.4rem; width: 42px; height: 42px; border-radius: 12px; cursor: pointer; transition: 0.3s ease; position: relative; z-index: 102; }
+        .menu-overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 98; opacity: 0; visibility: hidden; transition: 0.3s; }
+        .menu-overlay-bg.show { opacity: 1; visibility: visible; }
+
+        .cls-nav-link { color: rgba(255,255,255,0.95); text-decoration: none; font-weight: 700; font-size: 0.88rem; padding: 0.5rem 1rem; border-radius: 999px; transition: all 0.3s ease; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); }
+        .cls-nav-link:hover, .cls-nav-link.active { background: rgba(255,255,255,0.32); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.15); }
+
+        /* AUTH BAR LUÔN HIỂN THỊ */
+        .auth-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px); padding: 10px 18px; border-radius: 14px; margin-bottom: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.08); flex-wrap: wrap; gap: 10px; }
+        .user-status { font-size: 14px; color: #333; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .user-avatar-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #0D47A1; }
+        .role-tag { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; }
+        .role-admin { background: #d32f2f; } .role-leader { background: #e65100; } .role-viewer { background: #1976d2; }
+        .btn-auth-action { background: #0D47A1; color: #fff; border: none; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn-auth-action:hover { background: #1565C0; } .btn-logout { background: #546e7a; }
+
+        /* HEADER BANNER */
+        .dashboard-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 22px 26px; margin-bottom: 30px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;}
+        .dashboard-header h2 { color: #0D47A1; font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; margin: 0;}
+        .dashboard-header p { color: #64748b; font-size: 14px; margin-top: 4px; margin-bottom: 0;}
+        .btn-dang-bai { background: linear-gradient(135deg, #059669, #34d399); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 700; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); transition: 0.2s; }
+        .btn-dang-bai:hover { transform: translateY(-2px); filter: brightness(1.1); color: white;}
+
+        /* BÀI VIẾT (NEWS CARDS) */
+        .news-card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); transition: all 0.3s ease; display: flex; flex-direction: column; height: 100%; border: 1px solid #e2e8f0; cursor: pointer;}
+        .news-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,114,255,0.15); border-color: #93c5fd; }
+        .news-img { width: 100%; height: 220px; object-fit: cover; border-bottom: 3px solid #f1f5f9;}
+        .news-body { padding: 22px; flex-grow: 1; display: flex; flex-direction: column; }
+        .news-title { font-size: 1.25rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; font-family: 'Nunito', sans-serif; line-height: 1.4;}
+        .news-date { font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px; font-weight: 600; display: flex; align-items: center; gap: 6px;}
+        .news-excerpt { color: #475569; font-size: 0.95rem; line-height: 1.6; flex-grow: 1; margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .news-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
+        .btn-readmore { background: transparent; color: #0ea5e9; font-weight: 800; border: none; padding: 0; font-size: 0.9rem;}
+        .btn-delete-news { color: #ef4444; background: rgba(239, 68, 68, 0.1); padding: 6px 12px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: 0.2s;}
+        .btn-delete-news:hover { background: #ef4444; color: white; }
+
+        /* MODAL CHUNG */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 25, 47, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; padding: 16px; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-card { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.3); width: 100%; max-width: 650px; border-radius: 28px; padding: 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); color: #f8fafc; }
+        
+        /* GIAO DIỆN MODAL SÁNG */
+        .modal-card-light { background: #ffffff; color: #1e293b; box-shadow: 0 15px 40px rgba(0,0,0,0.2); border: none; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column; padding: 0; overflow: hidden;}
+        
+        .form-control-custom { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); color: #fff; font-size: 14.5px; outline: none; margin-bottom: 16px; font-weight: 500; }
+        .form-control-custom:focus { border-color: #38bdf8; background: rgba(255,255,255,0.12); }
+        textarea.form-control-custom { min-height: 150px; resize: vertical; }
+
+        .btn-modal-action { padding: 12px 28px; font-size: 15px; font-weight: 800; border-radius: 50px; cursor: pointer; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); }
+        .btn-modal-action.btn-confirm { background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff; border: 1px solid rgba(255,255,255,0.4); flex: 1.5; }
+        .btn-modal-action.btn-dismiss { background: rgba(255, 255, 255, 0.12); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.25); flex: 1; }
+        .btn-modal-action.btn-dismiss:hover { background: rgba(255, 255, 255, 0.25); color: #fff; }
+
+        /* CHI TIẾT BÀI VIẾT */
+        .article-header-img { width: 100%; height: 250px; object-fit: cover; }
+        .article-content-wrapper { padding: 30px; overflow-y: auto; flex-grow: 1; }
+        .article-title { font-size: 1.8rem; font-weight: 900; color: #0f172a; margin-bottom: 10px; font-family: 'Nunito', sans-serif; line-height: 1.3;}
+        .article-meta { color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9; display: flex; gap: 15px;}
+        .article-text { color: #334155; font-size: 1.05rem; line-height: 1.8; white-space: pre-wrap; text-align: justify; }
+
+        @media (max-width: 991px) {
+            .cls-topbar { margin: 16px; border-radius: 24px !important; padding: 24px 16px; background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important; box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important; position: relative; }
+            .cls-topbar .container { flex-direction: column !important; gap: 20px; padding: 0 !important; }
+            .cls-brand { justify-content: center; width: 100%; text-align: center; gap: 12px; }
+            .cls-brand img { width: 50px; height: 50px; }
+            .cls-brand span { font-size: 1.15rem; white-space: normal; }
+            .cls-topbar nav { flex-direction: column !important; width: 100%; gap: 8px !important; }
+            .cls-nav-link { width: 100%; display: flex; justify-content: center; align-items: center; padding: 12px 20px !important; font-size: 1rem !important; border: none !important; background: transparent !important; border-radius: 50px !important; margin: 0; }
+            .cls-nav-link.active { background: rgba(255, 255, 255, 0.25) !important; font-weight: 800; }
+            
+            .auth-bar { flex-direction: column; text-align: center; gap: 15px; padding: 15px; }
+            .auth-actions { justify-content: center; width: 100%; }
+            .dashboard-header { flex-direction: column; text-align: center; }
+            .article-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- OVERLAY MENU DI ĐỘNG -->
+    <div class="menu-overlay-bg" id="menuOverlayBg" onclick="toggleMobileMenu()"></div>
+
+    <!-- THANH ĐIỀU HƯỚNG -->
+    <header class="cls-topbar">
+        <div class="container d-flex justify-content-between align-items-center flex-wrap" style="padding: 0; max-width: 100%;">
+            <a class="cls-brand" href="index.html">
+                <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
+                <span>TNTT PHƯỚC HẢO</span>
+            </a>
+            
+            <button class="mobile-menu-toggle" id="mobileMenuBtn" onclick="toggleMobileMenu()" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- LƯU Ý: ĐÃ THÊM MỤC TIN TỨC VÀO ĐÂY -->
+            <nav id="navMenuLinks" class="cls-nav-menu d-flex gap-2 flex-wrap">
+                <a href="index.html" class="cls-nav-link"><i class="fas fa-home me-1"></i> Trang chủ</a>
+                <a href="tintuc.html" class="cls-nav-link active"><i class="fa-solid fa-newspaper me-1"></i> Tin Tức</a>
+                <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i> Lịch Trực</a>
+                <a href="diemdanh.html" class="cls-nav-link"><i class="fas fa-clipboard-user me-1"></i> Điểm Danh Đội</a>
+                <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i> Chia Đội</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- AUTH BAR -->
+        <div class="auth-bar">
+            <div class="user-status d-flex align-items-center gap-2">
+                <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
+                <div class="d-flex align-items-center gap-2">
+                    <span id="userNameDisplay" style="font-weight: 600;">Khách</span>
+                    <span id="roleBadge" class="role-tag role-viewer">Người xem</span>
+                </div>
+            </div>
+            <div class="auth-actions d-flex gap-2">
+                <div id="googleBtnContainer"></div>
+                <button id="logoutBtn" class="btn-auth-action btn-logout" style="display:none;" onclick="xuLyDangXuat()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+
+        <!-- HEADER TRANG -->
+        <div class="dashboard-header">
+            <div>
+                <h2><i class="fa-solid fa-newspaper text-primary"></i> Tin Tức & Thông Báo</h2>
+                <p>Cập nhật những hoạt động và thông báo mới nhất từ Xứ đoàn</p>
+            </div>
+            <!-- Nút này chỉ hiện khi Admin đăng nhập -->
+            <button id="btnDangBai" class="btn-dang-bai" style="display:none;" onclick="moModalDangBai()">
+                <i class="fa-solid fa-pen-to-square me-1"></i> Đăng bài viết mới
+            </button>
+        </div>
+
+        <!-- LƯỚI HIỂN THỊ BÀI VIẾT -->
+        <div id="newsGrid" class="row g-4 mb-5">
+            <div class="col-12 text-center text-muted py-5"><i class="fa-solid fa-spinner fa-spin fa-2x"></i> Đang tải dữ liệu...</div>
+        </div>
+    </div>
+
+    <!-- MODAL ĐĂNG BÀI VIẾT MỚI -->
+    <div class="modal-overlay" id="modalDangBai" onclick="dongModal('modalDangBai')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h3 style="color: #38bdf8; text-align: center; margin-bottom: 20px; font-weight: 800;"><i class="fa-solid fa-pen-to-square me-2"></i>Tạo Bài Viết Mới</h3>
+            
+            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Tiêu đề bài viết (*):</label>
+            <input type="text" id="inputNewsTitle" class="form-control-custom" placeholder="Nhập tiêu đề thật hấp dẫn...">
+
+            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Link hình ảnh minh họa (Không bắt buộc):</label>
+            <input type="text" id="inputNewsImg" class="form-control-custom" placeholder="Dán link ảnh (Ví dụ: https://...) vào đây">
+            <small style="color:#94a3b8; font-style:italic; display:block; margin-top:-10px; margin-bottom:15px;">Mẹo: Copy link ảnh từ Facebook hoặc Google Drive dán vào đây.</small>
+
+            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Nội dung chi tiết (*):</label>
+            <textarea id="inputNewsContent" class="form-control-custom" placeholder="Nhập nội dung bài viết..." style="min-height: 150px;"></textarea>
+
+            <div class="d-flex gap-3 mt-3">
+                <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalDangBai')">Hủy bỏ</button>
+                <button class="btn-modal-action btn-confirm" onclick="luuBaiViet()"><i class="fa-solid fa-paper-plane me-1"></i> Đăng bài ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM CHI TIẾT BÀI VIẾT -->
+    <div class="modal-overlay" id="modalXemTin" onclick="dongModal('modalXemTin')">
+        <div class="modal-card modal-card-light" onclick="event.stopPropagation()">
+            <img src="" id="detailNewsImg" class="article-header-img" alt="Ảnh bìa bài viết">
+            <div class="article-content-wrapper">
+                <h1 class="article-title" id="detailNewsTitle">Tiêu đề bài viết</h1>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-clock text-primary"></i> <span id="detailNewsDate"></span></span>
+                    <span><i class="fa-solid fa-user-pen text-success"></i> Đăng bởi: Admin</span>
+                </div>
+                <div class="article-text" id="detailNewsContent">
+                    Nội dung bài viết sẽ hiển thị ở đây...
+                </div>
+                
+                <div class="text-end mt-4 pt-3" style="border-top: 1px solid #e2e8f0;">
+                    <button class="btn btn-secondary rounded-pill px-4 fw-bold" onclick="dongModal('modalXemTin')">Đóng bài viết</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================= CẤU HÌNH FIREBASE =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
+            authDomain: "phantruchuynhtruong.firebaseapp.com",
+            databaseURL: "https://phantruchuynhtruong-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "phantruchuynhtruong",
+            storageBucket: "phantruchuynhtruong.firebasestorage.app",
+            messagingSenderId: "105589587705",
+            appId: "1:105589587705:web:e5673f9dad38c130b56c28",
+            measurementId: "G-YENZE6ZNSW"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
+        const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
+
+        let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || { role: "viewer" };
+        let newsData = [];
+
+        window.onload = function() {
+            if (window.google) {
+                google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
+                google.accounts.id.renderButton(document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" });
+            }
+            xacDinhQuyenTruyCap();
+
+            // Tải dữ liệu Tin Tức từ Firebase
+            db.ref("tinTucSuKien").on("value", (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    // Đảo ngược mảng để bài mới nhất (push sau cùng) lên đầu
+                    newsData = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+                } else {
+                    newsData = [];
+                }
+                renderNews();
+            });
+        };
+
+        function handleCredentialResponse(response) {
+            try {
+                const payload = jwt_decode(response.credential);
+                const email = payload.email.toLowerCase().trim();
+
+                let role = "viewer";
+                if (ADMIN_EMAILS.includes(email)) role = "admin";
+
+                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
+                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
+                
+                alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : 'Người Xem'}`);
+                xacDinhQuyenTruyCap();
+                renderNews(); // Render lại để ẩn/hiện nút xóa
+            } catch (e) { console.error(e); }
+        }
+
+        function xuLyDangXuat() {
+            currentUser = { role: "viewer" };
+            localStorage.removeItem("ht_user_session");
+            alert("Đã đăng xuất!");
+            xacDinhQuyenTruyCap();
+            renderNews(); // Render lại để ẩn nút xóa
+        }
+
+        function xacDinhQuyenTruyCap() {
+            document.getElementById("userNameDisplay").innerText = currentUser.name || "Khách";
+            document.getElementById("userAvatarMini").src = currentUser.picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+
+            const badge = document.getElementById("roleBadge");
+            badge.className = "role-tag";
+
+            if (currentUser.role === "admin") {
+                badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
+                document.getElementById("btnDangBai").style.display = "inline-flex";
+            } else {
+                badge.classList.add("role-viewer"); badge.innerText = "Người xem";
+                document.getElementById("btnDangBai").style.display = "none";
+            }
+
+            if (currentUser.email) {
+                document.getElementById("googleBtnContainer").style.display = "none";
+                document.getElementById("logoutBtn").style.display = "inline-flex";
+            } else {
+                document.getElementById("googleBtnContainer").style.display = "block";
+                document.getElementById("logoutBtn").style.display = "none";
+            }
+        }
+
+        // ================= XỬ LÝ BÀI VIẾT =================
+        function renderNews() {
+            const grid = document.getElementById("newsGrid");
+            grid.innerHTML = "";
+
+            if(newsData.length === 0) {
+                grid.innerHTML = `<div class="col-12 text-center text-muted py-5" style="background: rgba(255,255,255,0.8); border-radius: 20px;">Hiện tại chưa có bài viết hay thông báo nào.</div>`;
+                return;
+            }
+
+            newsData.forEach(item => {
+                let deleteBtnHtml = "";
+                if (currentUser.role === 'admin') {
+                    deleteBtnHtml = `<button class="btn-delete-news" onclick="xoaBaiViet('${item.id}', event)"><i class="fa-solid fa-trash me-1"></i> Xóa</button>`;
+                }
+
+                grid.innerHTML += `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="news-card" onclick="xemChiTietBaiViet('${item.id}')">
+                            <img src="${item.imgUrl || 'logo_app.jpg'}" class="news-img" alt="Hình ảnh bài viết" onerror="this.src='logo_app.jpg'">
+                            <div class="news-body">
+                                <h3 class="news-title">${item.title}</h3>
+                                <div class="news-date"><i class="fa-solid fa-clock text-primary"></i> ${item.timestamp}</div>
+                                <div class="news-excerpt">${item.content}</div>
+                                <div class="news-footer">
+                                    <button class="btn-readmore">Đọc tiếp <i class="fa-solid fa-arrow-right ms-1"></i></button>
+                                    ${deleteBtnHtml}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function moModalDangBai() {
+            document.getElementById("inputNewsTitle").value = "";
+            document.getElementById("inputNewsImg").value = "";
+            document.getElementById("inputNewsContent").value = "";
+            document.getElementById("modalDangBai").classList.add("active");
+        }
+
+        function luuBaiViet() {
+            const title = document.getElementById("inputNewsTitle").value.trim();
+            const imgUrl = document.getElementById("inputNewsImg").value.trim();
+            const content = document.getElementById("inputNewsContent").value.trim();
+
+            if(!title || !content) {
+                return alert("Vui lòng nhập đầy đủ Tiêu đề và Nội dung bài viết!");
+            }
+
+            const now = new Date();
+            const timeString = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} - ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+
+            const post = {
+                title: title,
+                imgUrl: imgUrl,
+                content: content,
+                timestamp: timeString
+            };
+
+            db.ref("tinTucSuKien").push(post).then(() => {
+                alert("Đã đăng bài viết thành công lên hệ thống!");
+                dongModal('modalDangBai');
+            }).catch(err => alert("Lỗi hệ thống: " + err.message));
+        }
+
+        function xemChiTietBaiViet(id) {
+            const item = newsData.find(n => n.id === id);
+            if(!item) return;
+
+            document.getElementById("detailNewsTitle").innerText = item.title;
+            document.getElementById("detailNewsDate").innerText = item.timestamp;
+            
+            const imgElement = document.getElementById("detailNewsImg");
+            imgElement.src = item.imgUrl || 'logo_app.jpg';
+            // Nếu không có ảnh, ẩn luôn cái hình đi cho đẹp
+            if(!item.imgUrl) { imgElement.style.display = "none"; } 
+            else { imgElement.style.display = "block"; }
+
+            // Xử lý xuống dòng cho nội dung
+            document.getElementById("detailNewsContent").innerHTML = item.content.replace(/\n/g, '<br>');
+            
+            document.getElementById("modalXemTin").classList.add("active");
+            document.body.style.overflow = "hidden"; // Chống cuộn nền khi xem
+        }
+
+        function xoaBaiViet(id, event) {
+            event.stopPropagation(); // Ngăn không cho click xuyên qua thẻ mở bài chi tiết
+            if(confirm("Cảnh báo: Bạn có chắc chắn muốn xóa bài viết này không? Không thể khôi phục lại được đâu nhé!")) {
+                db.ref("tinTucSuKien/" + id).remove().then(() => {
+                    alert("Đã xóa bài viết thành công!");
+                });
+            }
+        }
+
+        function dongModal(id) { 
+            document.getElementById(id).classList.remove("active"); 
+            document.body.style.overflow = "auto";
+        }
+
+        // HÀM ĐIỀU KHIỂN MENU DI ĐỘNG
+        function toggleMobileMenu() {
+            const menu = document.getElementById("navMenuLinks");
+            const btn = document.getElementById("mobileMenuBtn");
+            const icon = btn.querySelector("i");
+            const overlay = document.getElementById("menuOverlayBg");
+
+            menu.classList.toggle("show");
+            overlay.classList.toggle("show");
+            btn.classList.toggle("open");
+
+            if (menu.classList.contains("show")) {
+                icon.className = "fa-solid fa-xmark";
+            } else {
+                icon.className = "fa-solid fa-bars";
+            }
+        }
+
+        document.querySelectorAll(".cls-nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                document.getElementById("navMenuLinks").classList.remove("show");
+                document.getElementById("menuOverlayBg").classList.remove("show");
+                const btn = document.getElementById("mobileMenuBtn");
+                btn.classList.remove("open");
+                btn.querySelector("i").className = "fa-solid fa-bars";
+            });
+        });
+    </script>
+</body>
+</html>

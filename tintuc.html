@@ -101,7 +101,7 @@
         .article-header-img { width: 100%; height: 250px; object-fit: cover; }
         .article-content-wrapper { padding: 30px; overflow-y: auto; flex-grow: 1; }
         .article-title { font-size: 1.8rem; font-weight: 900; color: #0f172a; margin-bottom: 10px; font-family: 'Nunito', sans-serif; line-height: 1.3;}
-        .article-meta { color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9; display: flex; gap: 15px;}
+        .article-meta { color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;}
         .article-text { color: #334155; font-size: 1.05rem; line-height: 1.8; white-space: pre-wrap; text-align: justify; }
 
         @media (max-width: 991px) {
@@ -186,13 +186,20 @@
             <input type="text" id="inputNewsTitle" class="form-control-custom" placeholder="Nhập tiêu đề thật hấp dẫn...">
 
             <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Link hình ảnh minh họa (Không bắt buộc):</label>
-            <input type="text" id="inputNewsImg" class="form-control-custom" placeholder="Dán link ảnh (Ví dụ: https://...) vào đây">
-            <small style="color:#94a3b8; font-style:italic; display:block; margin-top:-10px; margin-bottom:15px;">Mẹo: Copy link ảnh từ Facebook hoặc Google Drive dán vào đây.</small>
+            <input type="text" id="inputNewsImg" class="form-control-custom" placeholder="Dán link ảnh bìa (Ví dụ: https://...) vào đây">
+            
+            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Link toàn bộ ảnh (Album sự kiện - Nếu có):</label>
+            <input type="text" id="inputNewsAlbum" class="form-control-custom" placeholder="Dán link Google Drive, Photos... để chia sẻ album">
 
-            <label style="font-size: 13px; font-weight: 700; margin-bottom: 4px; display: block; color: #cbd5e1;">Nội dung chi tiết (*):</label>
+            <div class="d-flex justify-content-between align-items-end mb-2">
+                <label style="font-size: 13px; font-weight: 700; color: #cbd5e1; margin-bottom: 0;">Nội dung chi tiết (*):</label>
+                <button type="button" class="btn btn-sm btn-outline-info" style="font-size: 12px; font-weight: 700; border-radius: 8px; border-color: rgba(56, 189, 248, 0.5); color: #38bdf8;" onclick="chenAnhPhu()">
+                    <i class="fa-solid fa-image me-1"></i> Chèn ảnh vào bài
+                </button>
+            </div>
             <textarea id="inputNewsContent" class="form-control-custom" placeholder="Nhập nội dung bài viết..." style="min-height: 150px;"></textarea>
 
-            <div class="d-flex gap-3 mt-3">
+            <div class="d-flex gap-3 mt-1">
                 <button class="btn-modal-action btn-dismiss" onclick="dongModal('modalDangBai')">Hủy bỏ</button>
                 <button class="btn-modal-action btn-confirm" onclick="luuBaiViet()"><i class="fa-solid fa-floppy-disk me-1"></i> Lưu bài viết</button>
             </div>
@@ -204,10 +211,18 @@
             <img src="" id="detailNewsImg" class="article-header-img" alt="Ảnh bìa bài viết">
             <div class="article-content-wrapper">
                 <h1 class="article-title" id="detailNewsTitle">Tiêu đề bài viết</h1>
+                
                 <div class="article-meta">
                     <span><i class="fa-solid fa-clock text-primary"></i> <span id="detailNewsDate"></span></span>
                     <span><i class="fa-solid fa-user-pen text-success"></i> Đăng bởi: Admin</span>
+                    
+                    <span id="detailNewsAlbumWrapper" style="display: none;">
+                        <a href="#" id="detailNewsAlbumLink" target="_blank" style="color: #ea580c; text-decoration: none; font-weight: 800; background: #ffedd5; padding: 6px 12px; border-radius: 20px;">
+                            <i class="fa-solid fa-images"></i> Xem toàn bộ ảnh
+                        </a>
+                    </span>
                 </div>
+                
                 <div class="article-text" id="detailNewsContent">
                     Nội dung bài viết sẽ hiển thị ở đây...
                 </div>
@@ -277,7 +292,7 @@
                 
                 alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : 'Người Xem'}`);
                 xacDinhQuyenTruyCap();
-                renderNews(); // Render lại để hiện nút sửa/xóa
+                renderNews(); 
             } catch (e) { console.error(e); }
         }
 
@@ -286,7 +301,7 @@
             localStorage.removeItem("ht_user_session");
             alert("Đã đăng xuất!");
             xacDinhQuyenTruyCap();
-            renderNews(); // Render lại để ẩn nút sửa/xóa
+            renderNews(); 
         }
 
         function xacDinhQuyenTruyCap() {
@@ -325,7 +340,6 @@
 
             newsData.forEach(item => {
                 let actionsHtml = "";
-                // Nếu là admin thì chèn thêm cục nút Sửa/Xóa
                 if (currentUser.role === 'admin') {
                     actionsHtml = `
                         <div class="news-footer-actions">
@@ -354,29 +368,43 @@
             });
         }
 
+        // HÀM CHÈN ẢNH VÀO KHUNG SOẠN THẢO
+        function chenAnhPhu() {
+            let url = prompt("Dán link hình ảnh bạn muốn chèn vào bài viết:");
+            if (url && url.trim() !== "") {
+                let textarea = document.getElementById("inputNewsContent");
+                let imgTag = `\n<img src="${url.trim()}" style="width: 100%; border-radius: 10px; margin: 15px 0;">\n`;
+                
+                // Chèn ảnh vào ngay vị trí con trỏ chuột đang đứng
+                let startPos = textarea.selectionStart;
+                let endPos = textarea.selectionEnd;
+                textarea.value = textarea.value.substring(0, startPos) + imgTag + textarea.value.substring(endPos, textarea.value.length);
+                textarea.focus();
+            }
+        }
+
         function moModalDangBai() {
-            // Đánh dấu là đang TẠO MỚI
             editingPostId = null; 
-            
             document.getElementById("modalTitleText").innerHTML = `<i class="fa-solid fa-pen-to-square me-2"></i>Tạo Bài Viết Mới`;
             document.getElementById("inputNewsTitle").value = "";
             document.getElementById("inputNewsImg").value = "";
+            document.getElementById("inputNewsAlbum").value = "";
             document.getElementById("inputNewsContent").value = "";
             document.getElementById("modalDangBai").classList.add("active");
         }
 
         function moModalSuaBai(id, event) {
-            event.stopPropagation(); // Ngăn việc nhấp chuột mở bài viết chi tiết
+            event.stopPropagation(); 
             
             const post = newsData.find(p => p.id === id);
             if (!post) return;
 
-            // Đánh dấu là đang SỬA bài viết ID này
             editingPostId = id;
 
             document.getElementById("modalTitleText").innerHTML = `<i class="fa-solid fa-pen-to-square me-2"></i>Cập Nhật Bài Viết`;
             document.getElementById("inputNewsTitle").value = post.title || "";
             document.getElementById("inputNewsImg").value = post.imgUrl || "";
+            document.getElementById("inputNewsAlbum").value = post.albumUrl || "";
             document.getElementById("inputNewsContent").value = post.content || "";
             
             document.getElementById("modalDangBai").classList.add("active");
@@ -385,6 +413,7 @@
         function luuBaiViet() {
             const title = document.getElementById("inputNewsTitle").value.trim();
             const imgUrl = document.getElementById("inputNewsImg").value.trim();
+            const albumUrl = document.getElementById("inputNewsAlbum").value.trim();
             const content = document.getElementById("inputNewsContent").value.trim();
 
             if(!title || !content) {
@@ -397,18 +426,17 @@
             const post = {
                 title: title,
                 imgUrl: imgUrl,
+                albumUrl: albumUrl,
                 content: content,
-                timestamp: timeString // Lấy giờ mới nhất khi lưu/cập nhật
+                timestamp: timeString 
             };
 
             if (editingPostId) {
-                // ĐANG CẬP NHẬT (SỬA)
                 db.ref("tinTucSuKien/" + editingPostId).update(post).then(() => {
                     alert("Cập nhật bài viết thành công!");
                     dongModal('modalDangBai');
                 }).catch(err => alert("Lỗi cập nhật: " + err.message));
             } else {
-                // ĐANG ĐĂNG MỚI
                 db.ref("tinTucSuKien").push(post).then(() => {
                     alert("Đã đăng bài viết thành công lên hệ thống!");
                     dongModal('modalDangBai');
@@ -428,10 +456,19 @@
             if(!item.imgUrl) { imgElement.style.display = "none"; } 
             else { imgElement.style.display = "block"; }
 
+            // Nếu có link Album thì hiện thẻ Album lên
+            const albumWrapper = document.getElementById("detailNewsAlbumWrapper");
+            if(item.albumUrl && item.albumUrl.trim() !== "") {
+                albumWrapper.style.display = "inline-block";
+                document.getElementById("detailNewsAlbumLink").href = item.albumUrl;
+            } else {
+                albumWrapper.style.display = "none";
+            }
+
             document.getElementById("detailNewsContent").innerHTML = item.content.replace(/\n/g, '<br>');
             
             document.getElementById("modalXemTin").classList.add("active");
-            document.body.style.overflow = "hidden";
+            document.body.style.overflow = "hidden"; 
         }
 
         function xoaBaiViet(id, event) {

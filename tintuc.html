@@ -98,8 +98,8 @@
         .article-meta { color: #64748b; font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #f1f5f9; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;}
         .article-text { color: #334155; font-size: 1.05rem; line-height: 1.85; text-align: justify; }
 
-        /* KHUNG HÌNH ẢNH KÈM CHÚ THÍCH (ĐÃ ĐƯỢC ÉP SÁT LẠI) */
-        .article-figure { margin: 12px 0; text-align: center; }
+        /* KHUNG HÌNH ẢNH KÈM CHÚ THÍCH (ĐÃ ÉP SÁT LẠI) */
+        .article-figure { margin: 8px 0; text-align: center; } /* Đổi margin từ 12px thành 8px */
         .article-figure img { width: 100%; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
         .article-figure figcaption { font-size: 14px; color: #64748b; font-style: italic; margin-top: 8px; margin-bottom: 8px; text-align: center; line-height: 1.4; }
 
@@ -255,7 +255,7 @@
 
     <script>
         // ================= ĐIỀN API KEY IMGBB CỦA BẠN VÀO ĐÂY =================
-        const IMGBB_API_KEY = "DÁN_MÃ_API_CỦA_BẠN_VÀO_ĐÂY"; 
+        const IMGBB_API_KEY = "3a0efef064bc3c27e8574d75471d4678"; 
         
         // ================= CẤU HÌNH FIREBASE =================
         const firebaseConfig = {
@@ -383,8 +383,8 @@
 
                         let textarea = document.getElementById("inputNewsContent");
                         
-                        // LƯU Ý: Không dùng dấu \n bên trong thẻ figure để tránh khoảng trống lớn khi hiển thị
-                        let figureTag = `\n<figure class="article-figure"><img src="${imageUrl}" alt="Ảnh chi tiết">${captionHtml}</figure>\n`;
+                        // LƯU Ý: Không dùng dấu \n bên trong thẻ figure
+                        let figureTag = `<figure class="article-figure"><img src="${imageUrl}" alt="Ảnh chi tiết">${captionHtml}</figure>`;
                         
                         let startPos = textarea.selectionStart;
                         let endPos = textarea.selectionEnd;
@@ -525,10 +525,12 @@
                 albumWrapper.style.display = "none";
             }
 
-            // XỬ LÝ KHOẢNG TRỐNG: Dọn dẹp các thẻ <br> mọc thừa quanh thẻ hình ảnh <figure>
+            // XỬ LÝ KHOẢNG TRỐNG NÂNG CAO: Dọn dẹp tất cả các thẻ <br> rác mọc xung quanh <figure>
             let contentHtml = item.content.replace(/\n/g, '<br>');
-            contentHtml = contentHtml.replace(/<br>\s*<figure/g, '<figure');
-            contentHtml = contentHtml.replace(/<\/figure>\s*<br>/g, '</figure>');
+            
+            // Xóa sạch mọi thẻ <br> nằm liền kề thẻ hình ảnh
+            contentHtml = contentHtml.replace(/(?:<br>\s*)+<figure/g, '<figure');
+            contentHtml = contentHtml.replace(/<\/figure>\s*(?:<br>\s*)+/g, '</figure>');
             
             document.getElementById("detailNewsContent").innerHTML = contentHtml;
             

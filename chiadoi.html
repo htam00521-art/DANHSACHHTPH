@@ -71,115 +71,94 @@
         .btn-auth-action:hover { background: #1565C0; }
         .btn-logout { background: #546e7a; }
 
-        /* GIAO DIỆN KHUNG NHẬP LIỆU */
+        /* VÙNG CẤM KHÁCH */
+        #accessDeniedArea { display: none; height: 60vh; text-align: center; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* THẺ CHỌN TÍNH NĂNG (TABS) */
+        .admin-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .btn-tab { padding: 12px 30px; font-weight: 800; font-size: 15px; border-radius: 50px; border: 2px solid transparent; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-tab-active { background: linear-gradient(135deg, #0d47a1, #1e88e5); color: #fff; box-shadow: 0 8px 20px rgba(13, 71, 161, 0.3); border-color: #0d47a1; }
+        .btn-tab-inactive { background: #fff; color: #64748b; border-color: #cbd5e1; }
+        .btn-tab-inactive:hover { background: #f1f5f9; color: #1e293b; border-color: #94a3b8; }
+
+        /* GIAO DIỆN KHUNG NHẬP LIỆU CHUNG */
         .setup-card {
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px; padding: 28px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); margin-bottom: 30px;
         }
         .setup-title { color: #0D47A1; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
         
+        /* CHIA ĐỘI CSS */
         .list-box { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; height: 300px; overflow-y: auto; padding: 12px; }
         .list-box label { display: block; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 500; }
         .list-box label:hover { background: #e0f2fe; }
         .list-box input[type="checkbox"] { margin-right: 10px; accent-color: #0284c7; width: 16px; height: 16px; cursor: pointer;}
-        
         textarea.form-control { background: #f8fafc; border-color: #cbd5e1; font-size: 14px; border-radius: 12px; resize: none; height: 120px; box-shadow: none; }
         textarea.form-control:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
         .input-label { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; }
-
         .btn-randomize {
             background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif;
             border-radius: 50px; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 30px auto 0;
         }
         .btn-randomize:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(37, 99, 235, 0.4); filter: brightness(1.1); }
 
+        /* VÒNG QUAY CSS */
+        .wheel-container-main { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: center; }
+        .wheel-input-box { flex: 1; min-width: 300px; max-width: 400px; }
+        .wheel-visual-box { position: relative; width: 350px; height: 350px; max-width: 100%; display: flex; justify-content: center; align-items: center; }
+        .wheel-canvas { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.15); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
+        .wheel-pointer { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-size: 40px; color: #ef4444; filter: drop-shadow(-3px 3px 2px rgba(0,0,0,0.2)); z-index: 10; }
+        .wheel-center-dot { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 5;}
+        .btn-spin-wheel { background: linear-gradient(135deg, #ef4444, #f97316); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif; border-radius: 50px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 30px auto 0; width: 100%; max-width: 300px; text-align: center;}
+        .btn-spin-wheel:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4); filter: brightness(1.1); }
+        .btn-spin-wheel:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none;}
+
         /* KHU VỰC PHONG BÌ THƯ BAN ĐẦU */
         #resultSection { display: none; text-align: center; }
         .dashboard-header { position: relative; z-index: 150; } 
         .envelope-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; padding: 90px 20px 40px; position: relative; z-index: 10; }
-        
         .envelope-container { position: relative; width: 280px; height: 180px; cursor: pointer; perspective: 1000px; margin-bottom: 40px; z-index: 1; }
         .envelope-container:hover { transform: translateY(-10px); transition: 0.3s ease; z-index: 50; }
         .envelope-container.open { z-index: 100; } 
-        
         .envelope { position: absolute; width: 100%; height: 100%; background: #e2e8f0; border-radius: 0 0 12px 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');}
-        .envelope::before {
-            content: ''; position: absolute; bottom: 0; left: 0; border-left: 140px solid #f1f5f9; border-right: 140px solid #f1f5f9; border-bottom: 100px solid #f8fafc; border-top: 80px solid transparent; z-index: 3; border-radius: 0 0 12px 12px; pointer-events: none;
-        }
-        .flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .flap::after {
-            content: ''; position: absolute; top: 0; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 110px solid #cbd5e1; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
-        }
-        .wax-seal {
-            position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 45px; height: 45px; background: radial-gradient(circle, #ef4444, #991b1b); border-radius: 50%; z-index: 5;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.6); border: 2px solid #7f1d1d; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); font-size: 20px; transition: opacity 0.3s;
-        }
-
-        .letter-preview {
-            position: absolute; top: 10px; left: 15px; width: 250px; height: 160px; background: #fff; z-index: 2; border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3); transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #fbbf24;
-        }
+        .envelope::before { content: ''; position: absolute; bottom: 0; left: 0; border-left: 140px solid #f1f5f9; border-right: 140px solid #f1f5f9; border-bottom: 100px solid #f8fafc; border-top: 80px solid transparent; z-index: 3; border-radius: 0 0 12px 12px; pointer-events: none; }
+        .flap { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; transform-origin: top; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .flap::after { content: ''; position: absolute; top: 0; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 110px solid #cbd5e1; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png'); }
+        .wax-seal { position: absolute; top: 90px; left: 50%; transform: translateX(-50%); width: 45px; height: 45px; background: radial-gradient(circle, #ef4444, #991b1b); border-radius: 50%; z-index: 5; box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.6); border: 2px solid #7f1d1d; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.8); font-size: 20px; transition: opacity 0.3s; }
+        .letter-preview { position: absolute; top: 10px; left: 15px; width: 250px; height: 160px; background: #fff; z-index: 2; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.3); transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #fbbf24; }
         .letter-preview i { font-size: 40px; color: #f59e0b; margin-bottom: 10px;}
         .letter-preview .text-mini { font-size: 10px; font-weight: bold; color: #94a3b8;}
-
         .envelope-container.open .flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-container.open .wax-seal { opacity: 0; }
         .envelope-container.open .letter-preview { transform: translateY(-70px); z-index: 5; }
-        
         .team-title-below { margin-top: 200px; font-weight: 900; font-size: 18px; color: #1e293b; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
 
-        /* ================== MODAL BỔ NHIỆM CHÍNH THỨC ================== */
-        .bonhiem-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.4s; padding: 16px;
-        }
-        .bonhiem-modal.active { opacity: 1; visibility: visible; }
+        /* MODAL BỔ NHIỆM & KẾT QUẢ VÒNG QUAY */
+        .bonhiem-modal, .winner-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.4s; padding: 16px; }
+        .bonhiem-modal.active, .winner-modal.active { opacity: 1; visibility: visible; }
         
-        .bonhiem-card {
-            background: #fefcf8; background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png');
-            width: 100%; max-width: 520px; max-height: 95vh; overflow-y: auto; border-radius: 20px; padding: 35px 25px; text-align: center;
-            position: relative; box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.1), 0 20px 50px rgba(0,0,0,0.5);
-            transform: scale(0.7) translateY(100px); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid #fbbf24;
-        }
-        .bonhiem-card::-webkit-scrollbar { width: 6px; }
-        .bonhiem-card::-webkit-scrollbar-thumb { background-color: #fbbf24; border-radius: 10px; }
+        .bonhiem-card, .winner-card { background: #fefcf8; background-image: url('https://www.transparenttextures.com/patterns/rice-paper-2.png'); width: 100%; max-width: 520px; max-height: 95vh; overflow-y: auto; border-radius: 20px; padding: 35px 25px; text-align: center; position: relative; transform: scale(0.7) translateY(100px); transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 4px solid #fbbf24; }
+        .bonhiem-card { box-shadow: 0 0 0 8px rgba(255, 215, 0, 0.1), 0 20px 50px rgba(0,0,0,0.5); }
+        .winner-card { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.1), 0 20px 50px rgba(0,0,0,0.5); border-color: #ef4444; }
+        .bonhiem-modal.active .bonhiem-card, .winner-modal.active .winner-card { transform: scale(1) translateY(0); }
 
-        .bonhiem-modal.active .bonhiem-card { transform: scale(1) translateY(0); }
+        .bn-badge { background: linear-gradient(to right, #f59e0b, #fbbf24); color: white; padding: 8px 24px; border-radius: 30px; font-weight: 900; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; display: inline-block; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); border: 1px solid #d97706; }
+        .winner-badge { background: linear-gradient(to right, #ef4444, #f97316); border-color: #b91c1c; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); }
 
-        .bn-badge { 
-            background: linear-gradient(to right, #f59e0b, #fbbf24); color: white; padding: 8px 24px; border-radius: 30px; 
-            font-weight: 900; font-size: 15px; letter-spacing: 1px; text-transform: uppercase; display: inline-block; 
-            margin-bottom: 30px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); border: 1px solid #d97706;
-        }
-        
-        /* ẢNH CHÂN DUNG ĐƯỢC PHÓNG TO KỊCH KIM */
+        /* ẢNH CHÂN DUNG */
         .avatar-container { display: flex; justify-content: center; gap: 30px; margin-bottom: 25px; }
         .avatar-box { display: flex; flex-direction: column; align-items: center; }
-        .bn-avatar-img { 
-            width: 160px; height: 160px; border-radius: 50%; border: 5px solid #fff; 
-            box-shadow: 0 6px 18px rgba(0,0,0,0.18); object-fit: cover; background: #e2e8f0;
-        }
-        .avatar-dt-border { border-color: #10b981; }
-        .avatar-dp-border { border-color: #f59e0b; }
-        .avatar-role-tag { 
-            font-size: 12px; font-weight: 900; padding: 5px 18px; border-radius: 20px; 
-            margin-top: -18px; z-index: 2; box-shadow: 0 3px 6px rgba(0,0,0,0.15); color: #fff;
-        }
-        .bg-tag-dt { background: #10b981; }
-        .bg-tag-dp { background: #f59e0b; }
+        .bn-avatar-img { width: 160px; height: 160px; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.18); object-fit: cover; background: #e2e8f0; }
+        .avatar-dt-border { border-color: #10b981; } .avatar-dp-border { border-color: #f59e0b; }
+        .avatar-role-tag { font-size: 12px; font-weight: 900; padding: 5px 18px; border-radius: 20px; margin-top: -18px; z-index: 2; box-shadow: 0 3px 6px rgba(0,0,0,0.15); color: #fff; }
+        .bg-tag-dt { background: #10b981; } .bg-tag-dp { background: #f59e0b; }
 
         .bn-title { font-size: 18px; font-weight: 900; color: #b45309; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
         .bn-names { font-family: 'Nunito', sans-serif; margin-bottom: 20px; }
         
-        /* KHUNG THÔNG TIN BÊN DƯỚI */
-        .bn-details { 
-            text-align: left; background: #ffffff; padding: 20px 25px; border-radius: 16px; 
-            border-left: 5px solid #3b82f6; margin-bottom: 25px; font-size: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;
-        }
+        .winner-name { font-size: 32px; font-weight: 900; color: #dc2626; font-family: 'Nunito', sans-serif; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        
+        .bn-details { text-align: left; background: #ffffff; padding: 20px 25px; border-radius: 16px; border-left: 5px solid #3b82f6; margin-bottom: 25px; font-size: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
         .bn-details div { margin-bottom: 12px; color: #475569; font-weight: 600; }
         .bn-details div strong { color: #0f172a; font-weight: 800; }
         .bn-details div:last-child { margin-bottom: 0; }
@@ -187,14 +166,14 @@
         .bn-footer-text { font-size: 13px; color: #94a3b8; font-style: italic; font-weight: 600; margin-bottom: 25px; }
         .bn-close-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; padding: 12px 35px; border-radius: 30px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .bn-close-btn:hover { background: #e2e8f0; color: #0f172a; }
+        
+        .winner-close-btn { background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
+        .winner-close-btn:hover { background: #fca5a5; color: #7f1d1d; }
 
         .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 100000;}
 
         /* MODAL CHUNG */
-        .general-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);
-            z-index: 9998; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; padding: 16px;
-        }
+        .general-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 9998; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; padding: 16px; }
         .general-modal.active { opacity: 1; visibility: visible; }
         .general-card { background: #fff; width: 100%; max-width: 800px; max-height: 85vh; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         .table-responsive { overflow-y: auto; flex-grow: 1; margin-bottom: 16px; border: 1px solid #e2e8f0; border-radius: 8px;}
@@ -203,53 +182,27 @@
         .table-custom td { padding: 12px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; color: #475569;}
         .table-custom tr:hover { background: #f1f5f9; }
 
-        /* VÙNG THÔNG BÁO CẤM TRUY CẬP */
-        #accessDeniedArea {
-            display: none; 
-            height: 60vh; 
-            text-align: center; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center;
-        }
-
-        /* TỐI ƯU MOBILE (Card Navigation) */
+        /* TỐI ƯU MOBILE */
         @media (max-width: 991px) {
-            .cls-topbar {
-                margin: 16px; border-radius: 24px !important; padding: 24px 16px;
-                background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important;
-                box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important;
-                position: relative; /* Không dính trên mobile */
-            }
+            .cls-topbar { margin: 16px; border-radius: 24px !important; padding: 24px 16px; background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important; box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important; position: relative; }
             .cls-topbar .container { flex-direction: column !important; gap: 20px; padding: 0 !important; }
             .cls-brand { justify-content: center; width: 100%; text-align: center; gap: 12px; }
-            .cls-brand img { width: 50px; height: 50px; }
-            .cls-brand span { font-size: 1.15rem; white-space: normal; }
-
             .cls-topbar nav { flex-direction: column !important; width: 100%; gap: 8px !important; }
-            .cls-nav-link {
-                width: 100%; display: flex; justify-content: center; align-items: center;
-                padding: 12px 20px !important; font-size: 1rem !important; border: none !important;
-                background: transparent !important; border-radius: 50px !important; margin: 0;
-            }
-            .cls-nav-link.active {
-                background: rgba(255, 255, 255, 0.25) !important;
-                box-shadow: none !important; font-weight: 800;
-            }
-
+            .cls-nav-link { width: 100%; display: flex; justify-content: center; align-items: center; padding: 12px 20px !important; font-size: 1rem !important; border: none !important; background: transparent !important; border-radius: 50px !important; margin: 0; }
+            .cls-nav-link.active { background: rgba(255, 255, 255, 0.25) !important; font-weight: 800; }
             .setup-card { padding: 15px; }
             .envelope-grid { gap: 20px; padding-top: 50px; } 
             .envelope-container { transform: scale(0.9); margin-bottom: 10px; }
-            .avatar-container { gap: 10px; }
-            .bn-avatar-img { width: 95px !important; height: 95px !important; border-width: 3px !important; }
-            .bn-names div { font-size: 16px !important; margin-bottom: 8px !important; }
-            .bonhiem-card { padding: 25px 15px; max-height: 85vh; }
+            .bonhiem-card, .winner-card { padding: 25px 15px; max-height: 85vh; }
+            .wheel-visual-box { width: 300px; height: 300px; }
+            .admin-tabs { flex-direction: column; width: 100%; }
+            .btn-tab { justify-content: center; }
         }
-
         @media (max-width: 480px) {
-            .cls-brand span { font-size: 1.05rem; }
             .auth-bar { flex-direction: column; align-items: stretch; text-align: center; }
             .auth-actions { justify-content: center; width: 100%; }
+            .wheel-visual-box { width: 260px; height: 260px; }
+            .wheel-pointer { right: -15px; font-size: 30px;}
         }
     </style>
 </head>
@@ -261,20 +214,19 @@
                 <img src="logo_app.jpg" onerror="this.onerror=null; this.src='logo.png';" alt="Logo Phước Hảo">
                 <span>TNTT PHƯỚC HẢO</span>
             </a>
-
             <nav id="navMenuLinks" class="cls-nav-menu d-flex gap-2 flex-wrap">
                 <a href="index.html" class="cls-nav-link"><i class="fas fa-home me-1"></i> Trang chủ</a>
                 <a href="tintuc.html" class="cls-nav-link"><i class="fa-solid fa-newspaper me-1"></i> Tin Tức</a>
                 <a href="classes.html" class="cls-nav-link"><i class="fas fa-users-gear me-1"></i> Lịch Trực</a>
                 <a href="diemdanh.html" class="cls-nav-link"><i class="fas fa-clipboard-user me-1"></i> Điểm Danh Đội</a>
-                <a href="chiadoi.html" class="cls-nav-link"><i class="fa-solid fa-shuffle me-1"></i> Chia Đội</a>
+                <a href="chiadoi.html" class="cls-nav-link active"><i class="fa-solid fa-shuffle me-1"></i> Chia Đội</a>
             </nav>
         </div>
     </header>
 
     <div class="container">
         
-        <!-- THÊM AUTH BAR VÀO ĐÂY ĐỂ LUÔN THẤY MÌNH ĐANG LÀ AI VÀ CÓ THỂ ĐĂNG XUẤT THỬ -->
+        <!-- AUTH BAR -->
         <div class="auth-bar">
             <div class="user-status d-flex align-items-center gap-2">
                 <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -291,12 +243,12 @@
             </div>
         </div>
 
-        <!-- VÙNG CẤM KHÁCH (CHỈ ADMIN MỚI THẤY ĐƯỢC CHỨC NĂNG CHIA ĐỘI) -->
+        <!-- VÙNG CẤM KHÁCH -->
         <div id="accessDeniedArea">
             <i class="fa-solid fa-lock" style="font-size: 80px; color: #ef4444; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(239, 68, 68, 0.3));"></i>
             <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">KHU VỰC DÀNH CHO ADMIN</h2>
             <p style="color: #64748b; font-size: 16px; max-width: 500px; margin-bottom: 30px; line-height: 1.6;">
-                Chức năng Phân Chia Đội Ngẫu Nhiên chứa các thiết lập quan trọng và hệ thống chỉ cấp quyền truy cập dành riêng cho tài khoản Ban Quản Trị.
+                Chức năng này chứa các thiết lập quan trọng và hệ thống chỉ cấp quyền truy cập dành riêng cho tài khoản Ban Quản Trị.
             </p>
             <a href="index.html" class="btn btn-primary rounded-pill px-4 py-2 fw-bold" style="background: linear-gradient(135deg, #0d47a1, #1565c0); border: none; box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);">
                 <i class="fa-solid fa-arrow-left me-2"></i>Quay lại Trang Chủ
@@ -306,168 +258,212 @@
         <!-- KHU VỰC CHÍNH DÀNH CHO ADMIN -->
         <div id="mainAdminArea" style="display: none;">
             
-            <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
-            <div class="setup-card" id="setupSection">
-                <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
-                <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
+            <!-- THẺ CHỌN TÍNH NĂNG -->
+            <div class="admin-tabs">
+                <button id="btnTabChiaDoi" class="btn-tab btn-tab-active" onclick="chuyenTab('chiadoi')">
+                    <i class="fa-solid fa-users-viewfinder"></i> Phân Chia Đội Trưởng
+                </button>
+                <button id="btnTabVongQuay" class="btn-tab btn-tab-inactive" onclick="chuyenTab('vongquay')">
+                    <i class="fa-solid fa-dharmachakra"></i> Vòng Quay Ngẫu Nhiên
+                </button>
+            </div>
 
-                <div class="row g-4">
-                    <div class="col-md-3">
-                        <label class="input-label text-success"><i class="fa-solid fa-user-tie"></i> Chọn Đội Trưởng</label>
-                        <div class="list-box" id="listDoiTruong"></div>
-                        <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDT">0</strong></div>
-                    </div>
+            <!-- ===================== TAB 1: CHIA ĐỘI (CŨ) ===================== -->
+            <div id="tabChiaDoi">
+                <!-- PHẦN NHẬP LIỆU THIẾT LẬP CHIA ĐỘI -->
+                <div class="setup-card" id="setupSection">
+                    <div class="setup-title"><i class="fa-solid fa-wand-magic-sparkles text-primary"></i> Thiết Lập Chia Đội Ngẫu Nhiên</div>
+                    <p class="text-muted mb-4">Vui lòng chọn danh sách Đội trưởng, Đội phó và nhập thông tin các đội tương ứng. <strong>Lưu ý: Số lượng các mục phải bằng nhau.</strong></p>
 
-                    <div class="col-md-3">
-                        <label class="input-label text-warning"><i class="fa-solid fa-user-shield"></i> Chọn Đội Phó</label>
-                        <div class="list-box" id="listDoiPho"></div>
-                        <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDP">0</strong></div>
-                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-3">
+                            <label class="input-label text-success"><i class="fa-solid fa-user-tie"></i> Chọn Đội Trưởng</label>
+                            <div class="list-box" id="listDoiTruong"></div>
+                            <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDT">0</strong></div>
+                        </div>
 
-                    <div class="col-md-6">
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <label class="input-label"><i class="fa-solid fa-flag"></i> Cấp Đội (Mỗi đội 1 dòng)</label>
-                                <textarea id="txtCapDoi" class="form-control" placeholder="VD:&#10;Đội 1&#10;Đội 2&#10;Đội 3"></textarea>
-                            </div>
-                            <div class="col-sm-6">
-                                <label class="input-label"><i class="fa-solid fa-signature"></i> Tên Đội (Mỗi tên 1 dòng)</label>
-                                <textarea id="txtTenDoi" class="form-control" placeholder="VD:&#10;Giuse&#10;Maria&#10;Phêrô"></textarea>
-                            </div>
-                            <div class="col-12 mt-3">
-                                <label class="input-label"><i class="fa-solid fa-quote-left"></i> Khẩu Hiệu (Mỗi câu 1 dòng)</label>
-                                <textarea id="txtKhauHieu" class="form-control" style="height: 100px;" placeholder="VD:&#10;Yêu thương và Phục vụ&#10;Hy sinh vì mọi người&#10;Can đảm và Tự tin"></textarea>
+                        <div class="col-md-3">
+                            <label class="input-label text-warning"><i class="fa-solid fa-user-shield"></i> Chọn Đội Phó</label>
+                            <div class="list-box" id="listDoiPho"></div>
+                            <div class="text-end mt-2 small text-muted">Đã chọn: <strong id="countDP">0</strong></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <label class="input-label"><i class="fa-solid fa-flag"></i> Cấp Đội (Mỗi đội 1 dòng)</label>
+                                    <textarea id="txtCapDoi" class="form-control" placeholder="VD:&#10;Đội 1&#10;Đội 2&#10;Đội 3"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="input-label"><i class="fa-solid fa-signature"></i> Tên Đội (Mỗi tên 1 dòng)</label>
+                                    <textarea id="txtTenDoi" class="form-control" placeholder="VD:&#10;Giuse&#10;Maria&#10;Phêrô"></textarea>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label class="input-label"><i class="fa-solid fa-quote-left"></i> Khẩu Hiệu (Mỗi câu 1 dòng)</label>
+                                    <textarea id="txtKhauHieu" class="form-control" style="height: 100px;" placeholder="VD:&#10;Yêu thương và Phục vụ&#10;Hy sinh vì mọi người&#10;Can đảm và Tự tin"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
-                    <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
-                    <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
-                        <i class="fa-solid fa-shuffle me-2"></i> BẮT ĐẦU CHIA ĐỘI
-                    </button>
-                </div>
-            </div>
-
-            <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
-            <div id="resultSection">
-                <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9); border-radius: 20px; padding: 22px 26px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);">
-                    <h2 style="justify-content: center; font-size: 28px; color: #dc2626; font-weight: 800;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
-                    <p class="text-muted mt-2">Nhấp vào từng phong bì bên dưới để mở Quyết Định Bổ Nhiệm cho từng đội!</p>
-                    <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
-                        <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem bảng tổng hợp</button>
-                        <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3 py-2" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại (Chia mới)</button>
+                    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                        <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" onclick="moModalLichSu()"><i class="fa-solid fa-clock-rotate-left me-1"></i> Xem Lịch Sử</button>
+                        <button class="btn-randomize mt-0" onclick="xuLyChiaDoi()">
+                            <i class="fa-solid fa-shuffle me-2"></i> BẮT ĐẦU CHIA ĐỘI
+                        </button>
                     </div>
                 </div>
-                
-                <div class="envelope-grid" id="envelopeGrid">
-                    <!-- JS sẽ tạo từng thẻ Phong bì thư vào đây -->
+
+                <!-- PHẦN HIỂN THỊ KẾT QUẢ PHONG BÌ THƯ -->
+                <div id="resultSection">
+                    <div class="dashboard-header mb-0 text-center" style="background: rgba(255,255,255,0.9); border-radius: 20px; padding: 22px 26px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);">
+                        <h2 style="justify-content: center; font-size: 28px; color: #dc2626; font-weight: 800;"><i class="fa-solid fa-envelope-open-text"></i> Kết Quả Bổ Nhiệm</h2>
+                        <p class="text-muted mt-2">Nhấp vào từng phong bì bên dưới để mở Quyết Định Bổ Nhiệm cho từng đội!</p>
+                        <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+                            <button class="btn btn-primary btn-sm rounded-pill fw-bold px-3 py-2" onclick="moModalTongHop()"><i class="fa-solid fa-list-check me-1"></i> Xem bảng tổng hợp</button>
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill fw-bold px-3 py-2" onclick="lamLaiTuDau()"><i class="fa-solid fa-rotate-left me-1"></i> Thiết lập lại (Chia mới)</button>
+                        </div>
+                    </div>
+                    <div class="envelope-grid" id="envelopeGrid"></div>
                 </div>
             </div>
+            <!-- ===================== KẾT THÚC TAB 1 ===================== -->
+
+
+            <!-- ===================== TAB 2: VÒNG QUAY (MỚI) ===================== -->
+            <div id="tabVongQuay" style="display: none;">
+                <div class="setup-card">
+                    <div class="setup-title"><i class="fa-solid fa-dharmachakra text-danger"></i> Vòng Quay Ngẫu Nhiên</div>
+                    <p class="text-muted mb-4">Nhập danh sách tên (hoặc món quà) vào ô bên trái, sau đó bấm QUAY để chọn ngẫu nhiên một người may mắn nhất!</p>
+                    
+                    <div class="wheel-container-main">
+                        <!-- Cột nhập liệu -->
+                        <div class="wheel-input-box">
+                            <label class="input-label text-danger"><i class="fa-solid fa-list-ol"></i> Danh sách thành viên (Mỗi tên 1 dòng)</label>
+                            <textarea id="txtWheelNames" class="form-control" style="height: 250px; font-size: 15px;" placeholder="Ví dụ:&#10;Trưởng Tâm&#10;Trưởng Ân&#10;Trưởng Nghĩa..." oninput="updateWheelCanvas()"></textarea>
+                            <div class="text-end mt-2 small text-muted">Tổng cộng: <strong id="countWheelNames">0</strong> người</div>
+                            <button class="btn-spin-wheel" id="btnQuayVongQuay" onclick="spinWheel()">
+                                <i class="fa-solid fa-play me-2"></i> BẮT ĐẦU QUAY
+                            </button>
+                        </div>
+
+                        <!-- Cột hiển thị vòng quay -->
+                        <div class="wheel-visual-box">
+                            <canvas id="wheelCanvas" class="wheel-canvas" width="400" height="400"></canvas>
+                            <div class="wheel-pointer"><i class="fa-solid fa-caret-left"></i></div>
+                            <div class="wheel-center-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ===================== KẾT THÚC TAB 2 ===================== -->
 
         </div> <!-- KẾT THÚC VÙNG ADMIN -->
     </div>
 
-    <!-- MODAL THẺ BỔ NHIỆM CHÍNH THỨC -->
+    <!-- ================== CÁC MODAL HIỂN THỊ KẾT QUẢ ================== -->
+
+    <!-- MODAL THẺ BỔ NHIỆM CHÍNH THỨC (CỦA TAB 1) -->
     <div class="bonhiem-modal" id="bonhiemModal" onclick="dongModalBonhiem()">
         <div class="bonhiem-card" id="bonhiemCard" onclick="event.stopPropagation()">
             <div class="bn-badge"><i class="fa-solid fa-award me-1"></i> THẺ BỔ NHIỆM</div>
-            
-            <!-- KHU VỰC ẢNH CHÂN DUNG LỚN -->
             <div class="avatar-container">
                 <div class="avatar-box">
-                    <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" alt="ĐT" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                    <img src="" id="bnAvatarDT" class="bn-avatar-img avatar-dt-border" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <span class="avatar-role-tag bg-tag-dt">ĐỘI TRƯỞNG</span>
                 </div>
                 <div class="avatar-box">
-                    <img src="" id="bnAvatarDP" class="bn-avatar-img avatar-dp-border" alt="ĐP" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                    <img src="" id="bnAvatarDP" class="bn-avatar-img avatar-dp-border" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <span class="avatar-role-tag bg-tag-dp">ĐỘI PHÓ</span>
                 </div>
             </div>
-            
             <div class="bn-title">QUYẾT ĐỊNH PHÂN CÔNG</div>
             <div class="bn-names" id="bnNames"></div>
-            
             <div class="bn-details">
                 <div>Trách nhiệm: <strong>Dẫn dắt & Đồng hành</strong></div>
-                <div>Phụ trách: <strong id="bnDoi" style="color: #2563eb;">Đội 1 (Giuse)</strong></div>
-                <div>Khẩu hiệu: <strong id="bnKhauHieu" style="color: #059669; font-style: italic;">Yêu Thương</strong></div>
+                <div>Phụ trách: <strong id="bnDoi" style="color: #2563eb;"></strong></div>
+                <div>Khẩu hiệu: <strong id="bnKhauHieu" style="color: #059669; font-style: italic;"></strong></div>
             </div>
-
             <div class="bn-footer-text">Xin Thiên Chúa nâng đỡ và ban ơn giúp các Trưởng luôn hăng say phục vụ.</div>
             <button class="bn-close-btn" onclick="dongModalBonhiem()">Xác nhận hoàn thành</button>
         </div>
     </div>
 
-    <!-- MODAL BẢNG TỔNG HỢP -->
+    <!-- MODAL HIỂN THỊ NGƯỜI TRÚNG THƯỞNG (CỦA TAB 2) -->
+    <div class="winner-modal" id="winnerModal" onclick="dongModal('winnerModal')">
+        <div class="winner-card" onclick="event.stopPropagation()">
+            <div class="bn-badge winner-badge"><i class="fa-solid fa-gift me-1"></i> KẾT QUẢ VÒNG QUAY</div>
+            <i class="fa-solid fa-trophy" style="font-size: 80px; color: #fbbf24; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));"></i>
+            <h3 style="margin-top: 20px; font-weight: 800; color: #1e293b;">Xin chúc mừng</h3>
+            <div class="winner-name" id="lblWinnerName">TÊN NGƯỜI CHƠI</div>
+            <p style="color: #64748b; font-weight: 600; margin-bottom: 25px;">Đã được vòng quay may mắn gọi tên!</p>
+            <button class="bn-close-btn winner-close-btn" onclick="dongModal('winnerModal')">Tuyệt vời, Đóng lại</button>
+        </div>
+    </div>
+
+    <!-- MODAL BẢNG TỔNG HỢP & LỊCH SỬ (GIỮ NGUYÊN) -->
     <div class="general-modal" id="modalTongHop" onclick="dongModal('modalTongHop')">
         <div class="general-card" onclick="event.stopPropagation()">
             <h4 class="mb-3 text-primary fw-bold"><i class="fa-solid fa-list-check me-2"></i> Bảng Tổng Hợp Phân Đội</h4>
             <div class="table-responsive">
                 <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th style="width: 50px;">STT</th>
-                            <th>Cấp Đội</th>
-                            <th>Tên Đội</th>
-                            <th>Đội Trưởng</th>
-                            <th>Đội Phó</th>
-                            <th>Khẩu Hiệu</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th style="width: 50px;">STT</th><th>Cấp Đội</th><th>Tên Đội</th><th>Đội Trưởng</th><th>Đội Phó</th><th>Khẩu Hiệu</th></tr></thead>
                     <tbody id="tbodyTongHop"></tbody>
                 </table>
             </div>
-            <div class="text-end">
-                <button class="btn btn-secondary rounded-pill px-4 fw-bold" onclick="dongModal('modalTongHop')">Đóng</button>
-            </div>
+            <div class="text-end"><button class="btn btn-secondary rounded-pill px-4 fw-bold" onclick="dongModal('modalTongHop')">Đóng</button></div>
         </div>
     </div>
 
-    <!-- MODAL LỊCH SỬ -->
     <div class="general-modal" id="modalLichSu" onclick="dongModal('modalLichSu')">
         <div class="general-card" onclick="event.stopPropagation()">
-            <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Phân Đội Tự Động</h4>
+            <h4 class="mb-3 text-success fw-bold"><i class="fa-solid fa-clock-rotate-left me-2"></i> Lịch Sử Phân Đội</h4>
             <div class="table-responsive" style="max-height: 300px; margin-bottom: 20px;">
                 <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>Thời Gian Chia</th>
-                            <th>Số Lượng Đội</th>
-                            <th style="text-align: right;">Hành động</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Thời Gian Chia</th><th>Số Lượng Đội</th><th style="text-align: right;">Hành động</th></tr></thead>
                     <tbody id="tbodyLichSu"></tbody>
                 </table>
             </div>
-
             <div id="chiTietLichSuBox" style="display: none; border-top: 2px dashed #cbd5e1; padding-top: 16px;">
                 <h6 class="fw-bold text-danger mb-2" id="lblChiTietThoiGian">Chi tiết phân đội lúc: ...</h6>
                 <div class="table-responsive" style="max-height: 250px; margin-bottom: 0;">
                     <table class="table-custom">
-                        <thead>
-                            <tr>
-                                <th>Đội</th>
-                                <th>Đội Trưởng</th>
-                                <th>Đội Phó</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Đội</th><th>Đội Trưởng</th><th>Đội Phó</th></tr></thead>
                         <tbody id="tbodyChiTietLichSu"></tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- Nút Xóa tất cả Lịch Sử và Nút Đóng -->
             <div class="text-end mt-3 d-flex justify-content-between align-items-center">
                 <button class="btn btn-outline-danger rounded-pill px-3 fw-bold" onclick="xoaToanBoLichSu()"><i class="fa-solid fa-trash-can me-1"></i> Xóa toàn bộ</button>
-                <button class="btn btn-secondary rounded-pill px-4 fw-bold" onclick="dongModal('modalLichSu')">Đóng Lịch Sử</button>
+                <button class="btn btn-secondary rounded-pill px-4 fw-bold" onclick="dongModal('modalLichSu')">Đóng</button>
             </div>
         </div>
     </div>
 
+
     <script>
-        // ================= CẤU HÌNH FIREBASE =================
+        // ================= CHUYỂN ĐỔI TAB (CHIA ĐỘI / VÒNG QUAY) =================
+        function chuyenTab(tabName) {
+            const btnChiaDoi = document.getElementById("btnTabChiaDoi");
+            const btnVongQuay = document.getElementById("btnTabVongQuay");
+            const tabChiaDoi = document.getElementById("tabChiaDoi");
+            const tabVongQuay = document.getElementById("tabVongQuay");
+
+            if (tabName === 'chiadoi') {
+                btnChiaDoi.className = "btn-tab btn-tab-active";
+                btnVongQuay.className = "btn-tab btn-tab-inactive";
+                tabChiaDoi.style.display = "block";
+                tabVongQuay.style.display = "none";
+            } else {
+                btnVongQuay.className = "btn-tab btn-tab-active";
+                btnChiaDoi.className = "btn-tab btn-tab-inactive";
+                tabVongQuay.style.display = "block";
+                tabChiaDoi.style.display = "none";
+                updateWheelCanvas(); // Vẽ lại vòng quay cho chuẩn khi vừa mở tab
+            }
+        }
+
+        // ================= CẤU HÌNH FIREBASE VÀ ĐĂNG NHẬP (GIỮ NGUYÊN) =================
         const firebaseConfig = {
             apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
             authDomain: "phantruchuynhtruong.firebaseapp.com",
@@ -478,11 +474,8 @@
             appId: "1:105589587705:web:e5673f9dad38c130b56c28",
             measurementId: "G-YENZE6ZNSW"
         };
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
-
         const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
 
@@ -555,6 +548,7 @@
 
         window.onload = function() {
             xacDinhQuyenTruyCap();
+            updateWheelCanvas(); // Khởi tạo vòng quay
 
             if (window.google) {
                 google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse });
@@ -566,12 +560,8 @@
             try {
                 const payload = jwt_decode(response.credential);
                 const email = payload.email.toLowerCase().trim();
-
                 let role = "viewer";
-                if (ADMIN_EMAILS.includes(email)) {
-                    role = "admin";
-                }
-
+                if (ADMIN_EMAILS.includes(email)) role = "admin";
                 currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
                 localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
                 
@@ -588,34 +578,22 @@
         }
 
         function xacDinhQuyenTruyCap() {
-            // Hiển thị Avatar và Tên
             document.getElementById("userNameDisplay").innerText = currentUser.name || "Khách";
             document.getElementById("userAvatarMini").src = currentUser.picture || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-
             const badge = document.getElementById("roleBadge");
             badge.className = "role-tag";
 
-            // KIỂM TRA QUYỀN
             if (currentUser.role === "admin") {
-                badge.classList.add("role-admin"); 
-                badge.innerText = "Admin Toàn Quyền";
-                
-                // Hiển thị nội dung Admin
+                badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
                 document.getElementById("mainAdminArea").style.display = "block";
                 document.getElementById("accessDeniedArea").style.display = "none";
-                
-                // Chỉ gọi Firebase load dữ liệu khi chắc chắn là Admin
                 loadDuLieuFirebaseAdmin();
             } else {
-                badge.classList.add("role-viewer"); 
-                badge.innerText = "Người xem";
-                
-                // Khóa nội dung lại
+                badge.classList.add("role-viewer"); badge.innerText = "Người xem";
                 document.getElementById("mainAdminArea").style.display = "none";
                 document.getElementById("accessDeniedArea").style.display = "flex";
             }
 
-            // Hiển thị nút đăng nhập / đăng xuất
             if (currentUser.email) {
                 document.getElementById("googleBtnContainer").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "inline-flex";
@@ -626,21 +604,17 @@
         }
 
         function loadDuLieuFirebaseAdmin() {
-            // Chống gọi hàm 2 lần khi Firebase bị trùng lặp listener
             if (isFirebaseLoaded) return;
             isFirebaseLoaded = true;
 
             const listDT = document.getElementById("listDoiTruong");
             const listDP = document.getElementById("listDoiPho");
-
-            listDT.innerHTML = "";
-            listDP.innerHTML = "";
+            listDT.innerHTML = ""; listDP.innerHTML = "";
 
             danhSachGocHT.forEach((ht) => {
                 let lblDT = document.createElement("label");
                 lblDT.innerHTML = `<input type="checkbox" value="${ht.thanhHoTen}" class="chk-dt" onchange="demSoLuong()"> ${ht.thanhHoTen}`;
                 listDT.appendChild(lblDT);
-
                 let lblDP = document.createElement("label");
                 lblDP.innerHTML = `<input type="checkbox" value="${ht.thanhHoTen}" class="chk-dp" onchange="demSoLuong()"> ${ht.thanhHoTen}`;
                 listDP.appendChild(lblDP);
@@ -649,12 +623,8 @@
             db.ref("lichSuPhanDoi2026").on("value", (snapshot) => {
                 if (snapshot.exists()) {
                     let data = snapshot.val();
-                    lichSuData = Object.keys(data).map(key => {
-                        return { firebaseKey: key, ...data[key] };
-                    }).reverse(); 
-                } else {
-                    lichSuData = [];
-                }
+                    lichSuData = Object.keys(data).map(key => ({ firebaseKey: key, ...data[key] })).reverse(); 
+                } else { lichSuData = []; }
             });
 
             db.ref("danhSachHT").on("value", (snapshot) => {
@@ -682,20 +652,12 @@
 
         function getAvatarHT(fullName) {
             let foundLocal = danhSachGocHT.find(h => h.thanhHoTen === fullName);
-            
-            if (foundLocal && foundLocal.avatar && foundLocal.avatar.trim() !== "") {
-                return foundLocal.avatar;
-            }
-
+            if (foundLocal && foundLocal.avatar && foundLocal.avatar.trim() !== "") return foundLocal.avatar;
             if (thongTinHuynhTruongTuFirebase.length > 0) {
-                let foundInFb = thongTinHuynhTruongTuFirebase.find(h => 
-                    (h.thanhHoTen === fullName || h.hoTen === fullName || h.name === fullName)
-                );
+                let foundInFb = thongTinHuynhTruongTuFirebase.find(h => (h.thanhHoTen === fullName || h.hoTen === fullName || h.name === fullName));
                 if (foundInFb) {
                     let urlAnhThucTe = foundInFb.avatar || foundInFb.hinhAnh || foundInFb.image || foundInFb.picture || foundInFb.img;
-                    if (urlAnhThucTe && urlAnhThucTe.trim() !== "") {
-                        return urlAnhThucTe;
-                    }
+                    if (urlAnhThucTe && urlAnhThucTe.trim() !== "") return urlAnhThucTe;
                 }
             }
             return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
@@ -709,56 +671,35 @@
             let arrKhauHieu = document.getElementById("txtKhauHieu").value.split('\n').map(s => s.trim()).filter(s => s !== "");
 
             let total = arrDT.length;
-
-            if (total === 0) {
-                alert("Vui lòng chọn ít nhất 1 Huynh trưởng làm Đội Trưởng!");
-                return;
-            }
+            if (total === 0) return alert("Vui lòng chọn ít nhất 1 Huynh trưởng làm Đội Trưởng!");
             if (arrDP.length !== total || arrCapDoi.length !== total || arrTenDoi.length !== total || arrKhauHieu.length !== total) {
                 alert(`Số lượng dữ liệu không khớp nhau!\n\nĐội trưởng: ${total}\nĐội phó: ${arrDP.length}\nCấp Đội: ${arrCapDoi.length}\nTên đội: ${arrTenDoi.length}\nKhẩu hiệu: ${arrKhauHieu.length}\n\nVui lòng kiểm tra lại để đảm bảo bằng nhau.`);
                 return;
             }
 
-            shuffleArray(arrDT);
-            shuffleArray(arrDP);
-            shuffleArray(arrCapDoi);
-            shuffleArray(arrTenDoi);
-            shuffleArray(arrKhauHieu);
+            shuffleArray(arrDT); shuffleArray(arrDP); shuffleArray(arrCapDoi); shuffleArray(arrTenDoi); shuffleArray(arrKhauHieu);
 
             ketQuaBocTham = [];
-            for (let i = 0; i < total; i++) {
-                ketQuaBocTham.push({
-                    dt: arrDT[i], dp: arrDP[i], capDoi: arrCapDoi[i], tenDoi: arrTenDoi[i], khauHieu: arrKhauHieu[i]
-                });
-            }
+            for (let i = 0; i < total; i++) { ketQuaBocTham.push({ dt: arrDT[i], dp: arrDP[i], capDoi: arrCapDoi[i], tenDoi: arrTenDoi[i], khauHieu: arrKhauHieu[i] }); }
 
-            const sessionData = {
-                thoiGian: new Date().toLocaleString('vi-VN'),
-                timestamp: new Date().getTime(),
-                danhSach: ketQuaBocTham
-            };
+            const sessionData = { thoiGian: new Date().toLocaleString('vi-VN'), timestamp: new Date().getTime(), danhSach: ketQuaBocTham };
             db.ref("lichSuPhanDoi2026").push(sessionData);
 
             document.getElementById("setupSection").style.display = "none";
             document.getElementById("resultSection").style.display = "block";
-            
             renderEnvelopes();
         }
 
         function renderEnvelopes() {
             const grid = document.getElementById("envelopeGrid");
             grid.innerHTML = "";
-
             ketQuaBocTham.forEach((item, index) => {
                 const wrapper = document.createElement("div");
                 wrapper.innerHTML = `
                     <div class="envelope-container" id="env_${index}" onclick="moPhongBi(${index})">
                         <div class="envelope"></div>
                         <div class="flap"></div>
-                        <div class="letter-preview">
-                            <i class="fa-solid fa-file-contract"></i>
-                            <div class="text-mini">QUYẾT ĐỊNH BỔ NHIỆM</div>
-                        </div>
+                        <div class="letter-preview"><i class="fa-solid fa-file-contract"></i><div class="text-mini">QUYẾT ĐỊNH BỔ NHIỆM</div></div>
                         <div class="wax-seal"><i class="fa-solid fa-cross"></i></div>
                     </div>
                     <div class="team-title-below">Bí Mật Số ${index + 1}</div>
@@ -770,42 +711,26 @@
         function moPhongBi(index) {
             const env = document.getElementById(`env_${index}`);
             const data = ketQuaBocTham[index];
-
-            if (env.classList.contains("open")) {
-                hienThiModalBonhiem(data);
-                return;
-            }
-
+            if (env.classList.contains("open")) return hienThiModalBonhiem(data);
             env.classList.add("open");
-
-            setTimeout(() => {
-                hienThiModalBonhiem(data);
-                taoHieuUngPhaoHoa(); 
-            }, 700);
+            setTimeout(() => { hienThiModalBonhiem(data); taoHieuUngPhaoHoa(); }, 700);
         }
 
         function hienThiModalBonhiem(data) {
             document.getElementById("bnAvatarDT").src = getAvatarHT(data.dt);
             document.getElementById("bnAvatarDP").src = getAvatarHT(data.dp);
-
-            // Bố cục text tên được điều chỉnh chuẩn xác 100% giống hình
             document.getElementById("bnNames").innerHTML = `
                 <div style="font-size: 14px; font-weight: 900; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">ĐỘI TRƯỞNG:</div>
                 <div style="color: #047857; font-size: 20px; font-weight: 900; margin-bottom: 12px;">${data.dt}</div>
-                
                 <div style="font-size: 14px; font-weight: 900; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px;">ĐỘI PHÓ:</div>
                 <div style="color: #b45309; font-size: 20px; font-weight: 900; margin-bottom: 20px;">${data.dp}</div>
             `;
-
             document.getElementById("bnDoi").innerText = `${data.capDoi} (${data.tenDoi})`;
             document.getElementById("bnKhauHieu").innerText = `"${data.khauHieu}"`;
-
             document.getElementById("bonhiemModal").classList.add("active");
         }
 
-        function dongModalBonhiem() {
-            document.getElementById("bonhiemModal").classList.remove("active");
-        }
+        function dongModalBonhiem() { document.getElementById("bonhiemModal").classList.remove("active"); }
 
         function lamLaiTuDau() {
             if(confirm("Bạn muốn thiết lập lại toàn bộ từ đầu?")) {
@@ -820,16 +745,7 @@
             const tbody = document.getElementById("tbodyTongHop");
             tbody.innerHTML = "";
             ketQuaBocTham.forEach((item, i) => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="fw-bold text-center">${i + 1}</td>
-                        <td class="fw-bold text-primary">${item.capDoi}</td>
-                        <td>${item.tenDoi}</td>
-                        <td class="fw-bold text-success">Đội trưởng: ${item.dt}</td>
-                        <td class="fw-bold text-warning text-dark">Đội phó: ${item.dp}</td>
-                        <td style="font-style: italic;">${item.khauHieu}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr><td class="fw-bold text-center">${i + 1}</td><td class="fw-bold text-primary">${item.capDoi}</td><td>${item.tenDoi}</td><td class="fw-bold text-success">Đội trưởng: ${item.dt}</td><td class="fw-bold text-warning text-dark">Đội phó: ${item.dp}</td><td style="font-style: italic;">${item.khauHieu}</td></tr>`;
             });
             document.getElementById("modalTongHop").classList.add("active");
         }
@@ -838,21 +754,10 @@
             document.getElementById("chiTietLichSuBox").style.display = "none";
             const tbody = document.getElementById("tbodyLichSu");
             tbody.innerHTML = "";
-            
-            if(lichSuData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Chưa có dữ liệu lịch sử nào.</td></tr>`;
-            } else {
+            if(lichSuData.length === 0) { tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Chưa có dữ liệu lịch sử nào.</td></tr>`; } 
+            else {
                 lichSuData.forEach((session, index) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td class="fw-bold text-secondary"><i class="fa-regular fa-calendar me-2"></i>${session.thoiGian}</td>
-                            <td><span class="badge bg-info text-dark">${session.danhSach.length} Đội</span></td>
-                            <td style="text-align: right;">
-                                <button class="btn btn-sm btn-outline-primary fw-bold rounded-pill" onclick="xemChiTietLichSu(${index})" title="Xem chi tiết"><i class="fa-solid fa-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-danger fw-bold rounded-pill ms-1" onclick="xoaLichSuTungDong('${session.firebaseKey}')" title="Xóa lịch sử này"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `;
+                    tbody.innerHTML += `<tr><td class="fw-bold text-secondary"><i class="fa-regular fa-calendar me-2"></i>${session.thoiGian}</td><td><span class="badge bg-info text-dark">${session.danhSach.length} Đội</span></td><td style="text-align: right;"><button class="btn btn-sm btn-outline-primary fw-bold rounded-pill" onclick="xemChiTietLichSu(${index})" title="Xem chi tiết"><i class="fa-solid fa-eye"></i></button><button class="btn btn-sm btn-outline-danger fw-bold rounded-pill ms-1" onclick="xoaLichSuTungDong('${session.firebaseKey}')" title="Xóa lịch sử này"><i class="fa-solid fa-trash"></i></button></td></tr>`;
                 });
             }
             document.getElementById("modalLichSu").classList.add("active");
@@ -861,64 +766,127 @@
         function xemChiTietLichSu(index) {
             const session = lichSuData[index];
             document.getElementById("lblChiTietThoiGian").innerText = `Chi tiết phân đội lúc: ${session.thoiGian}`;
-            
             const tbody = document.getElementById("tbodyChiTietLichSu");
             tbody.innerHTML = "";
             session.danhSach.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="fw-bold">${item.capDoi} (${item.tenDoi})</td>
-                        <td class="text-success fw-bold">Đội trưởng: ${item.dt}</td>
-                        <td class="text-warning fw-bold text-dark">Đội phó: ${item.dp}</td>
-                    </tr>
-                `;
+                tbody.innerHTML += `<tr><td class="fw-bold">${item.capDoi} (${item.tenDoi})</td><td class="text-success fw-bold">Đội trưởng: ${item.dt}</td><td class="text-warning fw-bold text-dark">Đội phó: ${item.dp}</td></tr>`;
             });
             document.getElementById("chiTietLichSuBox").style.display = "block";
         }
 
         function xoaLichSuTungDong(key) {
             if(confirm("Bạn có chắc chắn muốn xóa bản ghi lịch sử này không?")) {
-                db.ref("lichSuPhanDoi2026/" + key).remove().then(() => {
-                    document.getElementById("chiTietLichSuBox").style.display = "none";
-                }).catch(err => {
-                    alert("Lỗi khi xóa: " + err.message);
-                });
+                db.ref("lichSuPhanDoi2026/" + key).remove().then(() => { document.getElementById("chiTietLichSuBox").style.display = "none"; });
             }
         }
 
         function xoaToanBoLichSu() {
-            if (lichSuData.length === 0) {
-                alert("Lịch sử hiện đang trống, không có gì để xóa!");
-                return;
-            }
+            if (lichSuData.length === 0) return alert("Lịch sử hiện đang trống, không có gì để xóa!");
             if(confirm("CẢNH BÁO: Bạn có chắc chắn muốn xóa TOÀN BỘ lịch sử phân đội không? Hành động này không thể hoàn tác!")) {
-                db.ref("lichSuPhanDoi2026").remove().then(() => {
-                    alert("Đã dọn sạch toàn bộ lịch sử phân đội!");
-                    document.getElementById("chiTietLichSuBox").style.display = "none";
-                }).catch(err => {
-                    alert("Lỗi khi xóa toàn bộ: " + err.message);
-                });
+                db.ref("lichSuPhanDoi2026").remove().then(() => { alert("Đã dọn sạch toàn bộ lịch sử phân đội!"); document.getElementById("chiTietLichSuBox").style.display = "none"; });
             }
         }
 
         function taoHieuUngPhaoHoa() {
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 60; i++) {
                 let confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.top = '-10px';
-                confetti.style.backgroundColor = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'][Math.floor(Math.random() * 5)];
+                confetti.style.backgroundColor = ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'][Math.floor(Math.random() * 6)];
                 document.body.appendChild(confetti);
 
                 let duration = Math.random() * 2 + 2;
                 confetti.animate([
                     { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
-                    { transform: `translate3d(${Math.random()*200 - 100}px, 100vh, 0) rotate(${Math.random()*360}deg)`, opacity: 0 }
+                    { transform: `translate3d(${Math.random()*300 - 150}px, 100vh, 0) rotate(${Math.random()*360}deg)`, opacity: 0 }
                 ], { duration: duration * 1000, easing: 'cubic-bezier(.37,0,.63,1)' });
 
                 setTimeout(() => confetti.remove(), duration * 1000);
             }
         }
+
+        // ================= TÍNH NĂNG VÒNG QUAY NGẪU NHIÊN =================
+        const canvas = document.getElementById("wheelCanvas");
+        const ctx = canvas.getContext("2d");
+        const colors = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316", "#06b6d4", "#eab308"];
+        let wheelNames = [];
+        let currentWheelDeg = 0;
+        let isSpinning = false;
+
+        function updateWheelCanvas() {
+            let textValue = document.getElementById("txtWheelNames").value;
+            wheelNames = textValue.split('\n').map(s => s.trim()).filter(s => s !== "");
+            document.getElementById("countWheelNames").innerText = wheelNames.length;
+            
+            // Nếu không có tên nào thì hiện chữ mẫu cho đẹp
+            let displayNames = wheelNames.length > 0 ? wheelNames : ["Nhập tên", "vào ô", "bên trái", "để quay"];
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = cx - 5;
+            const sliceAngle = (Math.PI * 2) / displayNames.length;
+
+            for (let i = 0; i < displayNames.length; i++) {
+                // Vẽ mảnh
+                ctx.beginPath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, radius, i * sliceAngle, (i + 1) * sliceAngle);
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "rgba(255,255,255,0.4)";
+                ctx.stroke();
+
+                // Vẽ chữ
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(i * sliceAngle + sliceAngle / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 18px Nunito";
+                // Rút gọn chữ nếu quá dài
+                let txt = displayNames[i].length > 15 ? displayNames[i].substring(0, 15) + "..." : displayNames[i];
+                ctx.fillText(txt, radius - 20, 6);
+                ctx.restore();
+            }
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            if (wheelNames.length < 2) return alert("Vui lòng nhập ít nhất 2 tên vào danh sách để quay!");
+            
+            isSpinning = true;
+            document.getElementById("btnQuayVongQuay").disabled = true;
+
+            // Số vòng quay ngẫu nhiên (từ 5 đến 8 vòng) + góc lẻ
+            let spinAmount = Math.floor(Math.random() * 360) + 360 * (Math.floor(Math.random() * 3) + 5);
+            currentWheelDeg += spinAmount;
+
+            canvas.style.transform = `rotate(${currentWheelDeg}deg)`;
+
+            // Sau 4 giây (khớp với thời gian CSS transition 4s) thì tính kết quả
+            setTimeout(() => {
+                isSpinning = false;
+                document.getElementById("btnQuayVongQuay").disabled = false;
+
+                // Mũi tên nằm ở bên phải (góc 0 độ).
+                // Khi vòng quay quay thuận chiều kim đồng hồ góc 'currentWheelDeg',
+                // Mảnh nằm ở góc 0 độ hiện tại chính là mảnh có góc ban đầu = (360 - (currentWheelDeg % 360))
+                let actualDeg = (360 - (currentWheelDeg % 360)) % 360;
+                let sliceDeg = 360 / wheelNames.length;
+                let winnerIndex = Math.floor(actualDeg / sliceDeg);
+                let winnerName = wheelNames[winnerIndex];
+
+                // Hiển thị Popup
+                document.getElementById("lblWinnerName").innerText = winnerName;
+                document.getElementById("winnerModal").classList.add("active");
+                taoHieuUngPhaoHoa();
+
+            }, 4000);
+        }
+
     </script>
 </body>
 </html>

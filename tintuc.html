@@ -385,6 +385,22 @@
                 if (currentViewingPostId) {
                     capNhatLikeVaComment(currentViewingPostId);
                 }
+
+                // ================= TỰ ĐỘNG MỞ BÀI TỪ TRANG CHỦ =================
+                const urlParams = new URLSearchParams(window.location.search);
+                const postIdFromUrl = urlParams.get('id');
+                if (postIdFromUrl && !currentViewingPostId) {
+                    setTimeout(() => {
+                        // Kiểm tra xem bài viết có tồn tại trên Firebase không rồi mới mở
+                        const postExists = newsData.find(p => p.id === postIdFromUrl);
+                        if(postExists) {
+                            xemChiTietBaiViet(postIdFromUrl);
+                        }
+                    }, 500);
+                    // Dọn dẹp thanh địa chỉ web cho đẹp mắt
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+                // ===============================================================
             });
         };
 
@@ -515,7 +531,7 @@
             }
         }
 
-        // ================= XỬ LÝ CHÈN LINK VIDEO =================
+        // ================= XỬ LÝ CHÈN LINK VIDEO TỰ ĐỘNG =================
         function chenVideo() {
             let url = prompt("Dán link video vào đây (Hỗ trợ Facebook, YouTube, Google Drive):");
             if (!url || url.trim() === "") return;

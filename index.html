@@ -26,6 +26,16 @@
             min-height: 100vh;
         }
 
+        /* KEYFRAMES CHO HIỆU ỨNG TẢI DỮ LIỆU */
+        @keyframes fadeInDownCustom {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeUpCustom {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* THANH ĐIỀU HƯỚNG */
         .cls-topbar {
             background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75));
@@ -97,7 +107,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             max-width: 900px;
             margin: 0 auto;
-            animation: fadeInDown 1s ease-out;
+            animation: fadeInDownCustom 1s ease-out forwards;
         }
 
         .hero-title { 
@@ -272,9 +282,8 @@
             .liquid-glass-card { padding: 30px 20px; }
             .hero-section { background-attachment: scroll; } 
             
-            /* ĐÃ SỬA LỖI CSS HIỆN NÚT VỚI KHÁCH */
             .section-header { display: flex; flex-direction: column; gap: 10px; align-items: center; }
-            .btn-manage-featured { position: relative; top: 0; transform: none; margin-top: 10px; } 
+            .btn-manage-featured { position: relative; top: 0; transform: none; display: none; margin-top: 10px; } 
         }
 
         @media (max-width: 480px) {
@@ -314,7 +323,7 @@
     <main class="container py-5">
         
         <!-- ================= BÀI VIẾT NỔI BẬT ================= -->
-        <div class="section-header reveal-on-scroll mt-3">
+        <div class="section-header mt-3">
             <h2>Tin Tức Nổi Bật</h2>
             <p class="text-muted mt-2 mb-0">Những sự kiện và thông báo quan trọng nhất</p>
             <!-- Nút Cài đặt (Chỉ Admin mới thấy) -->
@@ -444,7 +453,7 @@
 
         let allNewsData = [];
 
-        // ĐÃ SỬA LỖI 1: Hàm kiểm tra quyền Admin an toàn hơn
+        // Kiểm tra quyền Admin
         function kiemTraQuyenAdmin() {
             const currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {};
             const btnManage = document.getElementById("btnManageFeatured");
@@ -467,7 +476,7 @@
             hienThiTinNoiBat();
         });
 
-        // Hàm lọc và hiển thị 3 tin nổi bật ra Trang Chủ
+        // Hàm hiển thị 3 tin nổi bật
         function hienThiTinNoiBat() {
             const grid = document.getElementById("featuredNewsGrid");
             grid.innerHTML = "";
@@ -487,12 +496,12 @@
             }
 
             featuredPosts.forEach(item => {
-                // ĐÃ SỬA LỖI 2: Xử lý an toàn khi bài viết không có chữ
                 let contentText = item.content || ""; 
                 let cleanExcerpt = contentText.replace(/<[^>]*>?/gm, '');
                 
+                // ĐÃ SỬA LỖI Ở ĐÂY: Bỏ chữ "reveal-on-scroll" để thẻ không bị tàng hình, và thay bằng hiệu ứng trồi lên
                 grid.innerHTML += `
-                    <div class="col-md-6 col-lg-4 reveal-on-scroll">
+                    <div class="col-md-6 col-lg-4" style="animation: fadeUpCustom 0.8s ease-out forwards; opacity: 0;">
                         <a href="tintuc.html?id=${item.id}" class="news-card-index">
                             <img src="${item.imgUrl || 'logo_app.jpg'}" class="news-img-index" onerror="this.src='logo_app.jpg'">
                             <div class="news-body-index">
@@ -506,7 +515,7 @@
             });
         }
 
-        // ================= CHỨC NĂNG CÀI ĐẶT BÀI NỔI BẬT (DÀNH CHO ADMIN) =================
+        // ================= CHỨC NĂNG CÀI ĐẶT BÀI NỔI BẬT =================
         function moModalCaiDat() {
             const listDiv = document.getElementById("adminPostList");
             listDiv.innerHTML = "";

@@ -93,8 +93,8 @@
         .list-box label { display: block; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 14px; font-weight: 500; }
         .list-box label:hover { background: #e0f2fe; }
         .list-box input[type="checkbox"] { margin-right: 10px; accent-color: #0284c7; width: 16px; height: 16px; cursor: pointer;}
-        textarea.form-control { background: #f8fafc; border-color: #cbd5e1; font-size: 14px; border-radius: 12px; resize: none; height: 120px; box-shadow: none; }
-        textarea.form-control:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
+        textarea.form-control, input.form-control { background: #f8fafc; border-color: #cbd5e1; font-size: 14px; border-radius: 12px; box-shadow: none; }
+        textarea.form-control:focus, input.form-control:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
         .input-label { font-size: 14px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; }
         .btn-randomize {
             background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif;
@@ -106,12 +106,16 @@
         .wheel-container-main { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: center; }
         .wheel-input-box { flex: 1; min-width: 300px; max-width: 400px; }
         .wheel-visual-box { position: relative; width: 350px; height: 350px; max-width: 100%; display: flex; justify-content: center; align-items: center; }
-        .wheel-canvas { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.15); transition: transform 4s cubic-bezier(0.1, 0.7, 0.1, 1); }
+        .wheel-canvas { width: 100%; height: 100%; border-radius: 50%; border: 6px solid #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
         .wheel-pointer { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); font-size: 40px; color: #ef4444; filter: drop-shadow(-3px 3px 2px rgba(0,0,0,0.2)); z-index: 10; }
         .wheel-center-dot { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background: #fff; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 5;}
-        .btn-spin-wheel { background: linear-gradient(135deg, #ef4444, #f97316); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif; border-radius: 50px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 30px auto 0; width: 100%; max-width: 300px; text-align: center;}
+        
+        .btn-spin-wheel { background: linear-gradient(135deg, #ef4444, #f97316); border: none; color: white; padding: 14px 40px; font-size: 18px; font-weight: 800; font-family: 'Nunito', sans-serif; border-radius: 50px; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3); transition: all 0.3s; cursor: pointer; display: block; margin: 20px auto 0; width: 100%; max-width: 300px; text-align: center;}
         .btn-spin-wheel:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4); filter: brightness(1.1); }
         .btn-spin-wheel:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none;}
+
+        .ht-tag { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-weight: 700; font-size: 13px; padding: 6px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 8px; margin: 4px; transition: 0.2s; }
+        .ht-tag:hover { background: #bae6fd; }
 
         /* KHU VỰC PHONG BÌ THƯ BAN ĐẦU */
         #resultSection { display: none; text-align: center; }
@@ -156,7 +160,7 @@
         .bn-title { font-size: 18px; font-weight: 900; color: #b45309; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; font-family: 'Nunito', sans-serif;}
         .bn-names { font-family: 'Nunito', sans-serif; margin-bottom: 20px; }
         
-        .winner-name { font-size: 32px; font-weight: 900; color: #dc2626; font-family: 'Nunito', sans-serif; text-transform: uppercase; margin: 10px 0 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .winner-name { font-size: 32px; font-weight: 900; color: #dc2626; font-family: 'Nunito', sans-serif; text-transform: uppercase; margin: 15px 0 20px; text-shadow: 0 2px 5px rgba(0,0,0,0.1);}
         
         .bn-details { text-align: left; background: #ffffff; padding: 20px 25px; border-radius: 16px; border-left: 5px solid #3b82f6; margin-bottom: 25px; font-size: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
         .bn-details div { margin-bottom: 12px; color: #475569; font-weight: 600; }
@@ -166,9 +170,6 @@
         .bn-footer-text { font-size: 13px; color: #94a3b8; font-style: italic; font-weight: 600; margin-bottom: 25px; }
         .bn-close-btn { background: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; padding: 12px 35px; border-radius: 30px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .bn-close-btn:hover { background: #e2e8f0; color: #0f172a; }
-        
-        .winner-close-btn { background: #fee2e2; border: 1px solid #fca5a5; color: #991b1b; }
-        .winner-close-btn:hover { background: #fca5a5; color: #7f1d1d; }
 
         .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; opacity: 0; z-index: 100000;}
 
@@ -334,14 +335,53 @@
             <div id="tabVongQuay" style="display: none;">
                 <div class="setup-card">
                     <div class="setup-title"><i class="fa-solid fa-dharmachakra text-danger"></i> Vòng Quay Ngẫu Nhiên</div>
-                    <p class="text-muted mb-4">Nhập danh sách tên (hoặc món quà) vào ô bên trái, sau đó bấm QUAY để chọn ngẫu nhiên một người may mắn nhất!</p>
                     
                     <div class="wheel-container-main">
                         <!-- Cột nhập liệu -->
                         <div class="wheel-input-box">
-                            <label class="input-label text-danger"><i class="fa-solid fa-list-ol"></i> Danh sách thành viên (Mỗi tên 1 dòng)</label>
-                            <textarea id="txtWheelNames" class="form-control" style="height: 250px; font-size: 15px;" placeholder="Ví dụ:&#10;Trưởng Tâm&#10;Trưởng Ân&#10;Trưởng Nghĩa..." oninput="updateWheelCanvas()"></textarea>
-                            <div class="text-end mt-2 small text-muted">Tổng cộng: <strong id="countWheelNames">0</strong> người</div>
+                            
+                            <!-- NÚT CHUYỂN CHẾ ĐỘ NHẬP LIỆU -->
+                            <div class="mb-3 d-flex justify-content-center gap-3 bg-light p-2 rounded-pill border">
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input" type="radio" name="wheelInputMode" id="modeManual" value="manual" checked onchange="toggleWheelMode()">
+                                    <label class="form-check-label fw-bold" for="modeManual" style="cursor: pointer;">Nhập tay tùy ý</label>
+                                </div>
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input" type="radio" name="wheelInputMode" id="modeHT" value="ht" onchange="toggleWheelMode()">
+                                    <label class="form-check-label fw-bold text-success" for="modeHT" style="cursor: pointer;">Lấy DS Huynh trưởng</label>
+                                </div>
+                            </div>
+
+                            <!-- CHẾ ĐỘ 1: NHẬP TAY (MẶC ĐỊNH) -->
+                            <div id="wheelModeManual">
+                                <label class="input-label text-danger"><i class="fa-solid fa-pen-to-square"></i> Nhập danh sách tên/phần thưởng (Mỗi dòng 1 tên)</label>
+                                <textarea id="txtWheelNames" class="form-control" style="height: 180px; font-size: 15px;" placeholder="Ví dụ:&#10;Gấu bông&#10;Quyển sổ&#10;Móc khóa..." oninput="updateWheelCanvas()"></textarea>
+                            </div>
+
+                            <!-- CHẾ ĐỘ 2: CHỌN HUYNH TRƯỞNG -->
+                            <div id="wheelModeHT" style="display: none;">
+                                <label class="input-label text-success"><i class="fa-solid fa-users"></i> Tìm và thêm Huynh Trưởng vào vòng quay</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" id="inputSearchHT" class="form-control" placeholder="Gõ tên để tìm..." list="datalistHT" onkeypress="if(event.key === 'Enter') addHTToWheel()">
+                                    <button class="btn btn-success fw-bold" type="button" onclick="addHTToWheel()"><i class="fa-solid fa-plus"></i> Thêm</button>
+                                </div>
+                                <datalist id="datalistHT"></datalist>
+                                <div id="selectedHTTags" class="d-flex flex-wrap align-items-start border rounded p-2" style="background: #f8fafc; height: 135px; overflow-y: auto;">
+                                    <div class="text-muted" style="font-size: 13px; font-style: italic; width: 100%; text-align: center; margin-top: 50px;">Chưa chọn Huynh trưởng nào.</div>
+                                </div>
+                            </div>
+
+                            <div class="text-end mt-2 small text-muted">Tổng cộng có: <strong id="countWheelNames">0</strong> ô trên vòng quay</div>
+
+                            <!-- THANH TRƯỢT CHỌN THỜI GIAN QUAY -->
+                            <div class="mt-4 pt-3 border-top">
+                                <label class="input-label text-primary d-flex justify-content-between">
+                                    <span><i class="fa-solid fa-stopwatch"></i> Thời gian quay:</span>
+                                    <span><strong id="lblSpinTime" class="text-danger" style="font-size: 18px;">5</strong> giây</span>
+                                </label>
+                                <input type="range" class="form-range" id="sliderSpinTime" min="3" max="60" value="5" oninput="document.getElementById('lblSpinTime').innerText = this.value">
+                            </div>
+
                             <button class="btn-spin-wheel" id="btnQuayVongQuay" onclick="spinWheel()">
                                 <i class="fa-solid fa-play me-2"></i> BẮT ĐẦU QUAY
                             </button>
@@ -390,14 +430,32 @@
     </div>
 
     <!-- MODAL HIỂN THỊ NGƯỜI TRÚNG THƯỞNG (CỦA TAB 2) -->
-    <div class="winner-modal" id="winnerModal" onclick="dongModal('winnerModal')">
+    <div class="winner-modal" id="winnerModal" onclick="xuLyDongModalVongQuay(false)">
         <div class="winner-card" onclick="event.stopPropagation()">
             <div class="bn-badge winner-badge"><i class="fa-solid fa-gift me-1"></i> KẾT QUẢ VÒNG QUAY</div>
-            <i class="fa-solid fa-trophy" style="font-size: 80px; color: #fbbf24; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));"></i>
+            
+            <!-- Icon chiếc cúp (Nếu là tên bình thường) -->
+            <div id="winnerIconBox">
+                <i class="fa-solid fa-trophy" style="font-size: 80px; color: #fbbf24; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));"></i>
+            </div>
+            <!-- Ảnh Avatar (Nếu quay trúng Huynh trưởng) -->
+            <div id="winnerAvatarBox" style="display: none;">
+                <img id="winnerAvatarImg" src="" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 5px solid #ef4444; box-shadow: 0 6px 15px rgba(0,0,0,0.2);">
+            </div>
+
             <h3 style="margin-top: 20px; font-weight: 800; color: #1e293b;">Xin chúc mừng</h3>
             <div class="winner-name" id="lblWinnerName">TÊN NGƯỜI CHƠI</div>
             <p style="color: #64748b; font-weight: 600; margin-bottom: 25px;">Đã được vòng quay may mắn gọi tên!</p>
-            <button class="bn-close-btn winner-close-btn" onclick="dongModal('winnerModal')">Tuyệt vời, Đóng lại</button>
+            
+            <!-- Tùy chọn Xóa hay Giữ -->
+            <div class="d-flex gap-3 mt-4">
+                <button class="btn btn-outline-danger fw-bold rounded-pill" style="flex: 1; border-width: 2px;" onclick="xuLyDongModalVongQuay(true)">
+                    <i class="fa-solid fa-user-minus me-1"></i> Xóa Khỏi DS
+                </button>
+                <button class="btn btn-primary fw-bold rounded-pill" style="flex: 1;" onclick="xuLyDongModalVongQuay(false)">
+                    <i class="fa-solid fa-rotate-right me-1"></i> Quay Tiếp
+                </button>
+            </div>
         </div>
     </div>
 
@@ -632,9 +690,13 @@
                     let data = snapshot.val();
                     thongTinHuynhTruongTuFirebase = Array.isArray(data) ? data : Object.values(data);
                 }
+                updateDatalistHT(); // Nạp tên HT vào danh sách gợi ý của vòng quay
             });
+            
+            updateDatalistHT(); // Nạp sẵn từ mảng cứng luôn
         }
 
+        // ================= CÁC HÀM CỦA TAB CHIA ĐỘI =================
         function demSoLuong() {
             document.getElementById("countDT").innerText = document.querySelectorAll('.chk-dt:checked').length;
             document.getElementById("countDP").innerText = document.querySelectorAll('.chk-dp:checked').length;
@@ -806,17 +868,88 @@
             }
         }
 
-        // ================= TÍNH NĂNG VÒNG QUAY NGẪU NHIÊN =================
+        // ================= TÍNH NĂNG VÒNG QUAY MỚI =================
         const canvas = document.getElementById("wheelCanvas");
         const ctx = canvas.getContext("2d");
         const colors = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316", "#06b6d4", "#eab308"];
+        
         let wheelNames = [];
+        let selectedWheelHTs = []; // Mảng chứa DS HT được chọn ở chế độ 2
         let currentWheelDeg = 0;
         let isSpinning = false;
+        let finalWinnerName = "";
 
+        // Nạp DS gợi ý khi gõ tên HT
+        function updateDatalistHT() {
+            const dl = document.getElementById("datalistHT");
+            dl.innerHTML = "";
+            let allNames = [];
+            danhSachGocHT.forEach(h => allNames.push(h.thanhHoTen));
+            thongTinHuynhTruongTuFirebase.forEach(h => {
+                let name = h.thanhHoTen || h.hoTen || h.name;
+                if(name && !allNames.includes(name)) allNames.push(name);
+            });
+            allNames.forEach(n => { dl.innerHTML += `<option value="${n}">`; });
+        }
+
+        // Chuyển đổi giữa 2 chế độ điền tên
+        function toggleWheelMode() {
+            let mode = document.querySelector('input[name="wheelInputMode"]:checked').value;
+            if(mode === 'manual') {
+                document.getElementById("wheelModeManual").style.display = "block";
+                document.getElementById("wheelModeHT").style.display = "none";
+            } else {
+                document.getElementById("wheelModeManual").style.display = "none";
+                document.getElementById("wheelModeHT").style.display = "block";
+            }
+            updateWheelCanvas();
+        }
+
+        // Chức năng thêm/xóa HT vào mảng vòng quay
+        function addHTToWheel() {
+            let input = document.getElementById("inputSearchHT");
+            let name = input.value.trim();
+            if(!name) return;
+            if(selectedWheelHTs.includes(name)) {
+                alert("Tên này đã có trong danh sách!");
+                return;
+            }
+            selectedWheelHTs.push(name);
+            input.value = "";
+            renderWheelHTTags();
+            updateWheelCanvas();
+        }
+
+        function removeHTFromWheel(name) {
+            selectedWheelHTs = selectedWheelHTs.filter(n => n !== name);
+            renderWheelHTTags();
+            updateWheelCanvas();
+        }
+
+        function renderWheelHTTags() {
+            let container = document.getElementById("selectedHTTags");
+            container.innerHTML = "";
+            if(selectedWheelHTs.length === 0) {
+                container.innerHTML = `<div class="text-muted" style="font-size: 13px; font-style: italic; width: 100%; text-align: center; margin-top: 50px;">Chưa chọn Huynh trưởng nào.</div>`;
+                return;
+            }
+            selectedWheelHTs.forEach(name => {
+                container.innerHTML += `<span class="ht-tag">${name} <i class="fa-solid fa-xmark text-danger ms-1" style="cursor:pointer" onclick="removeHTFromWheel('${name}')"></i></span>`;
+            });
+        }
+
+        // Vẽ Vòng Quay
         function updateWheelCanvas() {
-            let textValue = document.getElementById("txtWheelNames").value;
-            wheelNames = textValue.split('\n').map(s => s.trim()).filter(s => s !== "");
+            let mode = document.querySelector('input[name="wheelInputMode"]:checked').value;
+            
+            // Lấy danh sách tên tùy theo chế độ
+            if(mode === 'manual') {
+                let textValue = document.getElementById("txtWheelNames").value;
+                wheelNames = textValue.split('\n').map(s => s.trim()).filter(s => s !== "");
+            } else {
+                wheelNames = [...selectedWheelHTs];
+            }
+
             document.getElementById("countWheelNames").innerText = wheelNames.length;
             
             // Nếu không có tên nào thì hiện chữ mẫu cho đẹp
@@ -853,38 +986,78 @@
             }
         }
 
+        // Bắt đầu Quay
         function spinWheel() {
             if (isSpinning) return;
-            if (wheelNames.length < 2) return alert("Vui lòng nhập ít nhất 2 tên vào danh sách để quay!");
+            if (wheelNames.length < 2) return alert("Vui lòng nhập ít nhất 2 người/phần quà vào danh sách để quay!");
             
             isSpinning = true;
             document.getElementById("btnQuayVongQuay").disabled = true;
 
-            // Số vòng quay ngẫu nhiên (từ 5 đến 8 vòng) + góc lẻ
-            let spinAmount = Math.floor(Math.random() * 360) + 360 * (Math.floor(Math.random() * 3) + 5);
+            // Lấy thời gian quay do người dùng chỉnh (Tính bằng giây)
+            let spinSeconds = parseInt(document.getElementById("sliderSpinTime").value) || 5;
+
+            // Setup CSS chuyển động tương ứng với số giây
+            canvas.style.transition = `transform ${spinSeconds}s cubic-bezier(0.1, 0.7, 0.1, 1)`;
+
+            // Số vòng quay ngẫu nhiên (từ 5 đến 12 vòng) + góc lẻ ngẫu nhiên
+            let spinAmount = Math.floor(Math.random() * 360) + 360 * (Math.floor(Math.random() * 8) + 5);
             currentWheelDeg += spinAmount;
 
             canvas.style.transform = `rotate(${currentWheelDeg}deg)`;
 
-            // Sau 4 giây (khớp với thời gian CSS transition 4s) thì tính kết quả
+            // Đợi hết thời gian quay để hiện kết quả
             setTimeout(() => {
                 isSpinning = false;
                 document.getElementById("btnQuayVongQuay").disabled = false;
 
-                // Mũi tên nằm ở bên phải (góc 0 độ).
-                // Khi vòng quay quay thuận chiều kim đồng hồ góc 'currentWheelDeg',
-                // Mảnh nằm ở góc 0 độ hiện tại chính là mảnh có góc ban đầu = (360 - (currentWheelDeg % 360))
+                // Tính toán chính xác mũi tên đang chỉ vào góc nào
                 let actualDeg = (360 - (currentWheelDeg % 360)) % 360;
                 let sliceDeg = 360 / wheelNames.length;
                 let winnerIndex = Math.floor(actualDeg / sliceDeg);
-                let winnerName = wheelNames[winnerIndex];
+                finalWinnerName = wheelNames[winnerIndex];
+
+                document.getElementById("lblWinnerName").innerText = finalWinnerName;
+
+                // Kiểm tra xem tên trúng thưởng có phải là Huynh trưởng không (để lấy Avatar)
+                let avatarUrl = getAvatarHT(finalWinnerName);
+                if (avatarUrl && avatarUrl !== "https://cdn-icons-png.flaticon.com/512/3135/3135715.png") {
+                    document.getElementById("winnerIconBox").style.display = "none";
+                    document.getElementById("winnerAvatarBox").style.display = "block";
+                    document.getElementById("winnerAvatarImg").src = avatarUrl;
+                } else {
+                    document.getElementById("winnerIconBox").style.display = "block";
+                    document.getElementById("winnerAvatarBox").style.display = "none";
+                }
 
                 // Hiển thị Popup
-                document.getElementById("lblWinnerName").innerText = winnerName;
                 document.getElementById("winnerModal").classList.add("active");
                 taoHieuUngPhaoHoa();
 
-            }, 4000);
+            }, spinSeconds * 1000);
+        }
+
+        // Xử lý nút Đóng ở Modal Vòng Quay (Xóa tên hoặc Quay tiếp)
+        function xuLyDongModalVongQuay(isRemoveWinner) {
+            if (isRemoveWinner && finalWinnerName) {
+                let mode = document.querySelector('input[name="wheelInputMode"]:checked').value;
+                if(mode === 'manual') {
+                    // Xóa tên ở chế độ nhập tay
+                    let text = document.getElementById("txtWheelNames").value;
+                    let arr = text.split('\n').map(s => s.trim()).filter(s => s !== "");
+                    let index = arr.indexOf(finalWinnerName);
+                    if(index !== -1) {
+                        arr.splice(index, 1);
+                        document.getElementById("txtWheelNames").value = arr.join('\n');
+                    }
+                } else {
+                    // Xóa tên ở chế độ HT
+                    selectedWheelHTs = selectedWheelHTs.filter(n => n !== finalWinnerName);
+                    renderWheelHTTags();
+                }
+                updateWheelCanvas();
+            }
+            document.getElementById("winnerModal").classList.remove("active");
         }
 
     </script>

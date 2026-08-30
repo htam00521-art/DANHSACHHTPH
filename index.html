@@ -10,6 +10,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+    <!-- FIREBASE SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -20,7 +26,7 @@
             min-height: 100vh;
         }
 
-        /* THANH ĐIỀU HƯỚNG MÁT MẺ & NỔI BẬT (OCEAN AURORA GRADIENT) - GIAO DIỆN PC */
+        /* THANH ĐIỀU HƯỚNG */
         .cls-topbar {
             background: linear-gradient(135deg, rgba(0, 114, 255, 0.88), rgba(0, 198, 255, 0.88) 60%, rgba(56, 239, 125, 0.75));
             backdrop-filter: blur(18px);
@@ -131,7 +137,7 @@
         }
 
         /* SECTION TIÊU ĐỀ */
-        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header { text-align: center; margin-bottom: 40px; position: relative; }
         .section-header h2 {
             font-weight: 800;
             background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
@@ -152,7 +158,41 @@
             border-radius: 4px;
         }
 
-        /* LIQUID GLASS CARDS */
+        /* CSS BÀI VIẾT NỔI BẬT */
+        .news-card-index {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex; flex-direction: column;
+            text-decoration: none; color: inherit;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .news-card-index:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,114,255,0.15);
+            border-color: #93c5fd;
+            color: inherit;
+        }
+        .news-img-index { width: 100%; height: 200px; object-fit: cover; border-bottom: 3px solid #f1f5f9; }
+        .news-body-index { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .news-title-index { font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-bottom: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .news-date-index { font-size: 0.85rem; color: #64748b; margin-bottom: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .news-excerpt-index { color: #475569; font-size: 0.9rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* NÚT QUẢN LÝ (CHỈ ADMIN THẤY) */
+        .btn-manage-featured {
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            background: #fca5a5; color: #991b1b; font-weight: 700; font-size: 13px;
+            border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer;
+            transition: 0.2s; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .btn-manage-featured:hover { background: #ef4444; color: white; }
+
+        /* LIQUID GLASS CARDS (TÍNH NĂNG) */
         .liquid-glass-card {
             position: relative;
             background: rgba(255, 255, 255, 0.55);
@@ -160,7 +200,7 @@
             -webkit-backdrop-filter: blur(24px) saturate(190%);
             border-radius: 28px;
             border: 1px solid rgba(255, 255, 255, 0.75);
-            padding: 35px 25px; /* Giảm padding một chút để vừa 4 thẻ */
+            padding: 35px 25px; 
             text-align: center;
             height: 100%;
             overflow: hidden;
@@ -174,7 +214,7 @@
             box-shadow: 0 30px 65px rgba(0, 114, 255, 0.22);
         }
         .feature-icon {
-            width: 72px; height: 72px; border-radius: 20px; /* Thu nhỏ icon một chút */
+            width: 72px; height: 72px; border-radius: 20px; 
             background: linear-gradient(135deg, #00c6ff, #0072ff);
             display: flex; align-items: center; justify-content: center;
             margin: 0 auto 20px; font-size: 1.8rem; color: #fff;
@@ -182,8 +222,8 @@
             transition: all 0.4s ease;
         }
         .liquid-glass-card:hover .feature-icon { transform: scale(1.15) rotate(8deg); }
-        .liquid-glass-card h4 { font-size: 1.25rem; } /* Giảm nhẹ size chữ tiêu đề */
-        .liquid-glass-card p { font-size: 0.9rem; } /* Giảm nhẹ size chữ mô tả */
+        .liquid-glass-card h4 { font-size: 1.25rem; } 
+        .liquid-glass-card p { font-size: 0.9rem; } 
 
         .btn-liquid {
             background: linear-gradient(135deg, #0072ff, #00c6ff);
@@ -203,69 +243,37 @@
         .delay-1 { transition-delay: 0.15s; }
         .delay-2 { transition-delay: 0.30s; }
         .delay-3 { transition-delay: 0.45s; }
-        .delay-4 { transition-delay: 0.60s; } /* Thêm delay cho thẻ thứ 4 */
+        .delay-4 { transition-delay: 0.60s; } 
 
-        .modern-footer { background: linear-gradient(135deg, #0a2540, #0052d4); color: white; padding: 45px 0 20px; margin-top: 70px; }
+        /* MODAL CHỌN BÀI NỔI BẬT */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 25, 47, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s; padding: 16px; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-card { background: #ffffff; width: 100%; max-width: 600px; border-radius: 24px; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.5); }
+        .post-list-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-bottom: 1px solid #e2e8f0; cursor: pointer; transition: 0.2s; border-radius: 12px; }
+        .post-list-item:hover { background: #f8fafc; }
+        .post-list-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        .post-list-item div { flex-grow: 1; }
+        .post-list-item strong { font-size: 14px; color: #0f172a; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;}
+        .post-list-item span { font-size: 12px; color: #64748b; }
+        .form-check-input { width: 20px; height: 20px; cursor: pointer; }
 
-        /* ================= TỐI ƯU GIAO DIỆN DI ĐỘNG (MOBILE & TABLET) ================= */
         @media (max-width: 991px) {
-            /* Thanh điều hướng dạng Thẻ (Card) giống thiết kế App */
-            .cls-topbar {
-                margin: 16px;
-                border-radius: 24px !important;
-                padding: 24px 16px;
-                position: relative; /* Không dính trên mobile để nhường không gian cuộn */
-                background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important; /* Xanh dương đậm chuẩn App */
-                box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important;
-            }
-            
-            .cls-topbar .container {
-                flex-direction: column !important;
-                gap: 20px;
-            }
-
-            .cls-brand {
-                justify-content: center;
-                width: 100%;
-                text-align: center;
-                gap: 12px;
-            }
-            
+            .cls-topbar { margin: 16px; border-radius: 24px !important; padding: 24px 16px; position: relative; background: linear-gradient(135deg, #0d47a1, #1e88e5, #42a5f5) !important; box-shadow: 0 10px 30px rgba(13, 71, 161, 0.3) !important; }
+            .cls-topbar .container { flex-direction: column !important; gap: 20px; }
+            .cls-brand { justify-content: center; width: 100%; text-align: center; gap: 12px; }
             .cls-brand img { width: 50px; height: 50px; }
             .cls-brand span { font-size: 1.15rem; white-space: normal; }
-
-            .cls-topbar nav {
-                flex-direction: column !important;
-                width: 100%;
-                gap: 8px !important;
-            }
-
-            .cls-nav-link {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 12px 20px !important;
-                font-size: 1rem !important;
-                border: none !important;
-                background: transparent !important;
-                border-radius: 50px !important;
-                margin: 0;
-            }
-
-            /* Nút đang Active sẽ hiển thị khung bao quanh */
-            .cls-nav-link.active {
-                background: rgba(255, 255, 255, 0.25) !important;
-                box-shadow: none !important;
-                font-weight: 800;
-            }
-
-            /* Căn chỉnh các phần tử bên dưới Header cho đẹp */
+            .cls-topbar nav { flex-direction: column !important; width: 100%; gap: 8px !important; }
+            .cls-nav-link { width: 100%; display: flex; justify-content: center; align-items: center; padding: 12px 20px !important; font-size: 1rem !important; border: none !important; background: transparent !important; border-radius: 50px !important; margin: 0; }
+            .cls-nav-link.active { background: rgba(255, 255, 255, 0.25) !important; font-weight: 800; box-shadow: none !important;}
             .hero-title { font-size: 2.2rem !important; }
             .hero-subtitle { font-size: 1rem !important; }
             .hero-content-box { padding: 25px 15px; width: 92%; margin-top: 10px; }
             .liquid-glass-card { padding: 30px 20px; }
             .hero-section { background-attachment: scroll; } 
+            
+            .section-header { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+            .btn-manage-featured { position: relative; top: 0; transform: none; display: inline-block; }
         }
 
         @media (max-width: 480px) {
@@ -303,13 +311,27 @@
     </section>
 
     <main class="container py-5">
+        
+        <!-- ================= BÀI VIẾT NỔI BẬT ================= -->
+        <div class="section-header reveal-on-scroll mt-3">
+            <h2>Tin Tức Nổi Bật</h2>
+            <p class="text-muted mt-2 mb-0">Những sự kiện và thông báo quan trọng nhất</p>
+            <!-- Nút Cài đặt (Chỉ Admin mới thấy) -->
+            <button id="btnManageFeatured" class="btn-manage-featured" onclick="moModalCaiDat()">
+                <i class="fa-solid fa-star me-1"></i> Chọn Bài Nổi Bật
+            </button>
+        </div>
+        <div id="featuredNewsGrid" class="row g-4 justify-content-center mb-5 pb-4" style="border-bottom: 2px dashed #cbd5e1;">
+            <div class="col-12 text-center text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Đang tải tin tức...</div>
+        </div>
+
+        <!-- ================= TÍNH NĂNG HỆ THỐNG ================= -->
         <div class="section-header reveal-on-scroll">
             <h2>Tính Năng Hệ Thống</h2>
             <p class="text-muted mt-2">Cổng thông tin & Phân chia phiên trực Huynh Trưởng & Quản lý thiếu nhi</p>
         </div>
-        <div class="row g-4 justify-content-center">
+        <div class="row g-4 justify-content-center mb-4">
             
-            <!-- THẺ 1: TIN TỨC & THÔNG BÁO -->
             <div class="col-md-6 col-lg-3">
                 <div class="liquid-glass-card reveal-on-scroll delay-1">
                     <div class="feature-icon"><i class="fa-solid fa-newspaper"></i></div>
@@ -319,7 +341,6 @@
                 </div>
             </div>
 
-            <!-- THẺ 2: DANH SÁCH HUYNH TRƯỞNG -->
             <div class="col-md-6 col-lg-3">
                 <div class="liquid-glass-card reveal-on-scroll delay-2">
                     <div class="feature-icon"><i class="fas fa-user-check"></i></div>
@@ -329,7 +350,6 @@
                 </div>
             </div>
 
-            <!-- THẺ 3: PHÂN CHIA PHIÊN TRỰC -->
             <div class="col-md-6 col-lg-3">
                 <div class="liquid-glass-card reveal-on-scroll delay-3">
                     <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
@@ -339,7 +359,6 @@
                 </div>
             </div>
 
-            <!-- THẺ 4: ĐIỂM DANH 13 ĐỘI -->
             <div class="col-md-6 col-lg-3">
                 <div class="liquid-glass-card reveal-on-scroll delay-4">
                     <div class="feature-icon"><i class="fas fa-clipboard-user"></i></div>
@@ -351,6 +370,23 @@
 
         </div>
     </main>
+
+    <!-- MODAL QUẢN LÝ BÀI NỔI BẬT DÀNH CHO ADMIN -->
+    <div class="modal-overlay" id="modalFeatured" onclick="dongModalCaiDat()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h4 style="font-weight: 800; color: #0f172a; margin-bottom: 5px;"><i class="fa-solid fa-star text-warning me-2"></i>Chọn 3 Bài Viết Nổi Bật</h4>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Đánh dấu tích vào tối đa 3 bài viết bạn muốn ghim lên trang chủ.</p>
+            
+            <div id="adminPostList" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; padding: 5px;">
+                <!-- Danh sách bài viết đổ vào đây -->
+            </div>
+
+            <div class="text-end">
+                <button class="btn btn-secondary rounded-pill px-4 me-2 fw-bold" onclick="dongModalCaiDat()">Hủy</button>
+                <button class="btn btn-primary rounded-pill px-4 fw-bold" onclick="luuCaiDatNoiBat()">Lưu Cài Đặt</button>
+            </div>
+        </div>
+    </div>
 
     <footer style="background: linear-gradient(135deg, #0d47a1, #1565c0); color: #fff; padding: 40px 20px 20px; text-align: center; margin-top: 40px; border-radius: 20px 20px 0 0; box-shadow: 0 -4px 15px rgba(0,0,0,0.1);">
         <h3 style="font-weight: 800; font-size: 22px; margin-bottom: 8px;">Thiếu Nhi Thánh Thể Phước Hảo</h3>
@@ -376,6 +412,7 @@
     </footer>
 
     <script>
+        // Hiệu ứng chuyển động khi kéo trang
         document.addEventListener("DOMContentLoaded", function () {
             const observer = new IntersectionObserver((entries, obs) => {
                 entries.forEach(entry => {
@@ -387,6 +424,130 @@
             }, { threshold: 0.15 });
             document.querySelectorAll(".reveal-on-scroll").forEach(el => observer.observe(el));
         });
+
+        // ================= CẤU HÌNH FIREBASE =================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI",
+            authDomain: "phantruchuynhtruong.firebaseapp.com",
+            databaseURL: "https://phantruchuynhtruong-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "phantruchuynhtruong",
+            storageBucket: "phantruchuynhtruong.firebasestorage.app",
+            messagingSenderId: "105589587705",
+            appId: "1:105589587705:web:e5673f9dad38c130b56c28",
+            measurementId: "G-YENZE6ZNSW"
+        };
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        let allNewsData = [];
+
+        // Kiểm tra xem có phải là Admin đang đăng nhập không
+        const currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {};
+        if (currentUser.role === 'admin') {
+            document.getElementById("btnManageFeatured").style.display = "inline-block";
+        }
+
+        // Tải dữ liệu tin tức từ Firebase
+        db.ref("tinTucSuKien").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                allNewsData = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+            } else {
+                allNewsData = [];
+            }
+            hienThiTinNoiBat();
+        });
+
+        // Hàm lọc và hiển thị 3 tin nổi bật ra Trang Chủ
+        function hienThiTinNoiBat() {
+            const grid = document.getElementById("featuredNewsGrid");
+            grid.innerHTML = "";
+
+            if (allNewsData.length === 0) {
+                grid.innerHTML = `<div class="col-12 text-center text-muted" style="font-style:italic;">Hiện chưa có bài viết nào.</div>`;
+                return;
+            }
+
+            // Lọc ra các bài viết được Admin đánh dấu là Nổi bật (isFeatured = true)
+            let featuredPosts = allNewsData.filter(post => post.isFeatured === true);
+
+            // NẾU ADMIN CHƯA CHỌN BÀI NÀO -> Tự động lấy 3 bài mới nhất
+            if (featuredPosts.length === 0) {
+                featuredPosts = allNewsData.slice(0, 3);
+            } else {
+                // Nếu chọn nhiều hơn 3 bài, chỉ lấy 3 bài đầu tiên
+                featuredPosts = featuredPosts.slice(0, 3);
+            }
+
+            featuredPosts.forEach(item => {
+                let cleanExcerpt = item.content.replace(/<[^>]*>?/gm, ''); // Lọc bỏ thẻ HTML để lấy nội dung tóm tắt
+                
+                // ĐÃ SỬA: Bổ sung ?id=${item.id} vào liên kết
+                grid.innerHTML += `
+                    <div class="col-md-6 col-lg-4 reveal-on-scroll">
+                        <a href="tintuc.html?id=${item.id}" class="news-card-index">
+                            <img src="${item.imgUrl || 'logo_app.jpg'}" class="news-img-index" onerror="this.src='logo_app.jpg'">
+                            <div class="news-body-index">
+                                <h3 class="news-title-index">${item.title}</h3>
+                                <div class="news-date-index"><i class="fa-solid fa-clock text-primary"></i> ${item.timestamp}</div>
+                                <div class="news-excerpt-index">${cleanExcerpt}</div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+            });
+        }
+
+        // ================= CHỨC NĂNG CÀI ĐẶT BÀI NỔI BẬT (DÀNH CHO ADMIN) =================
+        function moModalCaiDat() {
+            const listDiv = document.getElementById("adminPostList");
+            listDiv.innerHTML = "";
+
+            allNewsData.forEach(item => {
+                const isChecked = item.isFeatured ? "checked" : "";
+                listDiv.innerHTML += `
+                    <label class="post-list-item">
+                        <input type="checkbox" class="form-check-input chk-featured" value="${item.id}" ${isChecked} onchange="kiemTraSoLuongChon(this)">
+                        <img src="${item.imgUrl || 'logo_app.jpg'}" onerror="this.src='logo_app.jpg'">
+                        <div>
+                            <strong>${item.title}</strong>
+                            <span>${item.timestamp}</span>
+                        </div>
+                    </label>
+                `;
+            });
+
+            document.getElementById("modalFeatured").classList.add("active");
+        }
+
+        function dongModalCaiDat() {
+            document.getElementById("modalFeatured").classList.remove("active");
+        }
+
+        // Giới hạn Admin chỉ được chọn tối đa 3 bài
+        function kiemTraSoLuongChon(checkbox) {
+            const checkedBoxes = document.querySelectorAll(".chk-featured:checked");
+            if (checkedBoxes.length > 3) {
+                alert("Bạn chỉ được chọn tối đa 3 bài viết nổi bật!");
+                checkbox.checked = false;
+            }
+        }
+
+        function luuCaiDatNoiBat() {
+            const checkboxes = document.querySelectorAll(".chk-featured");
+            
+            // Duyệt qua tất cả các bài viết, cập nhật lại trạng thái isFeatured lên Firebase
+            checkboxes.forEach(chk => {
+                const postId = chk.value;
+                const isFeatured = chk.checked;
+                db.ref(`tinTucSuKien/${postId}`).update({ isFeatured: isFeatured });
+            });
+
+            alert("Đã cập nhật danh sách bài viết nổi bật thành công!");
+            dongModalCaiDat();
+        }
     </script>
 </body>
 </html>

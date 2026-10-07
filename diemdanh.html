@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Điểm Danh QR Code - Đoàn TNTT Phước Hảo</title>
+    <title>Điểm Danh Đội - Đoàn TNTT Phước Hảo</title>
     
     <link rel="icon" type="image/jpeg" href="logo_app.jpg">
-    <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Auth (Dành cho Đăng nhập) -->
@@ -21,8 +18,7 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
-        /* ================= STYLE CHUNG CỦA WEB ================= */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
         
         body { 
             background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url('bg_church.jpg'); 
@@ -47,76 +43,62 @@
         .btn-auth-action { background: #546e7a; color: #fff; border: none; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 500; transition: 0.2s;}
         .btn-auth-action:hover { background: #37474f; }
 
-        /* VÙNG CẤM KHÁCH */
+        /* MÀN HÌNH CHẶN KHÁCH */
         #accessDeniedArea { display: none; height: 60vh; text-align: center; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* ================= STYLE CỦA APP ĐIỂM DANH QR ================= */
-        :root {
-            --qr-primary: #4f46e5; --qr-primary-light: #e0e7ff;
-            --qr-success: #10b981; --qr-success-light: #d1fae5;
-            --qr-error: #ef4444; --qr-error-light: #fee2e2;
-            --qr-card-bg: #ffffff;
-            --qr-text-main: #111827; --qr-text-muted: #6b7280; --qr-border: #e5e7eb;
-        }
-
-        #qrAppArea { display: none; flex-direction: column; max-width: 550px; margin: 0 auto; gap: 16px; height: 80vh; }
+        /* GIAO DIỆN CHÍNH - BẢNG ĐIỂM DANH */
+        #mainAppArea { display: none; }
+        .setup-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.8); border-radius: 20px; padding: 25px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08); margin-bottom: 30px; }
         
-        .qr-card { background: var(--qr-card-bg); padding: 16px; border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.08); border: 1px solid rgba(255,255,255,0.8); display: flex; flex-direction: column; }
-        #card-camera { flex-shrink: 0; }
-        #card-list { flex: 1; min-height: 250px; overflow: hidden; margin-bottom: 20px;}
-
-        .header-title { text-align: center; font-size: 20px; font-weight: 800; color: #0D47A1; margin-bottom: 12px; letter-spacing: -0.5px; }
+        .header-controls { display: flex; flex-wrap: wrap; gap: 15px; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px dashed #cbd5e1; }
+        .team-selector { width: 100%; max-width: 350px; padding: 10px 14px; border-radius: 12px; border: 2px solid #0ea5e9; font-size: 15px; font-weight: 700; color: #0D47A1; outline: none; cursor: pointer; }
         
-        .activity-selector { margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px; }
-        .activity-selector select { width: 100%; padding: 10px 14px; border-radius: 12px; border: 2px solid #0ea5e9; background-color: var(--qr-card-bg); font-size: 15px; font-weight: 700; color: #0D47A1; outline: none; cursor: pointer; transition: 0.2s;}
+        .btn-scan-qr { background: linear-gradient(135deg, #0ea5e9, #2563eb); border: none; color: white; padding: 10px 24px; font-size: 16px; font-weight: 800; border-radius: 50px; box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3); transition: all 0.3s; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-scan-qr:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4); }
+
+        /* BẢNG DANH SÁCH */
+        .table-responsive { overflow-y: auto; max-height: 500px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;}
+        .table-custom { width: 100%; border-collapse: collapse; font-size: 15px;}
+        .table-custom th { background: #f8fafc; padding: 14px; text-align: left; font-weight: 800; color: #1e293b; position: sticky; top: 0; border-bottom: 2px solid #cbd5e1; z-index: 1;}
+        .table-custom td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: middle; color: #334155; font-weight: 600;}
+        .table-custom tr.is-present { background-color: #f0fdf4; }
+        .table-custom tr.is-present td { color: #166534; }
+
+        .avatar-name { display: flex; align-items: center; gap: 12px; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; background-color: #e0e7ff; color: #4f46e5; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+        .is-present .avatar { background-color: #d1fae5; color: #10b981; }
+
+        /* CHECKBOX TÙY CHỈNH */
+        .custom-checkbox { position: relative; cursor: pointer; font-size: 22px; user-select: none; width: 26px; height: 26px; display: block; margin: 0 auto;}
+        .custom-checkbox input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
+        .checkmark { position: absolute; top: 0; left: 0; height: 26px; width: 26px; background-color: #fff; border: 2px solid #cbd5e1; border-radius: 6px; transition: 0.2s; }
+        .custom-checkbox input:checked ~ .checkmark { background-color: #10b981; border-color: #10b981; }
+        .checkmark:after { content: ""; position: absolute; display: none; left: 8px; top: 4px; width: 6px; height: 12px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        .custom-checkbox input:checked ~ .checkmark:after { display: block; }
+
+        /* MODAL QUÉT QR BẬT LÊN LỚP GIỮA MÀN HÌNH */
+        .qr-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px); z-index: 9999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.3s; padding: 16px; }
+        .qr-modal-overlay.active { opacity: 1; visibility: visible; }
+        .qr-modal-card { background: #fff; width: 100%; max-width: 400px; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.4); text-align: center; transform: scale(0.9); transition: 0.3s;}
+        .qr-modal-overlay.active .qr-modal-card { transform: scale(1); }
+
+        #reader { width: 100%; max-width: 300px; margin: 0 auto 15px; border-radius: 16px; overflow: hidden; border: 4px solid #e0e7ff; box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15); background: #000; }
+        #reader video { object-fit: cover !important; width: 100% !important; border-radius: 12px !important; }
         
-        .today-badge { display: flex; align-items: center; justify-content: center; background-color: var(--qr-primary-light); color: var(--qr-primary); padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 14px; width: 100%; margin-bottom: 12px; }
-        
-        .scanner-container { display: flex; justify-content: center; align-items: center; margin-bottom: 12px; position: relative; }
-        #reader { width: 220px; height: 220px; border-radius: 20px; overflow: hidden; border: 4px solid var(--qr-primary-light); box-shadow: 0 8px 24px rgba(79, 70, 229, 0.15); background: #000; position: relative; }
-        #reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; border-radius: 16px !important; }
-        #btn-fallback { position: absolute; z-index: 10; background: var(--qr-primary); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; display: none; }
-        #reader__dashboard_section_csr span, #reader__dashboard_section_swaplink { color: var(--qr-primary) !important; font-weight: bold; text-decoration: none; }
-        #reader__dashboard_section_csr button { background: var(--qr-primary) !important; color: white !important; border: none !important; padding: 6px 12px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer; }
+        #scanStatus { padding: 10px; font-weight: 700; font-size: 14px; border-radius: 10px; transition: 0.3s; margin-bottom: 15px; background: #f1f5f9; color: #64748b;}
+        .scan-success { background: #d1fae5 !important; color: #10b981 !important; }
+        .scan-error { background: #fee2e2 !important; color: #ef4444 !important; }
 
-        #status { padding: 10px; text-align: center; font-weight: 700; font-size: 14px; border-radius: 10px; transition: all 0.3s ease; margin-bottom: 4px; }
-        .status-default { background: var(--qr-border); color: var(--qr-text-muted); }
-        .status-success { background: var(--qr-success-light); color: var(--qr-success); }
-        .status-error { background: var(--qr-error-light); color: var(--qr-error); }
-        .status-loading { background: var(--qr-primary-light); color: var(--qr-primary); }
-
-        .list-header-wrapper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .list-header { font-size: 18px; font-weight: 800; margin: 0; color: #1e293b;}
-        .btn-toggle { background-color: var(--qr-primary-light); color: var(--qr-primary); border: none; padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
-        
-        .user-list { flex: 1; overflow-y: auto; padding-right: 4px; position: relative; }
-        .user-list::-webkit-scrollbar { width: 6px; }
-        .user-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .user-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; margin-bottom: 10px; border-radius: 14px; border: 1px solid var(--qr-border); background: #f8fafc; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        .user-item.active { background-color: #f0fdf4; border-color: var(--qr-success); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1); }
-
-        .user-info-wrapper { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; background-color: var(--qr-primary-light); color: var(--qr-primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
-        .user-item.active .avatar { background-color: var(--qr-success-light); color: var(--qr-success); }
-        .user-info { display: flex; flex-direction: column; }
-        .user-name { font-size: 15px; font-weight: 700; color: var(--qr-text-main); margin-bottom: 2px;}
-        .user-id { font-size: 12px; font-weight: 600; color: var(--qr-text-muted); }
-
-        .custom-checkbox-container { position: relative; cursor: pointer; font-size: 22px; user-select: none; width: 28px; height: 28px; }
-        .custom-checkbox-container input { position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0; }
-        .checkmark { position: absolute; top: 0; left: 0; height: 28px; width: 28px; background-color: #fff; border: 2px solid #cbd5e1; border-radius: 50%; transition: all 0.2s ease; }
-        .custom-checkbox-container input:checked ~ .checkmark { background-color: var(--qr-success); border-color: var(--qr-success); }
-        .checkmark:after { content: ""; position: absolute; display: none; left: 9px; top: 5px; width: 6px; height: 12px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
-        .custom-checkbox-container input:checked ~ .checkmark:after { display: block; }
-
+        /* TỐI ƯU MOBILE */
         @media (max-width: 991px) {
             .cls-topbar { margin: 16px; border-radius: 24px !important; padding: 20px 16px; position: relative; }
             .cls-brand { justify-content: center; width: 100%; margin-bottom: 15px; }
             .cls-nav-menu { flex-direction: column; width: 100%; gap: 8px !important; }
-            .cls-nav-link { width: 100%; display: flex; justify-content: center; align-items: center; padding: 12px 20px !important; }
+            .cls-nav-link { width: 100%; text-align: center; }
             .auth-bar { flex-direction: column; text-align: center; }
-            #qrAppArea { height: auto; min-height: 85vh; }
+            .header-controls { flex-direction: column; align-items: stretch; }
+            .btn-scan-qr { justify-content: center; }
+            .setup-card { padding: 15px; }
         }
     </style>
 </head>
@@ -161,44 +143,69 @@
         <div id="accessDeniedArea">
             <i class="fa-solid fa-shield-halved" style="font-size: 80px; color: #ef4444; margin-bottom: 20px; filter: drop-shadow(0 4px 10px rgba(239, 68, 68, 0.3));"></i>
             <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">BẢO MẬT HỆ THỐNG</h2>
-            <p style="color: #64748b; max-width: 400px;">Chức năng này chỉ dành cho Huynh Trưởng. Vui lòng đăng nhập bằng tài khoản được cấp quyền để điểm danh.</p>
+            <p style="color: #64748b; max-width: 400px;">Chức năng này chỉ dành cho Huynh Trưởng. Vui lòng đăng nhập bằng tài khoản được cấp quyền để xem danh sách đội.</p>
         </div>
 
-        <!-- KHU VỰC APP ĐIỂM DANH QR -->
-        <div id="qrAppArea">
-            <div class="qr-card" id="card-camera">
-                <h2 class="header-title"><i class="fa-solid fa-qrcode text-primary me-2"></i>Hệ Thống Điểm Danh</h2>
+        <!-- GIAO DIỆN CHÍNH: DANH SÁCH ĐIỂM DANH -->
+        <div id="mainAppArea">
+            <div class="setup-card">
                 
-                <div class="activity-selector">
-                    <select id="sheetSelect" onchange="onSheetChange()">
-                        <option>Đang tải danh mục...</option>
-                    </select>
+                <div class="header-controls">
+                    <div>
+                        <div class="text-muted small fw-bold mb-1"><i class="fa-solid fa-users me-1"></i> Chọn danh sách Đội</div>
+                        <select id="sheetSelect" class="team-selector" onchange="onSheetChange()">
+                            <option>Đang tải dữ liệu...</option>
+                        </select>
+                    </div>
+                    
+                    <!-- NÚT BẬT CAMERA -->
+                    <button class="btn-scan-qr" onclick="moModalQR()">
+                        <i class="fa-solid fa-qrcode"></i> Bật Máy Quét Mã QR
+                    </button>
                 </div>
 
-                <div class="today-badge"><i class="fa-solid fa-calendar-day me-2"></i> Hôm nay: &nbsp;<span id="todayDisplay">...</span></div>
-                
-                <div class="scanner-container">
-                    <div id="reader"></div>
-                    <button id="btn-fallback" onclick="startCamera()"><i class="fa-solid fa-camera me-1"></i> Chạm để bật Camera</button>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold text-primary m-0"><i class="fa-solid fa-clipboard-user me-2"></i>Danh sách đoàn sinh</h5>
+                    <div class="badge bg-light text-dark border px-3 py-2" style="font-size: 14px;">Hôm nay: <span id="todayDisplay" class="text-danger fw-bold">...</span></div>
                 </div>
 
-                <div id="status" class="status-default"><i class="fa-solid fa-spinner fa-spin me-2"></i> Đang kết nối hệ thống...</div>
-            </div>
-
-            <div class="qr-card" id="card-list">
-                <div class="list-header-wrapper">
-                    <h3 class="list-header"><i class="fa-solid fa-list-check me-2"></i>Danh Sách Trạng Thái</h3>
-                    <button id="btnToggleList" class="btn-toggle" onclick="toggleList()"><i class="fa-solid fa-compress me-1"></i> Thu gọn</button>
+                <div class="table-responsive">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Đoàn sinh</th>
+                                <th>Mã ID</th>
+                                <th style="text-align: center;">Có mặt</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userListTable">
+                            <tr><td colspan="3" class="text-center py-4 text-muted"><i class="fa-solid fa-spinner fa-spin me-2"></i> Đang tải danh sách...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="user-list" id="userList"></div>
+
             </div>
         </div>
 
     </div>
 
+    <!-- MODAL CAMERA QUÉT QR -->
+    <div class="qr-modal-overlay" id="qrModal" onclick="dongModalQR()">
+        <div class="qr-modal-card" onclick="event.stopPropagation()">
+            <h4 class="fw-bold text-primary mb-3"><i class="fa-solid fa-camera me-2"></i>Quét Mã QR</h4>
+            
+            <div id="reader"></div>
+            
+            <div id="scanStatus">Đưa thẻ vào khung hình để quét</div>
+            
+            <button class="btn btn-secondary rounded-pill fw-bold mt-2" onclick="dongModalQR()">Đóng Camera</button>
+        </div>
+    </div>
+
+
     <script>
         // ================= ĐỊA CHỈ API CỦA GOOGLE SHEETS =================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOeEA324N8VhO2kYghTIIf_FXNiMccquYa0nDiZOwFcHj9bcBhkcZcoXzS-35z4BWy/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwQlkE9C6U5VlpCpxrDvD6nybk5cYeB-FC59YVg5UZgrkUvUb0RmO6ir5JuqYZz_0I/exec";
         
         // ================= THIẾT LẬP AUTHENTICATION & PHÂN QUYỀN =================
         const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
@@ -229,9 +236,7 @@
             localStorage.removeItem("ht_user_session");
             currentUser = { name: "Khách", email: "", role: "viewer" };
             xacDinhQuyenTruyCap();
-            if(html5QrCode) { 
-                try { html5QrCode.stop(); } catch(e){} 
-            }
+            dongModalQR(); // Đóng camera nếu đang mở
         }
 
         function xacDinhQuyenTruyCap() {
@@ -241,16 +246,12 @@
             const badge = document.getElementById("roleBadge");
             if (currentUser.role === "admin") {
                 badge.innerText = "Trưởng Trực"; badge.style.background = "#059669";
-                
-                // HIỂN THỊ KHU VỰC APP QR
-                document.getElementById("qrAppArea").style.display = "flex";
+                document.getElementById("mainAppArea").style.display = "block";
                 document.getElementById("accessDeniedArea").style.display = "none";
-                
-                // KÍCH HOẠT DỮ LIỆU TỪ GOOGLE SHEETS NẾU CHƯA LOAD
                 if(!isDataLoaded) loadInitialData(); 
             } else {
                 badge.innerText = "Người xem"; badge.style.background = "#64748b";
-                document.getElementById("qrAppArea").style.display = "none";
+                document.getElementById("mainAppArea").style.display = "none";
                 document.getElementById("accessDeniedArea").style.display = "flex";
             }
 
@@ -259,52 +260,68 @@
         }
 
 
-        // ================= LOGIC LÕI QUÉT QR =================
+        // ================= LOGIC ĐIỂM DANH & QUÉT QR =================
         let globalData = {}; 
         let currentSheetName = ""; 
         let usersData = []; 
-        let todayDateStr = "";
         let isProcessing = false; 
-        let isExpanded = true; 
-        let lastScannedId = null; 
         let isDataLoaded = false;
         
-        const html5QrCode = new Html5Qrcode("reader");
+        let html5QrCode;
 
         function getInitials(name) { return name && name.trim() !== "" ? name.trim().split(" ").pop().charAt(0).toUpperCase() : "?"; }
-        
-        function updateStatus(message, type) {
-            const statusEl = document.getElementById("status");
-            statusEl.innerHTML = type === 'loading' ? `<i class="fa-solid fa-spinner fa-spin me-2"></i> ${message}` : message;
-            statusEl.className = ""; 
-            if(type === 'success') statusEl.classList.add('status-success');
-            else if(type === 'error') statusEl.classList.add('status-error');
-            else if(type === 'loading') statusEl.classList.add('status-loading');
-            else statusEl.classList.add('status-default');
+
+        // Mở popup quét QR
+        function moModalQR() {
+            document.getElementById("qrModal").classList.add("active");
+            document.getElementById("scanStatus").innerText = "Đang khởi động camera...";
+            document.getElementById("scanStatus").className = "";
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            
+            const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+            
+            Html5Qrcode.getCameras().then(devices => {
+                if (devices && devices.length > 0) {
+                    let cameraId = devices[0].id; 
+                    for (let i = 0; i < devices.length; i++) {
+                        let camName = devices[i].label.toLowerCase();
+                        if (camName.includes("back") || camName.includes("sau") || camName.includes("environment")) { cameraId = devices[i].id; break; }
+                    }
+                    html5QrCode.start(cameraId, config, onScanSuccess)
+                    .then(() => {
+                        document.getElementById("scanStatus").innerText = "Sẵn sàng quét thẻ QR!";
+                        document.getElementById("scanStatus").className = "scan-success";
+                    })
+                    .catch(err => { console.log(err); document.getElementById("scanStatus").innerText = "Lỗi camera. Không thể bật."; document.getElementById("scanStatus").className = "scan-error"; });
+                }
+            }).catch(err => {
+                html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+                .catch(err2 => { document.getElementById("scanStatus").innerText = "Từ chối quyền camera!"; document.getElementById("scanStatus").className = "scan-error"; });
+            });
         }
 
-        function toggleList() {
-            isExpanded = !isExpanded;
-            document.getElementById("btnToggleList").innerHTML = isExpanded ? '<i class="fa-solid fa-compress me-1"></i> Thu gọn' : '<i class="fa-solid fa-expand me-1"></i> Mở rộng';
-            renderList();
+        // Đóng popup quét QR
+        function dongModalQR() {
+            document.getElementById("qrModal").classList.remove("active");
+            if (html5QrCode) {
+                try { html5QrCode.stop(); } catch(e){}
+            }
         }
 
         function onSheetChange() {
-            const select = document.getElementById("sheetSelect");
-            currentSheetName = select.value;
+            currentSheetName = document.getElementById("sheetSelect").value;
             usersData = globalData[currentSheetName] || [];
-            lastScannedId = null; 
-            renderList();
-            updateStatus(`Đã chuyển sang danh sách: ${currentSheetName}`, "default");
+            renderTable();
         }
 
         function loadInitialData() {
             fetch(SCRIPT_URL).then(res => res.json()).then(data => {
                 isDataLoaded = true;
-                todayDateStr = data.today;
                 globalData = data.data; 
-                
-                document.getElementById("todayDisplay").innerText = todayDateStr; 
+                document.getElementById("todayDisplay").innerText = data.today; 
                 
                 const select = document.getElementById("sheetSelect");
                 select.innerHTML = "";
@@ -318,120 +335,117 @@
                     currentSheetName = data.sheetNames[0];
                     usersData = globalData[currentSheetName] || [];
                 }
-
-                renderList();
-                startCamera();
-            }).catch(err => { updateStatus("⚠️ Lỗi kết nối máy chủ Google Sheets!", "error"); });
+                renderTable();
+            }).catch(err => { 
+                document.getElementById("userListTable").innerHTML = `<tr><td colspan="3" class="text-center py-4 text-danger fw-bold"><i class="fa-solid fa-triangle-exclamation me-2"></i> Lỗi tải dữ liệu từ Google Sheets.</td></tr>`;
+            });
         }
 
-        function renderList() {
-            const container = document.getElementById("userList");
-            container.innerHTML = "";
-            let displayUsers = usersData;
-            
-            // Lọc bỏ những dòng trống (không có Mã ID)
-            displayUsers = displayUsers.filter(u => u.id !== "");
+        // Đổ dữ liệu ra Bảng
+        function renderTable() {
+            const tbody = document.getElementById("userListTable");
+            tbody.innerHTML = "";
+            let displayUsers = usersData.filter(u => u.id !== ""); // Lọc bỏ dòng trống
 
-            if (!isExpanded) {
-                if (lastScannedId) displayUsers = displayUsers.filter(u => u.id === lastScannedId);
-                else displayUsers = [];
-            }
-            
             if (displayUsers.length === 0) {
-                if (!isExpanded) container.innerHTML = `<div style="text-align:center; padding: 25px 10px; color: var(--qr-text-muted); font-size: 13px; line-height: 1.6;">✨ Chế độ thu gọn.<br>Người vừa quét sẽ hiển thị tại đây!</div>`;
-                else container.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--qr-text-muted); font-size: 13px;">Danh sách trống</div>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-muted">Chưa có danh sách thiếu nhi trong đội này.</td></tr>`;
                 return;
             }
 
             displayUsers.forEach(user => {
-                const div = document.createElement("div");
-                div.className = `user-item ${user.checked ? 'active' : ''}`;
-                div.id = `user-${user.id}`;
-                div.innerHTML = `
-                    <div class="user-info-wrapper">
-                        <div class="avatar">${getInitials(user.name)}</div>
-                        <div class="user-info"><span class="user-name">${user.name}</span><span class="user-id">Mã: ${user.id}</span></div>
-                    </div>
-                    <label class="custom-checkbox-container">
-                        <input type="checkbox" ${user.checked ? 'checked' : ''} onchange="manualCheck('${user.id}', this.checked)">
-                        <span class="checkmark"></span>
-                    </label>`;
-                container.appendChild(div);
+                const tr = document.createElement("tr");
+                tr.id = `row-${user.id}`;
+                if(user.checked) tr.classList.add("is-present");
+
+                tr.innerHTML = `
+                    <td>
+                        <div class="avatar-name">
+                            <div class="avatar">${getInitials(user.name)}</div>
+                            <span class="fw-bold">${user.name}</span>
+                        </div>
+                    </td>
+                    <td><span class="badge bg-light text-secondary border">${user.id}</span></td>
+                    <td style="text-align: center;">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="chk-${user.id}" ${user.checked ? 'checked' : ''} onchange="manualCheck('${user.id}', this.checked)">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
-        function startCamera() {
-            document.getElementById("btn-fallback").style.display = "none";
-            updateStatus("Đang bật camera...", "loading");
-
-            const config = { fps: 10, qrbox: { width: 180, height: 180 } };
-
-            Html5Qrcode.getCameras().then(devices => {
-                if (devices && devices.length > 0) {
-                    let cameraId = devices[0].id; 
-                    for (let i = 0; i < devices.length; i++) {
-                        let camName = devices[i].label.toLowerCase();
-                        if (camName.includes("back") || camName.includes("sau") || camName.includes("environment")) { cameraId = devices[i].id; break; }
-                    }
-                    html5QrCode.start(cameraId, config, onScanSuccess)
-                    .then(() => updateStatus("📷 Sẵn sàng điểm danh!", "success"))
-                    .catch(err => { console.log(err); showFallback(); });
-                } else updateStatus("⚠️ Không tìm thấy thiết bị camera!", "error");
-            }).catch(err => {
-                html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
-                .catch(err2 => showFallback());
-            });
-        }
-
-        function showFallback() {
-            document.getElementById("btn-fallback").style.display = "block";
-            updateStatus("⚠️ Camera bị lỗi chặn. Chạm nút phía trên để thử lại.", "error");
-        }
-
+        // Xử lý khi Camera quét trúng QR
         function onScanSuccess(decodedText) {
             if (isProcessing) return; 
 
             let user = usersData.find(u => u.id === decodedText);
+            const statusEl = document.getElementById("scanStatus");
+
             if (user) {
-                if (user.checked) { updateStatus(`Mã [${decodedText}] đã điểm danh rồi!`, "loading"); return; }
+                if (user.checked) { 
+                    statusEl.innerText = `Mã [${decodedText}] đã được điểm danh!`; 
+                    statusEl.className = "";
+                    return; 
+                }
                 
                 isProcessing = true;
                 user.checked = true;
-                lastScannedId = decodedText; 
-                renderList(); 
                 
-                if (isExpanded) {
-                    const targetRow = document.getElementById(`user-${user.id}`);
-                    if (targetRow) document.getElementById("userList").scrollTo({ top: targetRow.offsetTop - 50, behavior: 'smooth' });
-                }
+                // Cập nhật giao diện bảng bên ngoài ngay lập tức
+                document.getElementById(`row-${user.id}`).classList.add("is-present");
+                document.getElementById(`chk-${user.id}`).checked = true;
+
+                // Thông báo trong Popup
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Điểm danh thành công: ${user.name}`;
+                statusEl.className = "scan-success";
 
                 // Phát tiếng bíp
                 let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3');
                 audio.play();
 
+                // Gửi dữ liệu ngầm lên Google Sheets
                 sendDataToSheet(decodedText, true);
-                setTimeout(() => { isProcessing = false; }, 1500); 
+                
+                setTimeout(() => { isProcessing = false; }, 1200); // Tránh quét đúp
             } else { 
-                updateStatus(`❌ Mã [${decodedText}] không có trong danh sách [${currentSheetName}]`, "error"); 
+                statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Lỗi: Mã [${decodedText}] không thuộc đội này!`;
+                statusEl.className = "scan-error";
+                
+                // Tiếng bíp báo lỗi
+                let errAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3');
+                errAudio.play();
+                
+                setTimeout(() => { 
+                    statusEl.innerText = "Sẵn sàng quét thẻ QR!"; 
+                    statusEl.className = "scan-success";
+                }, 2000);
             }
         }
 
-        function sendDataToSheet(qrCode, isChecked) {
-            updateStatus(`Đang ghi nhận: ${qrCode}...`, "loading");
-            fetch(SCRIPT_URL, { 
-                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, 
-                body: JSON.stringify({ qrCode: qrCode, checked: isChecked, sheetName: currentSheetName }) 
-            }).then(() => updateStatus(`✅ Điểm danh thành công mã: ${qrCode}`, "success"));
-        }
-
+        // Bấm Checkbox bằng tay
         function manualCheck(qrCode, isChecked) {
             let user = usersData.find(u => u.id === qrCode);
             if (user) {
                 user.checked = isChecked;
-                lastScannedId = qrCode; 
-                renderList();
+                if(isChecked) { document.getElementById(`row-${user.id}`).classList.add("is-present"); } 
+                else { document.getElementById(`row-${user.id}`).classList.remove("is-present"); }
             }
             sendDataToSheet(qrCode, isChecked);
+        }
+
+        // Gửi lệnh lên Google Apps Script
+        function sendDataToSheet(qrCode, isChecked) {
+            // Hiển thị trạng thái nhỏ góc phải (Tùy chọn)
+            console.log(`Đang lưu: ${qrCode}...`);
+            
+            fetch(SCRIPT_URL, { 
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, 
+                body: JSON.stringify({ qrCode: qrCode, checked: isChecked, sheetName: currentSheetName }) 
+            }).then(() => {
+                console.log(`Đã lưu thành công: ${qrCode}`);
+            }).catch(err => console.log("Lỗi mạng khi lưu", err));
         }
 
     </script>

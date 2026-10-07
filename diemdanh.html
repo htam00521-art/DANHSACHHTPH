@@ -17,13 +17,11 @@
     <!-- FIREBASE CHỈ DÙNG CHO AUTH VÀ ADMIN PHÂN QUYỀN ĐỘI TRƯỞNG -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <!-- THƯ VIỆN QUÉT QR -->
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
-        /* ================= STYLE NGUYÊN BẢN CỦA BẠN ================= */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
 
         body {
@@ -102,7 +100,6 @@
         .btn-custom-action.btn-quay-lai { background: linear-gradient(135deg, #475569, #64748b); }
         .btn-custom-action:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        /* NÚT QUÉT QR XANH DƯƠNG */
         .btn-scan-qr { background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; border: none; padding: 9px 18px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;}
         .btn-scan-qr:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
@@ -118,13 +115,12 @@
         .scan-success { background: #d1fae5 !important; color: #10b981 !important; }
         .scan-error { background: #fee2e2 !important; color: #ef4444 !important; }
 
-        /* VÙNG THÔNG BÁO CẤM TRUY CẬP */
         #accessDeniedArea { display: none; height: 70vh; text-align: center; flex-direction: column; align-items: center; justify-content: center; }
         .loading-screen { text-align: center; padding: 50px; font-size: 18px; color: #0D47A1; font-weight: 800;}
 
         @media (max-width: 768px) {
             .doi-grid { grid-template-columns: 1fr; }
-            .thieunhi-table th:nth-child(2), .thieunhi-table td:nth-child(2) { min-width: 120px !important; left: 40px !important; font-size: 13px; }
+            .thieunhi-table th:nth-child(2), .thieunhi-table td:nth-child(2) { min-width: 120px !important; left: 40px !important; font-size: 13px; white-space: pre-wrap;}
             .thieunhi-table th:nth-child(1), .thieunhi-table td:nth-child(1) { width: 40px !important; padding: 10px 5px; font-size: 12px; }
             .btn-action-group { justify-content: center; width: 100%; }
         }
@@ -216,7 +212,6 @@
                         </div>
                         <div class="btn-action-group">
                             <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
-                            
                             <!-- NÚT QUÉT QR MỚI -->
                             <button class="btn-scan-qr" onclick="moModalQR()"><i class="fa-solid fa-camera"></i> Quét mã QR</button>
                         </div>
@@ -237,7 +232,7 @@
         </div>
     </div>
 
-    <!-- MODAL QUÉT QR MỚI TÍCH HỢP -->
+    <!-- MODAL QUÉT QR NỔI TÍCH HỢP -->
     <div class="modal-overlay" id="qrModal" onclick="dongModalQR()">
         <div class="qr-modal-card" onclick="event.stopPropagation()">
             <h4 class="fw-bold text-primary mb-3"><i class="fa-solid fa-qrcode me-2"></i>Máy Quét Điểm Danh</h4>
@@ -252,7 +247,7 @@
 
     <script>
         // ================= ĐỊA CHỈ API CỦA GOOGLE SHEETS =================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbycKuZMHoihCcpHoWha-OzETn4mMIXZ6p4XcWRXl2Ck-kXnYYUQk6PTHDHPZVzIHNdh/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3wmVVTSfhfi3ViPbwPAuqCraHZsEmRRX2ZmKnvP6eQq8U9IGLKrpt9G7PpPBivK4J/exec"; 
         
         // ================= FIREBASE & AUTHENTICATION =================
         const firebaseConfig = {
@@ -411,7 +406,7 @@
             });
         }
 
-        // ================= VẼ BẢNG ĐIỂM DANH =================
+        // ================= VẼ BẢNG ĐIỂM DANH CHI TIẾT =================
         function moChiTietDoi(doiName, doiId) {
             currentSelectedDoi = doiName;
             document.getElementById("danhSachDoiSection").style.display = "none";
@@ -488,10 +483,13 @@
                     else document.getElementById(`row_${em.id}`).style.background = "transparent";
                 }
             }
+            
+            // Gửi dữ liệu định dạng text/plain để tránh lỗi CORS
             fetch(SCRIPT_URL, { 
-                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, 
+                method: "POST", 
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }) 
-            });
+            }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
         }
 
         // ================= QUÉT MÃ QR NỔI =================
@@ -551,10 +549,12 @@
 
                     let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'); audio.play();
 
+                    // Gửi dữ liệu bằng text/plain để vượt lỗi CORS
                     fetch(SCRIPT_URL, { 
-                        method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, 
+                        method: "POST", 
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
                         body: JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }) 
-                    });
+                    }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
                 }
             } else {
                 statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Lỗi: Không tìm thấy thẻ ID [${decodedText}]!`;

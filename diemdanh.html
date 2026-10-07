@@ -17,7 +17,6 @@
     <!-- FIREBASE CHỈ DÙNG CHO AUTH VÀ ADMIN PHÂN QUYỀN ĐỘI TRƯỞNG -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <!-- THƯ VIỆN QUÉT QR -->
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -474,7 +473,15 @@
             });
         }
 
-        // ================= GỬI DỮ LIỆU LÊN GOOGLE SHEETS BẰNG FORM (CHỐNG CORS) =================
+        // ================= HÀM PHÁT ÂM THANH BÍP AN TOÀN =================
+        function phatAmThanhBip() {
+            try {
+                let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3');
+                audio.play().catch(e => console.log("Trình duyệt chờ tương tác âm thanh"));
+            } catch(err) { console.log(err); }
+        }
+
+        // ================= GỬI DỮ LIỆU LÊN GOOGLE SHEETS =================
         function toggleDiemDanh(emId, ngay, isChecked) {
             let em = thieuNhiData[currentSelectedDoi].find(u => u.id === emId);
             if(em) {
@@ -484,15 +491,15 @@
                     else document.getElementById(`row_${em.id}`).style.background = "transparent";
                 }
             }
+
+            if(isChecked) {
+                phatAmThanhBip();
+            }
             
-            // Dùng URLSearchParams để đâm xuyên lỗi CORS
             const formData = new URLSearchParams();
             formData.append("data", JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }));
 
-            fetch(SCRIPT_URL, { 
-                method: "POST", 
-                body: formData 
-            }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
+            fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
         }
 
         // ================= QUÉT MÃ QR NỔI =================
@@ -550,21 +557,17 @@
                     statusEl.innerHTML = `<i class="fa-solid fa-bell-concierge"></i> Đã điểm danh: <strong>${em.name}</strong>`;
                     statusEl.className = "scan-success";
 
-                    let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'); audio.play();
+                    phatAmThanhBip();
 
-                    // Gửi URLSearchParams để chống lỗi bảo mật CORS
                     const formData = new URLSearchParams();
                     formData.append("data", JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }));
 
-                    fetch(SCRIPT_URL, { 
-                        method: "POST", 
-                        body: formData 
-                    }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
+                    fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
                 }
             } else {
                 statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Lỗi: Không tìm thấy thẻ ID [${decodedText}]!`;
                 statusEl.className = "scan-error";
-                let errAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3'); errAudio.play();
+                let errAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3'); errAudio.play().catch(e=>{});
             }
 
             setTimeout(() => { isProcessing = false; }, 1500); 

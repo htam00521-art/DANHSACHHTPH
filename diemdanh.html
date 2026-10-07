@@ -17,6 +17,7 @@
     <!-- FIREBASE CHỈ DÙNG CHO AUTH VÀ ADMIN PHÂN QUYỀN ĐỘI TRƯỞNG -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <!-- THƯ VIỆN QUÉT QR -->
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -473,7 +474,7 @@
             });
         }
 
-        // ================= GỬI DỮ LIỆU LÊN GOOGLE SHEETS =================
+        // ================= GỬI DỮ LIỆU LÊN GOOGLE SHEETS BẰNG FORM (CHỐNG CORS) =================
         function toggleDiemDanh(emId, ngay, isChecked) {
             let em = thieuNhiData[currentSelectedDoi].find(u => u.id === emId);
             if(em) {
@@ -484,11 +485,13 @@
                 }
             }
             
-            // Gửi dữ liệu định dạng text/plain để tránh lỗi CORS
+            // Dùng URLSearchParams để đâm xuyên lỗi CORS
+            const formData = new URLSearchParams();
+            formData.append("data", JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }));
+
             fetch(SCRIPT_URL, { 
                 method: "POST", 
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }) 
+                body: formData 
             }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
         }
 
@@ -549,11 +552,13 @@
 
                     let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'); audio.play();
 
-                    // Gửi dữ liệu bằng text/plain để vượt lỗi CORS
+                    // Gửi URLSearchParams để chống lỗi bảo mật CORS
+                    const formData = new URLSearchParams();
+                    formData.append("data", JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }));
+
                     fetch(SCRIPT_URL, { 
                         method: "POST", 
-                        headers: { "Content-Type": "text/plain;charset=utf-8" },
-                        body: JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }) 
+                        body: formData 
                     }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
                 }
             } else {

@@ -31,7 +31,7 @@
         .user-status { font-size: 14px; color: #333; display: flex; align-items: center; gap: 8px; font-weight: 600; }
         .user-avatar-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid #0D47A1; }
         .role-tag { padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #fff; }
-        .role-admin { background: #d32f2f; } .role-doitruong { background: #059669; } .role-viewer { background: #1976d2; }
+        .role-admin { background: #d32f2f; } .role-doitruong { background: #059669; } .role-viewer { background: #475569; }
         .btn-auth-action { background: #0D47A1; color: #fff; border: none; padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: 13px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
 
         .dashboard-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 20px; padding: 22px 26px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
@@ -63,8 +63,7 @@
         .doi-card p { color: #64748b; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
         
         .doi-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-        .btn-card-action { padding: 9px 24px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; width: 100%; justify-content: center; }
+        .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; width: 100%; justify-content: center; border: none; padding: 9px 24px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .diemdanh-detail-section { display: none; }
         .diemdanh-detail-section.active { display: block; }
@@ -110,7 +109,6 @@
         .btn-modal-action.btn-confirm { background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff; }
         .btn-modal-action.btn-dismiss { background: rgba(255, 255, 255, 0.12); color: #f8fafc; }
 
-        #accessDeniedArea { display: none; height: 70vh; text-align: center; flex-direction: column; align-items: center; justify-content: center; }
         .loading-screen { text-align: center; padding: 50px; font-size: 18px; color: #0D47A1; font-weight: 800; }
     </style>
 </head>
@@ -131,13 +129,7 @@
             </nav>
         </div>
 
-        <div id="accessDeniedArea">
-            <i class="fa-solid fa-lock" style="font-size: 80px; color: #ef4444; margin-bottom: 20px;"></i>
-            <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">KHU VỰC BẢO MẬT</h2>
-            <p style="color: #64748b; font-size: 16px;">Chức năng này chỉ dành cho Admin và Huynh trưởng.</p>
-        </div>
-
-        <div id="mainAdminArea" style="display: none;">
+        <div id="mainAdminArea">
             <div class="auth-bar">
                 <div class="user-status d-flex align-items-center gap-2">
                     <img id="userAvatarMini" class="user-avatar-mini" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar">
@@ -204,8 +196,8 @@
                         </div>
                         <div class="btn-action-group">
                             <button class="btn-custom-action btn-quay-lai" onclick="quayVeDanhSachDoi()"><i class="fa-solid fa-arrow-left me-1"></i> Quay lại</button>
-                            <button class="btn-custom-action btn-them-ngay" onclick="themNgayThuCong()"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày</button>
-                            <button class="btn-scan-qr" onclick="moModalQR()"><i class="fa-solid fa-camera"></i> Quét mã QR</button>
+                            <button class="btn-custom-action btn-them-ngay" id="btnThemNgay" onclick="themNgayThuCong()" style="display:none;"><i class="fa-solid fa-calendar-plus me-1"></i> Thêm Ngày</button>
+                            <button class="btn-scan-qr" id="btnScanQR" onclick="moModalQR()" style="display:none;"><i class="fa-solid fa-camera"></i> Quét mã QR</button>
                         </div>
                     </div>
 
@@ -320,7 +312,7 @@
                 else {
                     for (let id in doiTruongMap) {
                         const info = doiTruongMap[id] || {};
-                        if ((info.emailDt && info.emailDt.toLowerCase() === email) || (info.emailDp && info.emailDp.toLowerCase() === email)) {
+                        if ((info.emailDt && info.emailDt.toLowerCase().trim() === email) || (info.emailDp && info.emailDp.toLowerCase().trim() === email)) {
                             role = "doitruong"; break;
                         }
                     }
@@ -348,21 +340,15 @@
                 badge.classList.add("role-admin"); badge.innerText = "Admin Toàn Quyền";
                 if(adminConfigBtn) adminConfigBtn.style.display = "inline-flex";
             } else if (currentUser.role === "doitruong") {
-                badge.classList.add("role-doitruong"); badge.innerText = "Đội Trưởng";
+                badge.classList.add("role-doitruong"); badge.innerText = "Đội Trưởng / Phó";
                 if(adminConfigBtn) adminConfigBtn.style.display = "none";
             } else {
                 badge.classList.add("role-viewer"); badge.innerText = "Người xem";
                 if(adminConfigBtn) adminConfigBtn.style.display = "none";
             }
 
-            if (currentUser.role === "admin" || currentUser.role === "doitruong") {
-                document.getElementById("mainAdminArea").style.display = "block";
-                document.getElementById("accessDeniedArea").style.display = "none";
-                if(!isDataLoaded) fetchGoogleSheetsData(); 
-            } else {
-                document.getElementById("mainAdminArea").style.display = "none";
-                document.getElementById("accessDeniedArea").style.display = "flex";
-            }
+            if(!isDataLoaded) fetchGoogleSheetsData();
+            kiemTraQuyenThaoTacToanBo();
 
             document.getElementById("googleBtnContainer").style.display = currentUser.email ? "none" : "block";
             document.getElementById("logoutBtn").style.display = currentUser.email ? "inline-flex" : "none";
@@ -370,13 +356,26 @@
 
         function checkQuyenSuaDoi(doiName) {
             if (currentUser.role === "admin") return true;
-            let doiObj = danhSachDoi.find(d => d.name === doiName);
-            if(doiObj && currentUser.role === "doitruong") {
-                const info = doiTruongMap[doiObj.id] || {};
-                const myEmail = currentUser.email.toLowerCase();
-                if ((info.emailDt && info.emailDt.toLowerCase() === myEmail) || (info.emailDp && info.emailDp.toLowerCase() === myEmail)) return true;
+            if (currentUser.role === "doitruong") {
+                let doiObj = danhSachDoi.find(d => d.name === doiName);
+                if (doiObj) {
+                    const info = doiTruongMap[doiObj.id] || {};
+                    const myEmail = (currentUser.email || "").toLowerCase().trim();
+                    const emailDt = (info.emailDt || "").toLowerCase().trim();
+                    const emailDp = (info.emailDp || "").toLowerCase().trim();
+                    if (myEmail && (myEmail === emailDt || myEmail === emailDp)) return true;
+                }
             }
             return false;
+        }
+
+        function kiemTraQuyenThaoTacToanBo() {
+            const btnThemNgay = document.getElementById("btnThemNgay");
+            const btnScan = document.getElementById("btnScanQR");
+            let duocPhep = checkQuyenSuaDoi(currentSelectedDoi);
+
+            if (btnThemNgay) btnThemNgay.style.display = duocPhep ? "inline-flex" : "none";
+            if (btnScan) btnScan.style.display = duocPhep ? "inline-flex" : "none";
         }
 
         function fetchGoogleSheetsData() {
@@ -428,7 +427,7 @@
                     <span class="doipho-lbl"><i class="fa-solid fa-user-shield me-1"></i> ĐP: ${tenDp}</span>
                     <p>Sĩ số: <strong>${listEm.length} em</strong></p>
                     <div class="doi-card-actions">
-                        <button class="btn-card-action btn-diem-danh" onclick="moChiTietDoi('${doi.name}', ${doi.id})"><i class="fa-solid fa-clipboard-user"></i> Điểm danh</button>
+                        <button class="btn-diem-danh" onclick="moChiTietDoi('${doi.name}', ${doi.id})"><i class="fa-solid fa-clipboard-user me-1"></i> Điểm danh</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -445,6 +444,7 @@
             const info = doiTruongMap[doiId] || {};
             document.getElementById("currentDoiBanCanSu").innerHTML = `Đội trưởng: ${info.dt || 'Chưa có'} | Đội phó: ${info.dp || 'Chưa có'}`;
 
+            kiemTraQuyenThaoTacToanBo();
             hienThiChiTietDoi();
         }
 
@@ -496,7 +496,7 @@
                             <input type="checkbox" class="sheet-checkbox" id="chk_${em.id}_${ngay}" 
                                    ${isCoMat ? 'checked' : ''} 
                                    ${duocPhepTick ? '' : 'disabled'}
-                                   title="${isHomNay ? 'Điểm danh ngày hôm nay' : 'Chỉ được phép điểm danh đúng ngày hôm nay'}"
+                                   title="${isHomNay ? 'Điểm danh ngày hôm nay' : 'Chỉ điểm danh được đúng ngày hôm nay'}"
                                    onchange="toggleDiemDanh('${em.id}', '${ngay}', this.checked)">
                         </td>
                     `;
@@ -525,6 +525,8 @@
         }
 
         function themNgayThuCong() {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền thêm ngày cho đội này!");
+
             let inputDate = prompt("Nhập ngày điểm danh mới (Định dạng DD/MM/YYYY):", todayDateStr);
             if (!inputDate) return;
             inputDate = inputDate.trim();
@@ -554,6 +556,11 @@
         }
 
         function toggleDiemDanh(emId, ngay, isChecked) {
+            if (!checkQuyenSuaDoi(currentSelectedDoi)) {
+                alert("Bạn không có quyền sửa điểm danh đội này!");
+                hienThiChiTietDoi();
+                return;
+            }
             if (ngay !== todayDateStr) {
                 alert("Hệ thống chỉ cho phép điểm danh dữ liệu trong ngày hôm nay!");
                 hienThiChiTietDoi();

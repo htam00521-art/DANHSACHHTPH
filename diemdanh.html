@@ -157,7 +157,6 @@
                 </div>
 
                 <div class="stats-overview-grid">
-                    <!-- THẺ 1: TỔNG THIẾU NHI -->
                     <div class="overview-card">
                         <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
                         <div class="overview-info">
@@ -165,8 +164,6 @@
                             <div class="lbl">TỔNG THIẾU NHI TOÀN ĐOÀN</div>
                         </div>
                     </div>
-
-                    <!-- THẺ 2: THỐNG KÊ SĨ SỐ THEO NGÀNH -->
                     <div class="overview-card">
                         <div class="overview-icon" style="background: linear-gradient(135deg, #059669, #34d399);"><i class="fa-solid fa-layer-group"></i></div>
                         <div class="overview-info" style="width: 100%;">
@@ -174,8 +171,6 @@
                             <div class="sub-stat-list" id="statNganhList">Đang tải...</div>
                         </div>
                     </div>
-
-                    <!-- THẺ 3: THỐNG KÊ SỐ ĐỘI THEO NGÀNH -->
                     <div class="overview-card">
                         <div class="overview-icon" style="background: linear-gradient(135deg, #d97706, #fbbf24);"><i class="fa-solid fa-shield-halved"></i></div>
                         <div class="overview-info" style="width: 100%;">
@@ -415,16 +410,12 @@
                     let countEm = (thieuNhiData[sheetName] || []).length;
                     totalEm += countEm;
 
-                    // Nhận diện ngành từ tên Sheet (Ví dụ: "Ấu 1", "Thiếu 2", "Nghĩa Nam", hoặc mặc định dựa vào từ khóa)
                     let nganh = "Khác";
                     let sLower = sheetName.toLowerCase();
                     if (sLower.includes("ấu")) nganh = "Ngành Ấu";
                     else if (sLower.includes("thiếu")) nganh = "Ngành Thiếu";
                     else if (sLower.includes("nghĩa")) nganh = "Ngành Nghĩa";
-                    else {
-                        // Nếu sheet chỉ đặt tên là "Đội 1", ta phân loại theo quy luật hoặc tên chung
-                        nganh = "Đoàn Sinh";
-                    }
+                    else nganh = "Đoàn Sinh";
 
                     nganhThieuNhiCount[nganh] = (nganhThieuNhiCount[nganh] || 0) + countEm;
                     nganhDoiCount[nganh] = (nganhDoiCount[nganh] || 0) + 1;
@@ -432,18 +423,12 @@
 
                 document.getElementById("statTongThieuNhi").innerText = `${totalEm} em`;
 
-                // Render thống kê số lượng thiếu nhi theo ngành
                 let nganhHtml = "";
-                for (let nganh in nganhThieuNhiCount) {
-                    nganhHtml += `<div>• ${nganh}: <strong style="color: #059669;">${nganhThieuNhiCount[nganh]} em</strong></div>`;
-                }
+                for (let nganh in nganhThieuNhiCount) nganhHtml += `<div>• ${nganh}: <strong style="color: #059669;">${nganhThieuNhiCount[nganh]} em</strong></div>`;
                 document.getElementById("statNganhList").innerHTML = nganhHtml || "Chưa phân ngành";
 
-                // Render thống kê số đội theo ngành
                 let doiHtml = "";
-                for (let nganh in nganhDoiCount) {
-                    doiHtml += `<div>• ${nganh}: <strong style="color: #d97706;">${nganhDoiCount[nganh]} đội</strong></div>`;
-                }
+                for (let nganh in nganhDoiCount) doiHtml += `<div>• ${nganh}: <strong style="color: #d97706;">${nganhDoiCount[nganh]} đội</strong></div>`;
                 document.getElementById("statSoDoiList").innerHTML = doiHtml || "Chưa phân đội";
 
                 document.getElementById("loadingGrid").style.display = "none";
@@ -498,6 +483,30 @@
             document.getElementById("chiTietDoiSection").classList.remove("active");
             document.getElementById("danhSachDoiSection").style.display = "block";
             fetchGoogleSheetsData();
+        }
+
+        // Tự động cộng tổng trên giao diện (Realtime Update)
+        function capNhatTongSoUi() {
+            const danhSachEm = thieuNhiData[currentSelectedDoi] || [];
+            let tongSoNguoiMoiNgay = new Array(danhSachNgayLe.length).fill(0);
+
+            danhSachEm.forEach(em => {
+                let tongNgayDiLeEm = 0;
+                const diemsDanhMap = em.diemDanh || {};
+                danhSachNgayLe.forEach((ngay, nIdx) => {
+                    if (diemsDanhMap[ngay]) {
+                        tongNgayDiLeEm++;
+                        tongSoNguoiMoiNgay[nIdx]++;
+                    }
+                });
+                let cellTotal = document.getElementById(`total_ngay_${em.id}`);
+                if(cellTotal) cellTotal.innerText = tongNgayDiLeEm;
+            });
+
+            danhSachNgayLe.forEach((ngay, nIdx) => {
+                let footTotal = document.getElementById(`foot_total_${nIdx}`);
+                if(footTotal) footTotal.innerText = tongSoNguoiMoiNgay[nIdx];
+            });
         }
 
         function hienThiChiTietDoi() {
@@ -556,15 +565,15 @@
                     <td class="fw-bold text-muted text-center">${idx + 1}</td>
                     <td><span class="fw-bold" style="color: #f8fafc; font-size: 16px;">${em.name}</span><br><span style="font-size:11px; color:#94a3b8">ID: ${em.id || 'N/A'}</span></td>
                     ${colsHTML}
-                    <td style="text-align: center;"><span style="color: #38bdf8; font-weight: 800; font-size: 18px;">${tongNgayDiLeEm}</span></td>
+                    <td style="text-align: center;"><span id="total_ngay_${em.id}" style="color: #38bdf8; font-weight: 800; font-size: 18px;">${tongNgayDiLeEm}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
 
             const footerRow = document.getElementById("tableFooterRow");
             let footerHTML = `<td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>`;
-            tongSoNguoiMoiNgay.forEach(sum => {
-                footerHTML += `<td style="text-align: center; color: #38ef7d; font-size: 16px; font-weight: 800;">${sum}</td>`;
+            tongSoNguoiMoiNgay.forEach((sum, nIdx) => {
+                footerHTML += `<td style="text-align: center; color: #38ef7d; font-size: 16px; font-weight: 800;" id="foot_total_${nIdx}">${sum}</td>`;
             });
             footerHTML += `<td style="text-align: center; color: #fde047; font-size: 16px;">-</td>`;
             footerRow.innerHTML = footerHTML;
@@ -588,29 +597,21 @@
             .then(() => {
                 alert("Đã tạo cột ngày " + inputDate + " thành công!");
                 hienThiChiTietDoi();
-            })
-            .catch(() => {
-                hienThiChiTietDoi();
-            });
+            }).catch(() => { hienThiChiTietDoi(); });
         }
 
         function phatAmThanhBip() {
-            try {
-                let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3');
-                audio.play().catch(e => {});
-            } catch(err) {}
+            try { let audio = new Audio('https://www.soundjay.com/buttons/sounds/beep-07a.mp3'); audio.play().catch(e => {}); } catch(err) {}
         }
 
         function toggleDiemDanh(emId, ngay, isChecked) {
             if (!checkQuyenSuaDoi(currentSelectedDoi)) {
                 alert("Bạn không có quyền sửa điểm danh đội này!");
-                hienThiChiTietDoi();
-                return;
+                capNhatTongSoUi(); return;
             }
             if (ngay !== todayDateStr) {
                 alert("Hệ thống chỉ cho phép điểm danh dữ liệu trong ngày hôm nay!");
-                hienThiChiTietDoi();
-                return;
+                capNhatTongSoUi(); return;
             }
 
             let em = thieuNhiData[currentSelectedDoi].find(u => u.id === emId);
@@ -622,16 +623,15 @@
             }
 
             if(isChecked) { phatAmThanhBip(); }
+            capNhatTongSoUi(); // Cập nhật tổng ngay lập tức trên màn hình
             
             const formData = new URLSearchParams();
             formData.append("data", JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }));
-
             fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
         }
 
         function moModalQR() {
             if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền điểm danh đội này!");
-            
             document.getElementById("qrModal").classList.add("active");
             document.getElementById("scanStatus").innerText = "Đang khởi động camera...";
             document.getElementById("scanStatus").className = "";
@@ -658,7 +658,7 @@
         function dongModalQR() {
             document.getElementById("qrModal").classList.remove("active");
             if (html5QrCode) { try { html5QrCode.stop(); } catch(e){} }
-            hienThiChiTietDoi();
+            capNhatTongSoUi();
         }
 
         function onScanSuccess(decodedText) {
@@ -676,7 +676,6 @@
                     statusEl.className = "scan-success";
                 } else {
                     em.diemDanh[todayDateStr] = true;
-                    
                     const checkbox = document.getElementById(`chk_${em.id}_${todayDateStr}`);
                     if(checkbox) checkbox.checked = true;
                     const row = document.getElementById(`row_${em.id}`);
@@ -684,12 +683,11 @@
 
                     statusEl.innerHTML = `<i class="fa-solid fa-bell-concierge"></i> Điểm danh thành công: <strong>${em.name}</strong>`;
                     statusEl.className = "scan-success";
-
                     phatAmThanhBip();
+                    capNhatTongSoUi(); // Cập nhật tổng trên web ngay
 
                     const formData = new URLSearchParams();
                     formData.append("data", JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }));
-
                     fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
                 }
             } else {
@@ -697,7 +695,6 @@
                 statusEl.className = "scan-error";
                 let errAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3'); errAudio.play().catch(e=>{});
             }
-
             setTimeout(() => { isProcessing = false; }, 1500); 
         }
 
@@ -706,7 +703,6 @@
             const container = document.getElementById("globalSearchResultContainer");
             if (!container) return;
             container.innerHTML = "";
-
             if (!keyword) return;
 
             let matches = [];
@@ -716,12 +712,9 @@
                     if (em.name.toLowerCase().includes(keyword) || em.id.toLowerCase().includes(keyword)) {
                         const diemsDanhMap = em.diemDanh || {};
                         let di = 0;
-                        danhSachNgayLe.forEach(ngay => {
-                            if (diemsDanhMap[ngay] === true) di++;
-                        });
+                        danhSachNgayLe.forEach(ngay => { if (diemsDanhMap[ngay] === true) di++; });
                         let tongSoNgayLe = danhSachNgayLe.length;
                         let vang = tongSoNgayLe - di;
-
                         matches.push({ em, doiName: doi.name, stats: { di, vang } });
                     }
                 });

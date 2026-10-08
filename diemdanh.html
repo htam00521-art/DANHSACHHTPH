@@ -48,7 +48,6 @@
         .search-bar-wrap input { width: 100%; padding: 12px 20px 12px 46px; border-radius: 30px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 15px; outline: none; font-weight: 600; color: #0f172a; }
         .search-bar-wrap i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #0072ff; }
         
-        /* KẾT QUẢ TÌM KIẾM CHI TIẾT */
         .search-result-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px 20px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; color: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
         .search-result-stats { display: flex; gap: 8px; font-size: 13px; font-weight: 700; flex-wrap: wrap; align-items: center; margin-top: 4px; }
         .badge-s-di { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 8px; } 
@@ -64,9 +63,8 @@
         .doi-card p { color: #64748b; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
         
         .doi-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-        .btn-card-action { padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-xem-ds { background: #475569; color: #fff; }
-        .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; }
+        .btn-card-action { padding: 9px 24px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; width: 100%; justify-content: center; }
 
         .diemdanh-detail-section { display: none; }
         .diemdanh-detail-section.active { display: block; }
@@ -84,7 +82,6 @@
         .thieunhi-table tbody td:nth-child(2), .thieunhi-table thead th:nth-child(2) { position: sticky; left: 50px; z-index: 11; border-right: 2px solid #38bdf8; }
         .thieunhi-table thead th:nth-child(1), .thieunhi-table thead th:nth-child(2) { z-index: 15; background: #0f172a; }
         
-        /* Cố định cột tổng số ngày đi lễ ở góc phải hoặc cuối bảng */
         .thieunhi-table th:last-child, .thieunhi-table td:last-child { position: sticky; right: 0; background: #1e293b; z-index: 12; text-align: center; border-left: 2px solid #38bdf8; }
 
         .sheet-checkbox { width: 22px; height: 22px; border: 2px solid #38bdf8; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; accent-color: #0072ff; }
@@ -164,7 +161,7 @@
             <div id="danhSachDoiSection">
                 <div class="dashboard-header">
                     <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Thiếu Nhi</h2>
-                    <p>Danh sách các đội, sĩ số tổng quan và tra cứu nhanh thiếu nhi trong họ đạo</p>
+                    <p>Danh sách các đội, sĩ số tổng quan và tra cứu thiếu nhi trong họ đạo</p>
                 </div>
 
                 <div class="stats-overview-grid">
@@ -182,9 +179,8 @@
                     </div>
                 </div>
 
-                <!-- TÌM KIẾM CHI TIẾT THÔNG TIN THIẾU NHI -->
                 <div class="search-panel-global">
-                    <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu thiếu nhi trong họ đạo</h4>
+                    <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu các em thiếu nhi trong họ đạo</h4>
                     <div class="search-bar-wrap">
                         <i class="fa-solid fa-search"></i>
                         <input type="text" id="globalSearchInput" placeholder="Nhập tên thiếu nhi để tìm kiếm..." oninput="xuLyTimKiemToanDoan()">
@@ -386,7 +382,7 @@
         function fetchGoogleSheetsData() {
             fetch(SCRIPT_URL).then(res => res.json()).then(data => {
                 isDataLoaded = true;
-                todayDateStr = data.today; // Đã là định dạng dd/MM/yyyy
+                todayDateStr = data.today;
                 danhSachNgayLe = data.dates || [];
                 thieuNhiData = data.data || {};
                 
@@ -432,7 +428,6 @@
                     <span class="doipho-lbl"><i class="fa-solid fa-user-shield me-1"></i> ĐP: ${tenDp}</span>
                     <p>Sĩ số: <strong>${listEm.length} em</strong></p>
                     <div class="doi-card-actions">
-                        <button class="btn-card-action btn-xem-ds" onclick="alert('Tính năng đang cập nhật')"><i class="fa-solid fa-address-book"></i> Xem danh sách</button>
                         <button class="btn-card-action btn-diem-danh" onclick="moChiTietDoi('${doi.name}', ${doi.id})"><i class="fa-solid fa-clipboard-user"></i> Điểm danh</button>
                     </div>
                 `;
@@ -493,7 +488,6 @@
                         tongSoNguoiMoiNgay[nIdx]++;
                     }
 
-                    // CHỈ CHO PHÉP TÍCH ĐÚNG NGÀY HÔM NAY (todayDateStr), CÁC NGÀY KHÁC BỊ KHÓA
                     let isHomNay = (ngay === todayDateStr);
                     let duocPhepTick = duocPhepSua && isHomNay;
 
@@ -521,7 +515,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Hiển thị hàng tổng kết phía dưới cùng
             const footerRow = document.getElementById("tableFooterRow");
             let footerHTML = `<td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>`;
             tongSoNguoiMoiNgay.forEach(sum => {
@@ -561,7 +554,6 @@
         }
 
         function toggleDiemDanh(emId, ngay, isChecked) {
-            // Chặn tuyệt đối nếu không phải ngày hôm nay
             if (ngay !== todayDateStr) {
                 alert("Hệ thống chỉ cho phép điểm danh dữ liệu trong ngày hôm nay!");
                 hienThiChiTietDoi();
@@ -584,7 +576,6 @@
             fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
         }
 
-        // ================= QUÉT MÃ QR (CHỈ QUÉT ĐÚNG HÔM NAY) =================
         function moModalQR() {
             if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền điểm danh đội này!");
             
@@ -657,7 +648,6 @@
             setTimeout(() => { isProcessing = false; }, 1500); 
         }
 
-        // ================= TÌM KIẾM CHI TIẾT TOÀN ĐOÀN =================
         function xuLyTimKiemToanDoan() {
             const keyword = document.getElementById("globalSearchInput").value.toLowerCase().trim();
             const container = document.getElementById("globalSearchResultContainer");
@@ -709,7 +699,6 @@
             });
         }
 
-        // ================= ADMIN QUẢN LÝ ĐỘI =================
         function moModalAdminDoi() {
             renderAdminDoiForm();
             document.getElementById("modalAdminDoi").classList.add("active");

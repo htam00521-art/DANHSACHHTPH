@@ -48,7 +48,6 @@
         .search-bar-wrap input { width: 100%; padding: 12px 20px 12px 46px; border-radius: 30px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 15px; outline: none; font-weight: 600; color: #0f172a; }
         .search-bar-wrap i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #0072ff; }
 
-        /* KẾT QUẢ TÌM KIẾM CHI TIẾT */
         #searchResultsBox { display: none; margin-top: 15px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 16px; max-height: 250px; overflow-y: auto; }
         .search-result-item { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
         .search-result-item:last-child { border-bottom: none; }
@@ -452,7 +451,6 @@
             let duocPhepSua = checkQuyenSuaDoi(currentSelectedDoi);
             const headerRow = document.getElementById("tableHeaderRow");
             
-            // Thêm cột "Tổng số buổi" ở ngoài cùng bên phải
             let headerHTML = `<th style="width: 50px; text-align: center;">STT</th><th style="min-width: 180px;">Thánh Họ Và Tên</th>`;
             danhSachNgayLe.forEach(ngay => {
                 headerHTML += `<th style="width: 120px; text-align: center; font-size: 13px;">${ngay}</th>`;
@@ -472,7 +470,6 @@
                 return;
             }
 
-            // Mảng lưu tổng số người đi lễ cho từng ngày
             let tongSoNguoiTheoNgay = {};
             danhSachNgayLe.forEach(ngay => { tongSoNguoiTheoNgay[ngay] = 0; });
 
@@ -497,7 +494,6 @@
                     `;
                 });
 
-                // Hiển thị tổng số buổi có mặt ở cột cuối hàng
                 colsHTML += `<td style="text-align: center; font-weight: 800; color: #38bdf8;">${tongSoBuoiCoMat} buổi</td>`;
 
                 const tr = document.createElement("tr");
@@ -512,7 +508,6 @@
                 tbody.appendChild(tr);
             });
 
-            // Vẽ hàng tổng kết dưới cùng hiển thị tổng số người đi lễ trong ngày
             let footerHTML = `<tr><td colspan="2" style="background: #1e293b; color: #fde047; font-weight: 800; text-align: right;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>`;
             danhSachNgayLe.forEach(ngay => {
                 footerHTML += `<td style="background: #1e293b; color: #34d399; font-weight: 800; text-align: center;">${tongSoNguoiTheoNgay[ngay] || 0} em</td>`;
@@ -521,7 +516,7 @@
             tfoot.innerHTML = footerHTML;
         }
 
-        // ================= TÍNH NĂNG THÊM NGÀY HOẶC TẠO LẦN 2 =================
+        // ================= THÊM NGÀY HOẶC TẠO LẦN 2 =================
         function themNgayThuCong() {
             let inputDate = prompt("Nhập ngày hoặc đợt điểm danh mới (Định dạng: dd/MM/yyyy, VD: 08/10/2026 hoặc 08/10/2026 lần 2):", todayDateStr);
             if (!inputDate) return;
@@ -556,7 +551,6 @@
         }
 
         function toggleDiemDanh(emId, ngay, isChecked) {
-            // Quy tắc: Chỉ cho phép điểm danh đúng vào ngày hiện tại/đang chọn, chặn điểm danh quá khứ/tương lai nếu chưa mở ngày đó
             let em = thieuNhiData[currentSelectedDoi].find(u => u.id === emId);
             if(em) {
                 if(!em.diemDanh) em.diemDanh = {};
@@ -576,7 +570,7 @@
             setTimeout(() => { hienThiChiTietDoi(); }, 400);
         }
 
-        // ================= TÌM KIẾM THÔNG MINH HIỂN THỊ CHI TIẾT =================
+        // ================= TÌM KIẾM THÔNG MINH =================
         function xuLyTimKiem(keyword) {
             keyword = keyword.toLowerCase().trim();
             const box = document.getElementById("searchResultsBox");
@@ -648,7 +642,7 @@
                     }
                     html5QrCode.start(cameraId, config, onScanSuccess)
                     .then(() => {
-                        document.getElementById("scanStatus").innerHTML = `<i class="fa-solid fa-camera"></i> Sẵn sàng quét (Ngày: ${todayDateStr})!`;
+                        document.getElementById("scanStatus").innerHTML = `<i class="fa-solid fa-camera"></i> Sẵn sàng quét (Đợt: ${todayDateStr})!`;
                         document.getElementById("scanStatus").className = "scan-success";
                     }).catch(err => { document.getElementById("scanStatus").innerText = "Lỗi camera!"; document.getElementById("scanStatus").className = "scan-error"; });
                 }

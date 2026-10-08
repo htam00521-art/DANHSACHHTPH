@@ -47,10 +47,12 @@
         .search-bar-wrap { position: relative; }
         .search-bar-wrap input { width: 100%; padding: 12px 20px 12px 46px; border-radius: 30px; border: 1px solid #cbd5e1; background: #f8fafc; font-size: 15px; outline: none; font-weight: 600; color: #0f172a; }
         .search-bar-wrap i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #0072ff; }
-
-        #searchResultsBox { display: none; margin-top: 15px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 16px; max-height: 250px; overflow-y: auto; }
-        .search-result-item { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .search-result-item:last-child { border-bottom: none; }
+        
+        /* KẾT QUẢ TÌM KIẾM CHI TIẾT */
+        .search-result-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px 20px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; color: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .search-result-stats { display: flex; gap: 8px; font-size: 13px; font-weight: 700; flex-wrap: wrap; align-items: center; margin-top: 4px; }
+        .badge-s-di { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 8px; } 
+        .badge-s-vang { background: #fee2e2; color: #b91c1c; padding: 3px 8px; border-radius: 8px; }
 
         .section-heading { color: #0D47A1; font-size: 20px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
         .doi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; margin-bottom: 30px; }
@@ -72,7 +74,7 @@
         .doi-header-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.2); }
         .doi-header-bar h3 { color: #fde047; font-size: 20px; font-weight: 800; }
         
-        .table-responsive { max-height: 62vh; overflow: auto; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.6); }
+        .table-responsive { max-height: 65vh; overflow: auto; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(15,23,42,0.6); }
         .thieunhi-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 15px; min-width: 800px; }
         .thieunhi-table th { background: #1e293b; color: #38bdf8; font-weight: 700; padding: 12px 14px; text-align: left; }
         .thieunhi-table td { background: #0f172a; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); vertical-align: middle; }
@@ -81,8 +83,13 @@
         .thieunhi-table tbody td:nth-child(1), .thieunhi-table thead th:nth-child(1) { position: sticky; left: 0; z-index: 11; }
         .thieunhi-table tbody td:nth-child(2), .thieunhi-table thead th:nth-child(2) { position: sticky; left: 50px; z-index: 11; border-right: 2px solid #38bdf8; }
         .thieunhi-table thead th:nth-child(1), .thieunhi-table thead th:nth-child(2) { z-index: 15; background: #0f172a; }
-        .sheet-checkbox { width: 22px; height: 22px; border: 2px solid #38bdf8; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; accent-color: #0072ff; }
         
+        /* Cố định cột tổng số ngày đi lễ ở góc phải hoặc cuối bảng */
+        .thieunhi-table th:last-child, .thieunhi-table td:last-child { position: sticky; right: 0; background: #1e293b; z-index: 12; text-align: center; border-left: 2px solid #38bdf8; }
+
+        .sheet-checkbox { width: 22px; height: 22px; border: 2px solid #38bdf8; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; accent-color: #0072ff; }
+        .sheet-checkbox:disabled { opacity: 0.3; cursor: not-allowed; border-color: #475569; }
+
         .btn-action-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .btn-custom-action { background: linear-gradient(135deg, #059669, #34d399); color: white; border: none; padding: 9px 16px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; }
         .btn-custom-action.btn-quay-lai { background: linear-gradient(135deg, #475569, #64748b); }
@@ -104,7 +111,7 @@
 
         .btn-modal-action { padding: 12px 28px; font-size: 15px; font-weight: 800; border-radius: 50px; cursor: pointer; border: none; }
         .btn-modal-action.btn-confirm { background: linear-gradient(135deg, #0072ff, #00c6ff); color: #fff; }
-        .btn-modal-action.btn-dismiss { background: rgba(255,255,255,0.12); color: #f8fafc; }
+        .btn-modal-action.btn-dismiss { background: rgba(255, 255, 255, 0.12); color: #f8fafc; }
 
         #accessDeniedArea { display: none; height: 70vh; text-align: center; flex-direction: column; align-items: center; justify-content: center; }
         .loading-screen { text-align: center; padding: 50px; font-size: 18px; color: #0D47A1; font-weight: 800; }
@@ -153,7 +160,7 @@
                 </div>
             </div>
 
-            <!-- GIAO DIỆN TỔNG QUAN & TÌM KIẾM THÔNG MINH -->
+            <!-- GIAO DIỆN TỔNG QUAN -->
             <div id="danhSachDoiSection">
                 <div class="dashboard-header">
                     <h2><i class="fa-solid fa-graduation-cap" style="color: #0072ff;"></i> Quản Lý & Điểm Danh Thiếu Nhi</h2>
@@ -175,14 +182,14 @@
                     </div>
                 </div>
 
-                <!-- TÌM KIẾM THÔNG MINH HIỂN THỊ RÕ THÔNG TIN & SỐ LẦN CÓ MẶT/VẮNG -->
+                <!-- TÌM KIẾM CHI TIẾT THÔNG TIN THIẾU NHI -->
                 <div class="search-panel-global">
                     <h4 style="color: #0052d4; font-size: 16px; font-weight: 800; margin-bottom: 10px;"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra cứu đoàn sinh trong họ đạo</h4>
                     <div class="search-bar-wrap">
                         <i class="fa-solid fa-search"></i>
-                        <input type="text" id="globalSearchInput" placeholder="Nhập tên thiếu nhi để xem thông tin, số buổi có mặt và vắng mặt..." oninput="xuLyTimKiem(this.value)">
+                        <input type="text" id="globalSearchInput" placeholder="Nhập tên thiếu nhi để tìm kiếm..." oninput="xuLyTimKiemToanDoan()">
                     </div>
-                    <div id="searchResultsBox"></div>
+                    <div id="globalSearchResultContainer"></div>
                 </div>
 
                 <div class="section-heading"><i class="fa-solid fa-list-check"></i> Danh Sách Các Đội Trong Họ Đạo</div>
@@ -214,7 +221,11 @@
                                 </tr>
                             </thead>
                             <tbody id="thieuNhiTableBody"></tbody>
-                            <tfoot id="tableFooterRow"></tfoot>
+                            <tfoot>
+                                <tr style="font-weight: 800;" id="tableFooterRow">
+                                    <td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -226,7 +237,7 @@
     <div class="modal-overlay" id="qrModal" onclick="dongModalQR()">
         <div class="qr-modal-card" onclick="event.stopPropagation()">
             <h4 class="fw-bold text-primary mb-3"><i class="fa-solid fa-qrcode me-2"></i>Máy Quét Điểm Danh</h4>
-            <p class="text-muted small mb-3">Đang điểm danh cho cột ngày: <strong id="qrActiveDate" class="text-danger">...</strong></p>
+            <p class="text-muted small mb-3">Chỉ điểm danh cho ngày hôm nay: <strong id="qrActiveDate" class="text-danger">...</strong></p>
             <div id="reader"></div>
             <div id="scanStatus">Đưa thẻ vào khung hình để quét</div>
             <button class="btn btn-secondary rounded-pill fw-bold mt-2" onclick="dongModalQR()">Đóng Camera</button>
@@ -248,6 +259,7 @@
     </div>
 
     <script>
+        // ================= ĐỊA CHỈ API CỦA GOOGLE SHEETS =================
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3wmVVTSfhfi3ViPbwPAuqCraHZsEmRRX2ZmKnvP6eQq8U9IGLKrpt9G7PpPBivK4J/exec"; 
         
         const firebaseConfig = {
@@ -374,7 +386,7 @@
         function fetchGoogleSheetsData() {
             fetch(SCRIPT_URL).then(res => res.json()).then(data => {
                 isDataLoaded = true;
-                todayDateStr = data.today; // dd/MM/yyyy
+                todayDateStr = data.today; // Đã là định dạng dd/MM/yyyy
                 danhSachNgayLe = data.dates || [];
                 thieuNhiData = data.data || {};
                 
@@ -455,46 +467,46 @@
             danhSachNgayLe.forEach(ngay => {
                 headerHTML += `<th style="width: 120px; text-align: center; font-size: 13px;">${ngay}</th>`;
             });
-            headerHTML += `<th style="width: 120px; text-align: center; font-size: 13px; background: #0284c7; color: #fff;">TỔNG SỐ BUỔI</th>`;
+            headerHTML += `<th style="width: 140px; text-align: center; color: #fde047;">Tổng số ngày đi lễ</th>`;
             headerRow.innerHTML = headerHTML;
 
             const tbody = document.getElementById("thieuNhiTableBody");
-            const tfoot = document.getElementById("tableFooterRow");
             tbody.innerHTML = "";
 
             const danhSachEm = thieuNhiData[currentSelectedDoi] || [];
+            let tongSoNguoiMoiNgay = new Array(danhSachNgayLe.length).fill(0);
 
             if (danhSachEm.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${danhSachNgayLe.length + 3}" class="text-center text-muted py-4">Chưa có dữ liệu đoàn sinh.</td></tr>`;
-                tfoot.innerHTML = "";
+                tbody.innerHTML = `<tr><td colspan="${danhSachNgayLe.length + 3}" class="text-center text-muted py-4">Chưa có dữ liệu đoàn sinh từ Google Sheets.</td></tr>`;
                 return;
             }
-
-            let tongSoNguoiTheoNgay = {};
-            danhSachNgayLe.forEach(ngay => { tongSoNguoiTheoNgay[ngay] = 0; });
 
             danhSachEm.forEach((em, idx) => {
                 let colsHTML = "";
                 const diemsDanhMap = em.diemDanh || {};
-                let tongSoBuoiCoMat = 0;
+                let tongNgayDiLeEm = 0;
                 
-                danhSachNgayLe.forEach(ngay => {
+                danhSachNgayLe.forEach((ngay, nIdx) => {
                     const isCoMat = diemsDanhMap[ngay];
                     if (isCoMat) {
-                        tongSoBuoiCoMat++;
-                        tongSoNguoiTheoNgay[ngay] = (tongSoNguoiTheoNgay[ngay] || 0) + 1;
+                        tongNgayDiLeEm++;
+                        tongSoNguoiMoiNgay[nIdx]++;
                     }
+
+                    // CHỈ CHO PHÉP TÍCH ĐÚNG NGÀY HÔM NAY (todayDateStr), CÁC NGÀY KHÁC BỊ KHÓA
+                    let isHomNay = (ngay === todayDateStr);
+                    let duocPhepTick = duocPhepSua && isHomNay;
+
                     colsHTML += `
                         <td style="text-align: center;">
                             <input type="checkbox" class="sheet-checkbox" id="chk_${em.id}_${ngay}" 
                                    ${isCoMat ? 'checked' : ''} 
-                                   ${duocPhepSua ? '' : 'disabled'}
+                                   ${duocPhepTick ? '' : 'disabled'}
+                                   title="${isHomNay ? 'Điểm danh ngày hôm nay' : 'Chỉ được phép điểm danh đúng ngày hôm nay'}"
                                    onchange="toggleDiemDanh('${em.id}', '${ngay}', this.checked)">
                         </td>
                     `;
                 });
-
-                colsHTML += `<td style="text-align: center; font-weight: 800; color: #38bdf8;">${tongSoBuoiCoMat} buổi</td>`;
 
                 const tr = document.createElement("tr");
                 tr.id = `row_${em.id}`;
@@ -504,41 +516,39 @@
                     <td class="fw-bold text-muted text-center">${idx + 1}</td>
                     <td><span class="fw-bold" style="color: #f8fafc; font-size: 16px;">${em.name}</span><br><span style="font-size:11px; color:#94a3b8">ID: ${em.id || 'N/A'}</span></td>
                     ${colsHTML}
+                    <td style="text-align: center;"><span style="color: #38bdf8; font-weight: 800; font-size: 18px;">${tongNgayDiLeEm}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            let footerHTML = `<tr><td colspan="2" style="background: #1e293b; color: #fde047; font-weight: 800; text-align: right;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>`;
-            danhSachNgayLe.forEach(ngay => {
-                footerHTML += `<td style="background: #1e293b; color: #34d399; font-weight: 800; text-align: center;">${tongSoNguoiTheoNgay[ngay] || 0} em</td>`;
+            // Hiển thị hàng tổng kết phía dưới cùng
+            const footerRow = document.getElementById("tableFooterRow");
+            let footerHTML = `<td colspan="2" style="color: #fde047; text-align: right; padding: 14px;">TỔNG SỐ NGƯỜI ĐI LỄ:</td>`;
+            tongSoNguoiMoiNgay.forEach(sum => {
+                footerHTML += `<td style="text-align: center; color: #38ef7d; font-size: 16px; font-weight: 800;">${sum}</td>`;
             });
-            footerHTML += `<td style="background: #1e293b; color: #fde047; font-weight: 800; text-align: center;">-</td></tr>`;
-            tfoot.innerHTML = footerHTML;
+            footerHTML += `<td style="text-align: center; color: #fde047; font-size: 16px;">-</td>`;
+            footerRow.innerHTML = footerHTML;
         }
 
-        // ================= THÊM NGÀY HOẶC TẠO LẦN 2 =================
         function themNgayThuCong() {
-            let inputDate = prompt("Nhập ngày hoặc đợt điểm danh mới (Định dạng: dd/MM/yyyy, VD: 08/10/2026 hoặc 08/10/2026 lần 2):", todayDateStr);
+            let inputDate = prompt("Nhập ngày điểm danh mới (Định dạng DD/MM/YYYY):", todayDateStr);
             if (!inputDate) return;
             inputDate = inputDate.trim();
 
             if (!danhSachNgayLe.includes(inputDate)) {
                 danhSachNgayLe.push(inputDate);
             }
-            todayDateStr = inputDate; 
-            document.getElementById("qrActiveDate").innerText = todayDateStr;
-
+            
             const formData = new URLSearchParams();
             formData.append("data", JSON.stringify({ action: "addDate", sheetName: currentSelectedDoi, date: inputDate }));
 
             fetch(SCRIPT_URL, { method: "POST", body: formData })
-            .then(res => res.json())
-            .then(res => {
-                alert("Đã tạo thành công cột: " + inputDate);
+            .then(() => {
+                alert("Đã tạo cột ngày " + inputDate + " thành công!");
                 hienThiChiTietDoi();
             })
-            .catch(err => {
-                alert("Đã tạo trên giao diện. Cột sẽ đồng bộ lên Sheets khi bạn tích điểm danh.");
+            .catch(() => {
                 hienThiChiTietDoi();
             });
         }
@@ -551,14 +561,19 @@
         }
 
         function toggleDiemDanh(emId, ngay, isChecked) {
+            // Chặn tuyệt đối nếu không phải ngày hôm nay
+            if (ngay !== todayDateStr) {
+                alert("Hệ thống chỉ cho phép điểm danh dữ liệu trong ngày hôm nay!");
+                hienThiChiTietDoi();
+                return;
+            }
+
             let em = thieuNhiData[currentSelectedDoi].find(u => u.id === emId);
             if(em) {
                 if(!em.diemDanh) em.diemDanh = {};
                 em.diemDanh[ngay] = isChecked;
-                if(ngay === todayDateStr) {
-                    if(isChecked) document.getElementById(`row_${em.id}`).style.background = "#1e293b";
-                    else document.getElementById(`row_${em.id}`).style.background = "transparent";
-                }
+                if(isChecked) { document.getElementById(`row_${em.id}`).style.background = "#1e293b"; } 
+                else { document.getElementById(`row_${em.id}`).style.background = "transparent"; }
             }
 
             if(isChecked) { phatAmThanhBip(); }
@@ -567,62 +582,9 @@
             formData.append("data", JSON.stringify({ qrCode: emId, checked: isChecked, sheetName: currentSelectedDoi, date: ngay }));
 
             fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu:", err));
-            setTimeout(() => { hienThiChiTietDoi(); }, 400);
         }
 
-        // ================= TÌM KIẾM THÔNG MINH =================
-        function xuLyTimKiem(keyword) {
-            keyword = keyword.toLowerCase().trim();
-            const box = document.getElementById("searchResultsBox");
-            if (!keyword) { box.style.display = "none"; box.innerHTML = ""; return; }
-
-            let ketQua = [];
-            for (let doiName in thieuNhiData) {
-                let list = thieuNhiData[doiName] || [];
-                list.forEach(em => {
-                    if (em.name.toLowerCase().includes(keyword) || em.id.toLowerCase().includes(keyword)) {
-                        let tongCoMat = 0;
-                        let chiTietNgay = em.diemDanh || {};
-                        let tongSoBuoiDaTao = danhSachNgayLe.length;
-                        
-                        for (let ngay in chiTietNgay) {
-                            if (chiTietNgay[ngay] === true) tongCoMat++;
-                        }
-                        let tongVangMặt = tongSoBuoiDaTao - tongCoMat;
-                        if (tongVangMặt < 0) tongVangMặt = 0;
-
-                        ketQua.push({ ...em, doi: doiName, coMat: tongCoMat, vangMặt: tongVangMặt });
-                    }
-                });
-            }
-
-            if (ketQua.length === 0) {
-                box.style.display = "block";
-                box.innerHTML = `<div class="text-muted text-center py-2">Không tìm thấy thiếu nhi nào phù hợp.</div>`;
-                return;
-            }
-
-            let html = "";
-            ketQua.forEach(em => {
-                html += `
-                    <div class="search-result-item">
-                        <div>
-                            <strong style="color: #0D47A1; font-size: 15px;">${em.name}</strong> 
-                            <span class="badge bg-secondary ms-2">ID: ${em.id}</span>
-                            <span class="badge bg-info text-dark ms-1">${em.doi}</span>
-                        </div>
-                        <div>
-                            <span class="badge bg-success me-1">Có mặt: ${em.coMat} buổi</span>
-                            <span class="badge bg-danger">Vắng: ${em.vangMặt} buổi</span>
-                        </div>
-                    </div>
-                `;
-            });
-            box.style.display = "block";
-            box.innerHTML = html;
-        }
-
-        // ================= QUÉT MÃ QR NỔI =================
+        // ================= QUÉT MÃ QR (CHỈ QUÉT ĐÚNG HÔM NAY) =================
         function moModalQR() {
             if (!checkQuyenSuaDoi(currentSelectedDoi)) return alert("Bạn không có quyền điểm danh đội này!");
             
@@ -642,7 +604,7 @@
                     }
                     html5QrCode.start(cameraId, config, onScanSuccess)
                     .then(() => {
-                        document.getElementById("scanStatus").innerHTML = `<i class="fa-solid fa-camera"></i> Sẵn sàng quét (Đợt: ${todayDateStr})!`;
+                        document.getElementById("scanStatus").innerHTML = `<i class="fa-solid fa-camera"></i> Đang quét cho ngày: ${todayDateStr}`;
                         document.getElementById("scanStatus").className = "scan-success";
                     }).catch(err => { document.getElementById("scanStatus").innerText = "Lỗi camera!"; document.getElementById("scanStatus").className = "scan-error"; });
                 }
@@ -666,7 +628,7 @@
             if (em) {
                 if (!em.diemDanh) em.diemDanh = {};
                 if (em.diemDanh[todayDateStr] === true) {
-                    statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> [${em.name}] đã điểm danh đợt này rồi!`;
+                    statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> [${em.name}] đã điểm danh hôm nay rồi!`;
                     statusEl.className = "scan-success";
                 } else {
                     em.diemDanh[todayDateStr] = true;
@@ -676,7 +638,7 @@
                     const row = document.getElementById(`row_${em.id}`);
                     if(row) row.style.background = "#1e293b";
 
-                    statusEl.innerHTML = `<i class="fa-solid fa-bell-concierge"></i> Đã điểm danh: <strong>${em.name}</strong>`;
+                    statusEl.innerHTML = `<i class="fa-solid fa-bell-concierge"></i> Điểm danh thành công: <strong>${em.name}</strong>`;
                     statusEl.className = "scan-success";
 
                     phatAmThanhBip();
@@ -685,15 +647,66 @@
                     formData.append("data", JSON.stringify({ qrCode: em.id, checked: true, sheetName: currentSelectedDoi, date: todayDateStr }));
 
                     fetch(SCRIPT_URL, { method: "POST", body: formData }).catch(err => console.error("Lỗi gửi dữ liệu QR:", err));
-                    setTimeout(() => { hienThiChiTietDoi(); }, 400);
                 }
             } else {
-                statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Lỗi: Không tìm thấy ID [${decodedText}]!`;
+                statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Không tìm thấy ID [${decodedText}] trong đội!`;
                 statusEl.className = "scan-error";
                 let errAudio = new Audio('https://www.soundjay.com/buttons/sounds/button-10.mp3'); errAudio.play().catch(e=>{});
             }
 
             setTimeout(() => { isProcessing = false; }, 1500); 
+        }
+
+        // ================= TÌM KIẾM CHI TIẾT TOÀN ĐOÀN =================
+        function xuLyTimKiemToanDoan() {
+            const keyword = document.getElementById("globalSearchInput").value.toLowerCase().trim();
+            const container = document.getElementById("globalSearchResultContainer");
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (!keyword) return;
+
+            let matches = [];
+            danhSachDoi.forEach(doi => {
+                const arr = thieuNhiData[doi.name] || [];
+                arr.forEach(em => {
+                    if (em.name.toLowerCase().includes(keyword) || em.id.toLowerCase().includes(keyword)) {
+                        const diemsDanhMap = em.diemDanh || {};
+                        let di = 0;
+                        danhSachNgayLe.forEach(ngay => {
+                            if (diemsDanhMap[ngay] === true) di++;
+                        });
+                        let tongSoNgayLe = danhSachNgayLe.length;
+                        let vang = tongSoNgayLe - di;
+
+                        matches.push({ em, doiName: doi.name, stats: { di, vang } });
+                    }
+                });
+            });
+
+            if (matches.length === 0) {
+                container.innerHTML = `<div class="text-muted small mt-2">Không tìm thấy đoàn sinh nào phù hợp.</div>`;
+                return;
+            }
+
+            matches.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "search-result-card";
+                card.innerHTML = `
+                    <div>
+                        <strong style="color: #0052d4; font-size: 16px;">${item.em.name}</strong> <span class="badge bg-light text-dark border">ID: ${item.em.id}</span>
+                        <div class="small text-muted">Thuộc đội: <strong>${item.doiName}</strong></div>
+                        <div class="search-result-stats">
+                            <span class="badge-s-di"><i class="fa-solid fa-circle-check me-1"></i> Có mặt: ${item.stats.di} buổi</span>
+                            <span class="badge-s-vang"><i class="fa-solid fa-circle-xmark me-1"></i> Vắng: ${item.stats.vang} buổi</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-primary rounded-pill px-3 fw-bold" onclick="moChiTietDoi('${item.doiName}', 1)">
+                        <i class="fa-solid fa-eye me-1"></i> Xem đội
+                    </button>
+                `;
+                container.appendChild(card);
+            });
         }
 
         // ================= ADMIN QUẢN LÝ ĐỘI =================
@@ -721,7 +734,7 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dt === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom email-dt-${doi.id}" value="${info.emailDt || ''}" placeholder="Gmail đăng nhập ĐT..." style="margin-bottom: 0;">
+                            <input type="text" class="form-control-custom email-dt-${doi.id}" value="${info.emailDt || ''}" placeholder="Gmail ĐT..." style="margin-bottom: 0;">
                         </div>
                         <div style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.25); padding: 14px; border-radius: 12px; border-left: 4px solid #fbbf24;">
                             <label style="font-size: 12px; font-weight: 800; color: #fbbf24; margin-bottom: 8px; display: block;">ĐỘI PHÓ</label>
@@ -729,7 +742,7 @@
                                 <option value="">-- Chọn Huynh Trưởng --</option>
                                 ${danhSachGocHT.map(ht => `<option value="${ht.thanhHoTen}" ${info.dp === ht.thanhHoTen ? 'selected' : ''}>${ht.thanhHoTen}</option>`).join('')}
                             </select>
-                            <input type="text" class="form-control-custom email-dp-${doi.id}" value="${info.emailDp || ''}" placeholder="Gmail đăng nhập ĐP..." style="margin-bottom: 0;">
+                            <input type="text" class="form-control-custom email-dp-${doi.id}" value="${info.emailDp || ''}" placeholder="Gmail ĐP..." style="margin-bottom: 0;">
                         </div>
                     </div>
                 `;
@@ -740,10 +753,14 @@
         function luuQuanLyDoiAdmin() {
             let newMap = {};
             danhSachDoi.forEach(doi => {
-                const dt = document.querySelector(`.select-dt[data-doi-id="${doi.id}"]`)?.value || "";
+                const dtSelect = document.querySelector(`.select-dt[data-doi-id="${doi.id}"]`);
+                const dt = dtSelect ? dtSelect.value : "";
                 const emailDt = document.querySelector(`.email-dt-${doi.id}`)?.value.trim() || "";
-                const dp = document.querySelector(`.select-dp[data-doi-id="${doi.id}"]`)?.value || "";
+                
+                const dpSelect = document.querySelector(`.select-dp[data-doi-id="${doi.id}"]`);
+                const dp = dpSelect ? dpSelect.value : "";
                 const emailDp = document.querySelector(`.email-dp-${doi.id}`)?.value.trim() || "";
+                
                 newMap[doi.id] = { dt, emailDt, dp, emailDp };
             });
 

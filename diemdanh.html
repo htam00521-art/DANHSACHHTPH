@@ -37,11 +37,12 @@
         .dashboard-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 20px; padding: 22px 26px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
         .dashboard-header h2 { color: #0D47A1; font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         
-        .stats-overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; margin-bottom: 20px; }
-        .overview-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 20px; padding: 20px 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 18px; }
-        .overview-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #0072ff, #00c6ff); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; }
-        .overview-info .val { font-size: 26px; font-weight: 800; color: #0D47A1; }
-        .overview-info .lbl { font-size: 13px; color: #64748b; font-weight: 700; margin-top: 4px; text-transform: uppercase; }
+        .stats-overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 20px; }
+        .overview-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 20px; padding: 20px 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); display: flex; align-items: flex-start; gap: 18px; }
+        .overview-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #0072ff, #00c6ff); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; flex-shrink: 0; }
+        .overview-info .val { font-size: 22px; font-weight: 800; color: #0D47A1; line-height: 1.2; }
+        .overview-info .lbl { font-size: 12px; color: #64748b; font-weight: 700; margin-top: 4px; text-transform: uppercase; }
+        .sub-stat-list { font-size: 13px; color: #334155; font-weight: 600; margin-top: 6px; line-height: 1.4; }
 
         .search-panel-global { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 20px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
         .search-bar-wrap { position: relative; }
@@ -62,7 +63,6 @@
         .doi-card .doipho-lbl { color: #d97706; font-size: 12px; font-weight: 700; display: block; margin-bottom: 8px; }
         .doi-card p { color: #64748b; font-size: 13px; font-weight: 600; margin-bottom: 14px; }
         
-        .doi-card-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
         .btn-diem-danh { background: linear-gradient(135deg, #00c6ff, #0072ff); color: #fff; width: 100%; justify-content: center; border: none; padding: 9px 24px; border-radius: 20px; font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .diemdanh-detail-section { display: none; }
@@ -157,17 +157,31 @@
                 </div>
 
                 <div class="stats-overview-grid">
+                    <!-- THẺ 1: TỔNG THIẾU NHI -->
                     <div class="overview-card">
                         <div class="overview-icon"><i class="fa-solid fa-users"></i></div>
-                        <div class="overview-info"><div class="val" id="statTongThieuNhi">0 em</div><div class="lbl">TỔNG THIẾU NHI</div></div>
+                        <div class="overview-info">
+                            <div class="val" id="statTongThieuNhi">0 em</div>
+                            <div class="lbl">TỔNG THIẾU NHI TOÀN ĐOÀN</div>
+                        </div>
                     </div>
+
+                    <!-- THẺ 2: THỐNG KÊ SĨ SỐ THEO NGÀNH -->
                     <div class="overview-card">
                         <div class="overview-icon" style="background: linear-gradient(135deg, #059669, #34d399);"><i class="fa-solid fa-layer-group"></i></div>
-                        <div class="overview-info"><div class="val" style="color: #059669;">3 Ngành</div><div class="lbl">NGÀNH (Ấu - Thiếu - Nghĩa)</div></div>
+                        <div class="overview-info" style="width: 100%;">
+                            <div class="val" style="color: #059669; font-size: 16px;">THIẾU NHI THEO NGÀNH</div>
+                            <div class="sub-stat-list" id="statNganhList">Đang tải...</div>
+                        </div>
                     </div>
+
+                    <!-- THẺ 3: THỐNG KÊ SỐ ĐỘI THEO NGÀNH -->
                     <div class="overview-card">
                         <div class="overview-icon" style="background: linear-gradient(135deg, #d97706, #fbbf24);"><i class="fa-solid fa-shield-halved"></i></div>
-                        <div class="overview-info"><div class="val" style="color: #d97706;" id="statTongSoDoi">0 Đội</div><div class="lbl">TỔNG SỐ ĐỘI</div></div>
+                        <div class="overview-info" style="width: 100%;">
+                            <div class="val" style="color: #d97706; font-size: 16px;">SỐ ĐỘI THEO NGÀNH</div>
+                            <div class="sub-stat-list" id="statSoDoiList">Đang tải...</div>
+                        </div>
                     </div>
                 </div>
 
@@ -390,15 +404,47 @@
 
                 danhSachDoi = [];
                 let totalEm = 0;
+                let nganhThieuNhiCount = {};
+                let nganhDoiCount = {};
+
                 data.sheetNames.forEach((sheetName, idx) => {
                     let idMatch = sheetName.match(/\d+/);
                     let idDoi = idMatch ? parseInt(idMatch[0]) : (idx + 1);
                     danhSachDoi.push({ id: idDoi, name: sheetName });
-                    totalEm += (thieuNhiData[sheetName] || []).length;
+                    
+                    let countEm = (thieuNhiData[sheetName] || []).length;
+                    totalEm += countEm;
+
+                    // Nhận diện ngành từ tên Sheet (Ví dụ: "Ấu 1", "Thiếu 2", "Nghĩa Nam", hoặc mặc định dựa vào từ khóa)
+                    let nganh = "Khác";
+                    let sLower = sheetName.toLowerCase();
+                    if (sLower.includes("ấu")) nganh = "Ngành Ấu";
+                    else if (sLower.includes("thiếu")) nganh = "Ngành Thiếu";
+                    else if (sLower.includes("nghĩa")) nganh = "Ngành Nghĩa";
+                    else {
+                        // Nếu sheet chỉ đặt tên là "Đội 1", ta phân loại theo quy luật hoặc tên chung
+                        nganh = "Đoàn Sinh";
+                    }
+
+                    nganhThieuNhiCount[nganh] = (nganhThieuNhiCount[nganh] || 0) + countEm;
+                    nganhDoiCount[nganh] = (nganhDoiCount[nganh] || 0) + 1;
                 });
 
                 document.getElementById("statTongThieuNhi").innerText = `${totalEm} em`;
-                document.getElementById("statTongSoDoi").innerText = `${danhSachDoi.length} Đội`;
+
+                // Render thống kê số lượng thiếu nhi theo ngành
+                let nganhHtml = "";
+                for (let nganh in nganhThieuNhiCount) {
+                    nganhHtml += `<div>• ${nganh}: <strong style="color: #059669;">${nganhThieuNhiCount[nganh]} em</strong></div>`;
+                }
+                document.getElementById("statNganhList").innerHTML = nganhHtml || "Chưa phân ngành";
+
+                // Render thống kê số đội theo ngành
+                let doiHtml = "";
+                for (let nganh in nganhDoiCount) {
+                    doiHtml += `<div>• ${nganh}: <strong style="color: #d97706;">${nganhDoiCount[nganh]} đội</strong></div>`;
+                }
+                document.getElementById("statSoDoiList").innerHTML = doiHtml || "Chưa phân đội";
 
                 document.getElementById("loadingGrid").style.display = "none";
                 document.getElementById("doiGridContainer").style.display = "grid";

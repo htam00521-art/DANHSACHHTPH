@@ -724,9 +724,87 @@
             }
         }
 
+auth.onAuthStateChanged((user) => {
+    if (!user) {
+        currentUser = {
+            name: "Khách",
+            email: "",
+            picture: defaultAvatar,
+            role: "viewer",
+            leaderOfGroup: null
+        };
+
+        localStorage.removeItem("ht_user_session");
+    } else {
+        const email = (user.email || "").toLowerCase().trim();
+
+        let role = "viewer";
+        let leaderOfGroup = null;
+
+        if (ADMIN_EMAILS.some(
+            e => e.toLowerCase().trim() === email
+        )) {
+            role = "admin";
+        } else {
+            for (let g = 1; g <= 4; g++) {
+                const leaderEmails =
+                    hardcodedGroupEmails[g].leaderEmails || [];
+
+                if (leaderEmails.some(
+                    e => e.toLowerCase().trim() === email
+                )) {
+                    role = "leader";
+                    leaderOfGroup = g;
+                    break;
+                }
+            }
+        }
+
+        currentUser = {
+            name: user.displayName || email,
+            email: email,
+            picture: user.photoURL || defaultAvatar,
+            role: role,
+            leaderOfGroup: leaderOfGroup
+        };
+
+        localStorage.setItem(
+            "ht_user_session",
+            JSON.stringify(currentUser)
+        );
+    }
+
+    capNhatGiaoDienQuyen();
+    hienThiPhienTruc();
+});
+
         window.onload = function () { khoiTaoDanhSachTuanPhungVu(); if (window.google) { google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse }); google.accounts.id.renderButton( document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" } ); } hienThiDanhSach(danhSachGoc); capNhatGiaoDienQuyen(); };
 
-        function xuLyDangXuat() { currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer", leaderOfGroup: null }; localStorage.removeItem("ht_user_session"); capNhatGiaoDienQuyen(); alert("Đã đăng xuất!"); }
+        
+async function xuLyDangXuat() {
+    try {
+        await auth.signOut();
+
+        localStorage.removeItem("ht_user_session");
+
+        currentUser = {
+            name: "Khách",
+            email: "",
+            picture: defaultAvatar,
+            role: "viewer",
+            leaderOfGroup: null
+        };
+
+        capNhatGiaoDienQuyen();
+        hienThiPhienTruc();
+
+        alert("Đã đăng xuất thành công!");
+    } catch (error) {
+        console.error("Lỗi đăng xuất Firebase:", error);
+        alert("Không thể đăng xuất. Vui lòng thử lại.");
+    }
+}
+
 
         function capNhatGiaoDienQuyen() { document.getElementById("userNameDisplay").innerText = currentUser.name; document.getElementById("userAvatarMini").src = currentUser.picture; const badge = document.getElementById("roleBadge"); const googleBtn = document.getElementById("googleBtnContainer"); const logoutBtn = document.getElementById("logoutBtn"); const adminBtn = document.getElementById("adminManageBtn"); badge.className = "role-tag"; if (currentUser.role === "admin") { badge.classList.add("role-admin"); badge.innerText = "Admin"; adminBtn.style.display = "inline-flex"; } else if (currentUser.role === "leader") { badge.classList.add("role-leader"); badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`; adminBtn.style.display = "none"; } else { badge.classList.add("role-viewer"); badge.innerText = "Người xem"; adminBtn.style.display = "none"; } if (currentUser.email) { googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex"; } else { googleBtn.style.display = "block"; logoutBtn.style.display = "none"; } capNhatThongTinTuanHienTai(); }
 

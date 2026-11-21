@@ -434,6 +434,63 @@
                         <div class="control-item"><i class="fa-regular fa-calendar-days"></i><input type="text" id="weekDateRangeDisplay" readonly></div>
                     </div>
                 </div>
+                
+<!-- ADMIN: CHỈ ĐỊNH NHÓM TRỰC THEO TUẦN -->
+<div id="adminWeekAssignmentPanel"
+     style="display:none; background:rgba(15,23,42,0.85);
+            border:1px solid rgba(255,255,255,0.25);
+            border-radius:20px; padding:20px;
+            margin-bottom:20px; color:white;">
+
+    <h3 style="color:#38bdf8; font-weight:800; font-size:20px;">
+        <i class="fa-solid fa-user-gear"></i>
+        Admin: Chỉ Định Nhóm Trực
+    </h3>
+
+    <p style="color:#cbd5e1; font-size:14px;">
+        Chỉ thay đổi nhóm trực của tuần đang chọn.
+        Không ảnh hưởng lịch luân phiên các tuần khác.
+    </p>
+
+    <label for="adminOverrideGroup"
+           style="font-weight:700; margin-bottom:8px;">
+        Chọn nhóm trực:
+    </label>
+
+    <select id="adminOverrideGroup"
+            style="width:100%; padding:12px;
+                   background:#0f172a; color:white;
+                   border:1px solid #64748b;
+                   border-radius:12px; margin-bottom:15px;">
+        <option value="1">Nhóm 1</option>
+        <option value="2">Nhóm 2</option>
+        <option value="3">Nhóm 3</option>
+        <option value="4">Nhóm 4</option>
+    </select>
+
+    <div style="display:flex; flex-wrap:wrap; gap:10px;">
+        <button id="btnSaveWeekOverride"
+                type="button" disabled
+                class="btn-modal-action btn-confirm">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Lưu Nhóm Trực
+        </button>
+
+        <button id="btnResetWeekOverride"
+                type="button" disabled
+                class="btn-modal-action btn-dismiss">
+            <i class="fa-solid fa-rotate-left"></i>
+            Khôi Phục Lịch Gốc
+        </button>
+    </div>
+
+    <p id="weekOverrideStatus"
+       style="margin-top:15px; font-size:13px;
+              color:#93c5fd;">
+        Chưa tải trạng thái phân công.
+    </p>
+</div>
+
                 <div class="duty-container" id="dutyContent"></div>
             </div>
         </div>

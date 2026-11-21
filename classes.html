@@ -563,11 +563,116 @@
         let currentSelectedWeek = 39; let currentAssignedGroup = 3;
         let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer", leaderOfGroup: null };
         let currentEditingSlot = { catIdx: null, slotIdx: null, selectedMembers: [] };
+        
+        // DANH SACH NHOM TRUC DO ADMIN CHI DINH
+        let weeklyGroupOverrides = {};
+        let weeklyOverridesLoaded = false;
+
+        function layNhomTrucThucTe(weekId) {
+            const assigned = Number(weeklyGroupOverrides[weekId]);
+
+            if (Number.isInteger(assigned) &&
+                assigned >= 1 && assigned <= 4) {
+                return assigned;
+            }
+
+            return tinhNhomTrucChoTuan(weekId);
+        }
+
+        // DONG BO NHOM TRUC TU FIREBASE
+        db.ref("weeklyGroupOverrides").on("value", (snapshot) => {
+            weeklyGroupOverrides = snapshot.val() || {};
+            weeklyOverridesLoaded = true;
+
+            capNhatThongTinTuanHienTai();
+            hienThiPhienTruc();
+        }, (error) => {
+            weeklyOverridesLoaded = false;
+            console.error("Loi doc nhom truc:", error);
+
+            const status = document.getElementById(
+                "weekOverrideStatus"
+            );
+            if (status) {
+                status.textContent =
+                    "Không thể tải chỉ định nhóm trực từ Firebase.";
+            }
+        });
+
 
         function timIdTuanHienTai() { const now = new Date(); let targetDate = new Date(now); if (now.getDay() === 6 && now.getHours() >= 6) { targetDate.setDate(targetDate.getDate() + 1); } targetDate.setHours(0, 0, 0, 0); for (let item of danhSachTuanPhungVu) { const parts = item.dates.split("-").map(p => p.trim()); if (parts.length === 2) { const endMatch = parts[1].match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); if (endMatch) { const endYear = parseInt(endMatch[3]); const endMonth = parseInt(endMatch[2]) - 1; const endDay = parseInt(endMatch[1]); const endDate = new Date(endYear, endMonth, endDay, 23, 59, 59); let startYear = endYear; const startParts = parts[0].split("/"); let startMonth = parseInt(startParts[1]) - 1; let startDay = parseInt(startParts[0]); if (startParts.length === 3) { startYear = parseInt(startParts[2]); } else if (startMonth > endMonth) { startYear = endYear - 1; } const startDate = new Date(startYear, startMonth, startDay, 0, 0, 0); if (targetDate >= startDate && targetDate <= endDate) { return item.id; } } } } return 39; }
 
         function khoiTaoDanhSachTuanPhungVu() { currentSelectedWeek = timIdTuanHienTai(); currentAssignedGroup = tinhNhomTrucChoTuan(currentSelectedWeek); const select = document.getElementById("liturgicalWeekSelect"); select.innerHTML = ""; danhSachTuanPhungVu.forEach(w => { const opt = document.createElement("option"); opt.value = w.id; opt.innerText = `${w.name} (${w.dates})`; select.appendChild(opt); }); select.value = currentSelectedWeek; capNhatThongTinTuanHienTai(); }
-        function capNhatThongTinTuanHienTai() { currentAssignedGroup = tinhNhomTrucChoTuan(currentSelectedWeek); const currentWeekObj = danhSachTuanPhungVu.find(w => w.id === currentSelectedWeek); if (currentWeekObj) { document.getElementById("weekDateRangeDisplay").value = `📅 ${currentWeekObj.dates} (${currentWeekObj.season})`; } document.getElementById("currentGroupDisplay").value = `Nhóm ${currentAssignedGroup} Trực`; }
+        
+        function capNhatThongTinTuanHienTai() {
+            currentAssignedGroup =
+                layNhomTrucThucTe(currentSelectedWeek);
+
+            const currentWeekObj = danhSachTuanPhungVu.find(
+                w => w.id === currentSelectedWeek
+            );
+
+            if (currentWeekObj) {
+                document.getElementById(
+                    "weekDateRangeDisplay"
+                ).value =
+                    `📅 ${currentWeekObj.dates} (${currentWeekObj.season})`;
+            }
+
+            const groupDisplay = document.getElementById(
+                "currentGroupDisplay"
+            );
+
+            if (!weeklyOverridesLoaded) {
+                groupDisplay.value = "Đang tải nhóm trực...";
+            } else {
+                const isOverridden =
+                    Object.prototype.hasOwnProperty.call(
+                        weeklyGroupOverrides,
+                        currentSelectedWeek
+                    );
+
+                groupDisplay.value = isOverridden
+                    ? `Nhóm ${currentAssignedGroup} Trực (Admin chỉ định)`
+                    : `Nhóm ${currentAssignedGroup} Trực`;
+            }
+
+            // Giao diện quản lý chỉ dành cho Admin
+            const panel = document.getElementById(
+                "adminWeekAssignmentPanel"
+            );
+
+            if (panel) {
+                const isAdmin = currentUser.role === "admin";
+
+                panel.style.display =
+                    isAdmin ? "block" : "none";
+
+                const groupSelect = document.getElementById(
+                    "adminOverrideGroup"
+                );
+
+                if (groupSelect) {
+                    groupSelect.value =
+                        String(currentAssignedGroup);
+                }
+
+                const status = document.getElementById(
+                    "weekOverrideStatus"
+                );
+
+                if (status) {
+                    const originalGroup =
+                        tinhNhomTrucChoTuan(currentSelectedWeek);
+
+                    status.textContent = !weeklyOverridesLoaded
+                        ? "Đang tải dữ liệu Firebase..."
+                        : `Lịch gốc: Nhóm ${originalGroup}. ` +
+                          `Nhóm trực hiện tại: Nhóm ${currentAssignedGroup}.`;
+                }
+            }
+        }
+
 
         function handleCredentialResponse(response) { try { const payload = jwt_decode(response.credential); const email = payload.email.toLowerCase().trim(); let role = "viewer"; let leaderOfGroup = null; if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) { role = "admin"; } else { for (let g = 1; g <= 4; g++) { const emails = hardcodedGroupEmails[g].leaderEmails || []; if (emails.some(e => e.toLowerCase().trim() === email)) { role = "leader"; leaderOfGroup = g; break; } } } currentUser = { name: payload.name, email: email, picture: payload.picture, role: role, leaderOfGroup: leaderOfGroup }; localStorage.setItem("ht_user_session", JSON.stringify(currentUser)); capNhatGiaoDienQuyen(); alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : (role === 'leader' ? 'Điều Hành Nhóm ' + leaderOfGroup : 'Người Xem')}`); } catch (e) { console.error("Lỗi Google Auth:", e); } }
 
@@ -575,7 +680,7 @@
 
         function xuLyDangXuat() { currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer", leaderOfGroup: null }; localStorage.removeItem("ht_user_session"); capNhatGiaoDienQuyen(); alert("Đã đăng xuất!"); }
 
-        function capNhatGiaoDienQuyen() { document.getElementById("userNameDisplay").innerText = currentUser.name; document.getElementById("userAvatarMini").src = currentUser.picture; const badge = document.getElementById("roleBadge"); const googleBtn = document.getElementById("googleBtnContainer"); const logoutBtn = document.getElementById("logoutBtn"); const adminBtn = document.getElementById("adminManageBtn"); badge.className = "role-tag"; if (currentUser.role === "admin") { badge.classList.add("role-admin"); badge.innerText = "Admin"; adminBtn.style.display = "inline-flex"; } else if (currentUser.role === "leader") { badge.classList.add("role-leader"); badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`; adminBtn.style.display = "none"; } else { badge.classList.add("role-viewer"); badge.innerText = "Người xem"; adminBtn.style.display = "none"; } if (currentUser.email) { googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex"; } else { googleBtn.style.display = "block"; logoutBtn.style.display = "none"; } hienThiPhienTruc(); }
+        function capNhatGiaoDienQuyen() { document.getElementById("userNameDisplay").innerText = currentUser.name; document.getElementById("userAvatarMini").src = currentUser.picture; const badge = document.getElementById("roleBadge"); const googleBtn = document.getElementById("googleBtnContainer"); const logoutBtn = document.getElementById("logoutBtn"); const adminBtn = document.getElementById("adminManageBtn"); badge.className = "role-tag"; if (currentUser.role === "admin") { badge.classList.add("role-admin"); badge.innerText = "Admin"; adminBtn.style.display = "inline-flex"; } else if (currentUser.role === "leader") { badge.classList.add("role-leader"); badge.innerText = `Điều Hành Nhóm ${currentUser.leaderOfGroup}`; adminBtn.style.display = "none"; } else { badge.classList.add("role-viewer"); badge.innerText = "Người xem"; adminBtn.style.display = "none"; } if (currentUser.email) { googleBtn.style.display = "none"; logoutBtn.style.display = "inline-flex"; } else { googleBtn.style.display = "block"; logoutBtn.style.display = "none"; } capNhatThongTinTuanHienTai(); }
 
         function chuyenTuan() { currentSelectedWeek = parseInt(document.getElementById("liturgicalWeekSelect").value); capNhatThongTinTuanHienTai(); hienThiPhienTruc(); }
         function layDuLieuPhienTruc() { const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; if (!dutyHistoryData[dutyKey]) { dutyHistoryData[dutyKey] = taoKhungCaTrucMau(); } return dutyHistoryData[dutyKey]; }

@@ -18,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
@@ -534,8 +535,9 @@
         };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.database();
+        const auth = firebase.auth();
         const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
-        const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
+        const GOOGLE_CLIENT_ID = "105589587705-n2bm5gomthmmrc10sr8s5ids2o7aqh2f.apps.googleusercontent.com";
 
         const danhSachGocHT = [
             { thanhHoTen: "Patriciô Nguyễn Thiên Ân", avatar: "thienan.jpg" },
@@ -602,7 +604,7 @@
         let thongTinHuynhTruongTuFirebase = [];
         let isFirebaseLoaded = false;
         
-        let currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
+        let currentUser = { role: "viewer" };
 
         window.onload = function() {
             xacDinhQuyenTruyCap();
@@ -614,26 +616,23 @@
             }
         };
 
-        function handleCredentialResponse(response) {
-            try {
-                const payload = jwt_decode(response.credential);
-                const email = payload.email.toLowerCase().trim();
-                let role = "viewer";
-                if (ADMIN_EMAILS.includes(email)) role = "admin";
-                currentUser = { name: payload.name, email: email, picture: payload.picture, role: role };
-                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
-                
-                alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : 'Người Xem'}`);
-                xacDinhQuyenTruyCap();
-            } catch (e) { console.error(e); }
+        async function handleCredentialResponse(response) {
+            try { await auth.signInWithCredential(firebase.auth.GoogleAuthProvider.credential(response.credential)); }
+            catch (error) { alert("Đăng nhập thất bại: " + error.message); }
         }
-
-        function xuLyDangXuat() {
-            currentUser = { name: "Khách", email: "", picture: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png", role: "viewer" };
-            localStorage.removeItem("ht_user_session");
-            alert("Đã đăng xuất!");
-            xacDinhQuyenTruyCap();
+        async function xuLyDangXuat() {
+            try { await auth.signOut(); } catch (error) { alert("Không thể đăng xuất: " + error.message); }
         }
+        function applyFirebaseUser(user) {
+            const email = user && user.emailVerified ? (user.email || "").toLowerCase().trim() : "";
+            let role = "viewer";
+            if (email && ADMIN_EMAILS.includes(email)) role = "admin";
+            
+            currentUser = email ? {name: user.displayName || email, email, picture: user.photoURL || "", role} : {role: "viewer"};
+            if (email) localStorage.setItem("ht_user_session", JSON.stringify(currentUser)); else localStorage.removeItem("ht_user_session");
+            xacDinhQuyenTruyCap(); 
+        }
+        auth.onAuthStateChanged(applyFirebaseUser);
 
         function xacDinhQuyenTruyCap() {
             document.getElementById("userNameDisplay").innerText = currentUser.name || "Khách";

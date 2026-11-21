@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -450,12 +451,14 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
+        const auth = firebase.auth();
 
         let allNewsData = [];
 
         // Kiểm tra quyền Admin
         function kiemTraQuyenAdmin() {
-            const currentUser = JSON.parse(localStorage.getItem("ht_user_session")) || {};
+            const user = auth.currentUser;
+            const currentUser = {role: user && user.emailVerified && ["htam00521@gmail.com", "yinsnhuw29@gmail.com"].includes(user.email.toLowerCase()) ? "admin" : "viewer"};
             const btnManage = document.getElementById("btnManageFeatured");
             if (currentUser.role === 'admin') {
                 btnManage.style.display = "inline-block";
@@ -463,7 +466,7 @@
                 btnManage.style.display = "none";
             }
         }
-        kiemTraQuyenAdmin();
+        auth.onAuthStateChanged(kiemTraQuyenAdmin);
 
         // Tải dữ liệu tin tức từ Firebase
         db.ref("tinTucSuKien").on("value", (snapshot) => {
@@ -549,17 +552,21 @@
             }
         }
 
-        function luuCaiDatNoiBat() {
+        async function luuCaiDatNoiBat() {
             const checkboxes = document.querySelectorAll(".chk-featured");
             
+            try {
+            const updates = {};
             checkboxes.forEach(chk => {
                 const postId = chk.value;
                 const isFeatured = chk.checked;
-                db.ref(`tinTucSuKien/${postId}`).update({ isFeatured: isFeatured });
+                updates[`${postId}/isFeatured`] = isFeatured;
             });
 
+            await db.ref("tinTucSuKien").update(updates);
             alert("Đã cập nhật danh sách bài viết nổi bật thành công!");
             dongModalCaiDat();
+            } catch (error) { alert("Không thể lưu: " + error.message); }
         }
     </script>
 </body>

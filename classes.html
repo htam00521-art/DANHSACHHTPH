@@ -674,6 +674,7 @@
                           `Nhóm trực hiện tại: Nhóm ${currentAssignedGroup}.`;
                 }
             }
+       capNhatNutChiDinhNhom();
         }
 
 
@@ -831,6 +832,97 @@ async function xuLyDangXuat() {
         function dongModalById(id) { const el = document.getElementById(id); if (el) el.classList.remove("active"); document.body.style.overflow = "auto"; }
 
         document.getElementById("searchInput").addEventListener("input", (e) => { const keyword = e.target.value.toLowerCase().trim(); const filtered = danhSachGoc.filter(ht => (ht.thanhHoTen && ht.thanhHoTen.toLowerCase().includes(keyword)) || (ht.chucVu && ht.chucVu.toLowerCase().includes(keyword)) || (ht.cap && ht.cap.toLowerCase().includes(keyword)) || (ht.sdt && ht.sdt.includes(keyword)) ); hienThiDanhSach(filtered); });
+   
+async function luuNhomTrucChiDinh() {
+    if (!auth.currentUser || currentUser.role !== "admin") {
+        alert("Chỉ Admin mới có quyền chỉ định nhóm trực!");
+        return;
+    }
+
+    if (!weeklyOverridesLoaded) {
+        alert("Dữ liệu chưa tải xong!");
+        return;
+    }
+
+    const weekId = currentSelectedWeek;
+    const group = Number(
+        document.getElementById("adminOverrideGroup").value
+    );
+
+    if (!Number.isInteger(group) || group < 1 || group > 4) {
+        alert("Nhóm trực không hợp lệ!");
+        return;
+    }
+
+    if (!confirm(
+        `Bạn có muốn chỉ định Nhóm ${group} trực tuần này không? ` +
+        "Các phiên trực cũ sẽ không bị tự động xóa."
+    )) {
+        return;
+    }
+
+    try {
+        await db.ref("weeklyGroupOverrides/" + weekId)
+            .set(group);
+
+        alert("Đã chỉ định Nhóm " + group + " trực thành công!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Không thể lưu: " + error.message);
+    }
+}
+
+async function khoiPhucNhomTrucMacDinh() {
+    if (!auth.currentUser || currentUser.role !== "admin") {
+        alert("Bạn không có quyền thực hiện!");
+        return;
+    }
+
+    if (!weeklyOverridesLoaded) {
+        alert("Dữ liệu chưa tải xong!");
+        return;
+    }
+
+    const weekId = currentSelectedWeek;
+
+    if (!confirm("Khôi phục lịch luân phiên gốc của tuần này?")) {
+        return;
+    }
+
+    try {
+        await db.ref("weeklyGroupOverrides/" + weekId)
+            .remove();
+
+        alert("Đã khôi phục lịch trực mặc định!");
+
+    } catch (error) {
+        console.error(error);
+        alert("Không thể khôi phục: " + error.message);
+    }
+}
+
+function capNhatNutChiDinhNhom() {
+    const allowed =
+        !!auth.currentUser &&
+        currentUser.role === "admin" &&
+        weeklyOverridesLoaded;
+
+    document.getElementById(
+        "btnSaveWeekOverride"
+    ).disabled = !allowed;
+
+    document.getElementById(
+        "btnResetWeekOverride"
+    ).disabled = !allowed;
+}
+
+document.getElementById("btnSaveWeekOverride")
+    .addEventListener("click", luuNhomTrucChiDinh);
+
+document.getElementById("btnResetWeekOverride")
+    .addEventListener("click", khoiPhucNhomTrucMacDinh);
+
     </script>
 </body>
 </html>

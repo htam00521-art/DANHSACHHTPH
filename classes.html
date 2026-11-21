@@ -677,7 +677,52 @@
         }
 
 
-         async function handleCredentialResponse(response) {     try {         // Xac thuc Google voi Firebase         const credential =             firebase.auth.GoogleAuthProvider.credential(                 response.credential             );          const result =             await auth.signInWithCredential(credential);          const user = result.user;          if (!user || !user.email) {             throw new Error("Tai khoan khong co email.");         }          const email = user.email.toLowerCase().trim();          let role = "viewer";         let leaderOfGroup = null;          // Xac dinh vai tro de hien thi giao dien         if (ADMIN_EMAILS.some(             adm => adm.toLowerCase().trim() === email         )) {             role = "admin";         } else {             for (let g = 1; g <= 4; g++) {                 const emails =                     hardcodedGroupEmails[g].leaderEmails || [];                  if (emails.some(                     e => e.toLowerCase().trim() === email                 )) {                     role = "leader";                     leaderOfGroup = g;                     break;                 }             }         }          currentUser = {             name: user.displayName || email,             email: email,             picture: user.photoURL || defaultAvatar,             role: role,             leaderOfGroup: leaderOfGroup         };          localStorage.setItem(             "ht_user_session",             JSON.stringify(currentUser)         );          capNhatGiaoDienQuyen();          alert(             "Đăng nhập Firebase thành công! Quyền hiển thị: " +             (role === "admin"                 ? "Admin"                 : role === "leader"                     ? "Nhóm trưởng nhóm " + leaderOfGroup                     : "Người xem")         );      } catch (error) {         console.error("Loi Firebase Authentication:", error);          alert(             "Đăng nhập thất bại: " +             (error.message || "Lỗi không xác định")         );     } }
+                 async function handleCredentialResponse(response) {
+            try {
+                // Xác thực Google với Firebase Authentication
+                const credential = firebase.auth.GoogleAuthProvider.credential(
+                    response.credential
+                );
+                const result = await auth.signInWithCredential(credential);
+                const user = result.user;
+
+                if (!user || !user.email) {
+                    throw new Error("Tài khoản không có email.");
+                }
+
+                const email = user.email.toLowerCase().trim();
+                let role = "viewer";
+                let leaderOfGroup = null;
+
+                // Vai trò này chỉ dùng để hiển thị, không thay thế Firebase Rules
+                if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) {
+                    role = "admin";
+                } else {
+                    for (let g = 1; g <= 4; g++) {
+                        const emails = hardcodedGroupEmails[g].leaderEmails || [];
+                        if (emails.some(e => e.toLowerCase().trim() === email)) {
+                            role = "leader";
+                            leaderOfGroup = g;
+                            break;
+                        }
+                    }
+                }
+
+                currentUser = {
+                    name: user.displayName || email,
+                    email,
+                    picture: user.photoURL || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+                    role,
+                    leaderOfGroup
+                };
+                localStorage.setItem("ht_user_session", JSON.stringify(currentUser));
+                capNhatGiaoDienQuyen();
+                alert("Đăng nhập Firebase thành công!");
+            } catch (error) {
+                console.error("Lỗi Firebase Authentication:", error);
+                alert("Đăng nhập thất bại: " + (error.message || "Lỗi không xác định"));
+            }
+        }
 
         window.onload = function () { khoiTaoDanhSachTuanPhungVu(); if (window.google) { google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse }); google.accounts.id.renderButton( document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" } ); } hienThiDanhSach(danhSachGoc); capNhatGiaoDienQuyen(); };
 

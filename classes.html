@@ -14,6 +14,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
@@ -542,7 +545,7 @@
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyC0bD7rkP2C1NS_pKanobfZN23Y3-1WznI", authDomain: "phantruchuynhtruong.firebaseapp.com", databaseURL: "https://phantruchuynhtruong-default-rtdb.asia-southeast1.firebasedatabase.app", projectId: "phantruchuynhtruong", storageBucket: "phantruchuynhtruong.firebasestorage.app", messagingSenderId: "105589587705", appId: "1:105589587705:web:e5673f9dad38c130b56c28", measurementId: "G-YENZE6ZNSW" };
-        firebase.initializeApp(firebaseConfig); const db = firebase.database();
+         firebase.initializeApp(firebaseConfig);  const db = firebase.database(); const auth = firebase.auth();
         const GOOGLE_CLIENT_ID = "262126423881-einke9pok3r8at0d9hrnli04klf68s9q.apps.googleusercontent.com";
         const ADMIN_EMAILS = ["htam00521@gmail.com", "yinsnhuw29@gmail.com"]; 
         const hardcodedGroupEmails = { 1: { groupName: "Nhóm 1", leaderName: "Hiếu Nghĩa", leaderEmails: ["nghia1132009852009@gmail.com", "nguyenxhuyvu70@gmail.com", "ltam54127@gmail.com"] }, 2: { groupName: "Nhóm 2", leaderName: "Ngọc Trâm", leaderEmails: ["ngoctramtv2006@gmail.com", "haut7238@gmail.com"] }, 3: { groupName: "Nhóm 3", leaderName: "Minh Vũ", leaderEmails: ["ngminhvu2000@gmail.com", "pherokhoa0707@gmail.com"] }, 4: { groupName: "Nhóm 4", leaderName: "Thịnh Đạt", leaderEmails: ["tranbuithinhdatph@gmail.com", "diemthy352026@gmail.com"] } };
@@ -674,7 +677,7 @@
         }
 
 
-        function handleCredentialResponse(response) { try { const payload = jwt_decode(response.credential); const email = payload.email.toLowerCase().trim(); let role = "viewer"; let leaderOfGroup = null; if (ADMIN_EMAILS.some(adm => adm.toLowerCase().trim() === email)) { role = "admin"; } else { for (let g = 1; g <= 4; g++) { const emails = hardcodedGroupEmails[g].leaderEmails || []; if (emails.some(e => e.toLowerCase().trim() === email)) { role = "leader"; leaderOfGroup = g; break; } } } currentUser = { name: payload.name, email: email, picture: payload.picture, role: role, leaderOfGroup: leaderOfGroup }; localStorage.setItem("ht_user_session", JSON.stringify(currentUser)); capNhatGiaoDienQuyen(); alert(`Đăng nhập thành công! Quyền: ${role === 'admin' ? 'Admin Toàn Quyền' : (role === 'leader' ? 'Điều Hành Nhóm ' + leaderOfGroup : 'Người Xem')}`); } catch (e) { console.error("Lỗi Google Auth:", e); } }
+         async function handleCredentialResponse(response) {     try {         // Xac thuc Google voi Firebase         const credential =             firebase.auth.GoogleAuthProvider.credential(                 response.credential             );          const result =             await auth.signInWithCredential(credential);          const user = result.user;          if (!user || !user.email) {             throw new Error("Tai khoan khong co email.");         }          const email = user.email.toLowerCase().trim();          let role = "viewer";         let leaderOfGroup = null;          // Xac dinh vai tro de hien thi giao dien         if (ADMIN_EMAILS.some(             adm => adm.toLowerCase().trim() === email         )) {             role = "admin";         } else {             for (let g = 1; g <= 4; g++) {                 const emails =                     hardcodedGroupEmails[g].leaderEmails || [];                  if (emails.some(                     e => e.toLowerCase().trim() === email                 )) {                     role = "leader";                     leaderOfGroup = g;                     break;                 }             }         }          currentUser = {             name: user.displayName || email,             email: email,             picture: user.photoURL || defaultAvatar,             role: role,             leaderOfGroup: leaderOfGroup         };          localStorage.setItem(             "ht_user_session",             JSON.stringify(currentUser)         );          capNhatGiaoDienQuyen();          alert(             "Đăng nhập Firebase thành công! Quyền hiển thị: " +             (role === "admin"                 ? "Admin"                 : role === "leader"                     ? "Nhóm trưởng nhóm " + leaderOfGroup                     : "Người xem")         );      } catch (error) {         console.error("Loi Firebase Authentication:", error);          alert(             "Đăng nhập thất bại: " +             (error.message || "Lỗi không xác định")         );     } }
 
         window.onload = function () { khoiTaoDanhSachTuanPhungVu(); if (window.google) { google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleCredentialResponse }); google.accounts.id.renderButton( document.getElementById("googleBtnContainer"), { theme: "outline", size: "medium", text: "signin_with", shape: "pill" } ); } hienThiDanhSach(danhSachGoc); capNhatGiaoDienQuyen(); };
 

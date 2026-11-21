@@ -816,10 +816,29 @@ async function xuLyDangXuat() {
 
         function toggleIndividualCheck(cIdx, sIdx, pIdx) { if (currentUser.role !== "admin") { alert("Chỉ Admin mới có quyền xác nhận hoàn thành ca trực!"); hienThiPhienTruc(); return; } const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; const slot = dutyHistoryData[dutyKey][cIdx].slots[sIdx]; if (!Array.isArray(slot.dones)) slot.dones = [false, false]; slot.dones[pIdx] = !slot.dones[pIdx]; db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]); }
 
-        function moModalChonNguoiTruc(cIdx, sIdx) { currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] }; const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; const slotData = dutyHistoryData[dutyKey][cIdx].slots[sIdx]; const catName = dutyHistoryData[dutyKey][cIdx].category; document.getElementById("pickModalTitle").innerText = `Phân công: ${catName} (${slotData.time})`; const container = document.getElementById("memberPickListContainer"); container.innerHTML = ""; const membersOfThisGroup = groupsData[currentAssignedGroup].members || []; let currentPersons = []; if (Array.isArray(slotData.persons)) currentPersons = slotData.persons; else if (slotData.person) currentPersons = slotData.person.split(" - ").map(p => p.trim()); if (membersOfThisGroup.length === 0) { container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên (Admin chưa chia trên web).</div>`; } else { membersOfThisGroup.forEach(memName => { const item = document.createElement("div"); item.className = "member-pick-item"; item.innerHTML = `<span><i class="fa-solid fa-user me-2"></i>${memName}</span><i class="fa-regular fa-circle-check check-icon" style="color:#aaa;"></i>`; if (currentPersons.includes(memName)) { item.classList.add("selected"); item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#0072ff"; currentEditingSlot.selectedMembers.push(memName); } item.onclick = function () { if (currentEditingSlot.selectedMembers.includes(memName)) { currentEditingSlot.selectedMembers = currentEditingSlot.selectedMembers.filter(m => m !== memName); item.classList.remove("selected"); item.querySelector(".check-icon").className = "fa-regular fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#aaa"; } else { currentEditingSlot.selectedMembers.push(memName); item.classList.add("selected"); item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#0072ff"; } capNhatResultInput(); }; container.appendChild(item); }); } capNhatResultInput(); document.getElementById("modalDutyPick").classList.add("active"); }
+        
+function moModalChonNguoiTruc(cIdx, sIdx) {
+    if (!coQuyenChiaPhienTruc()) {
+        alert("Bạn không có quyền chia phiên trực tuần này!");
+        return;
+    }
+
+    if (layNhomTrucThucTe(currentSelectedWeek) !==
+        currentAssignedGroup) {
+        alert("Nhóm trực đã thay đổi. Vui lòng chọn lại tuần!");
+        return;
+    }
+ currentEditingSlot = { catIdx: cIdx, slotIdx: sIdx, selectedMembers: [] }; const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; const slotData = dutyHistoryData[dutyKey][cIdx].slots[sIdx]; const catName = dutyHistoryData[dutyKey][cIdx].category; document.getElementById("pickModalTitle").innerText = `Phân công: ${catName} (${slotData.time})`; const container = document.getElementById("memberPickListContainer"); container.innerHTML = ""; const membersOfThisGroup = groupsData[currentAssignedGroup].members || []; let currentPersons = []; if (Array.isArray(slotData.persons)) currentPersons = slotData.persons; else if (slotData.person) currentPersons = slotData.person.split(" - ").map(p => p.trim()); if (membersOfThisGroup.length === 0) { container.innerHTML = `<div style="text-align:center; color:#999; padding:20px;">Nhóm này chưa có thành viên (Admin chưa chia trên web).</div>`; } else { membersOfThisGroup.forEach(memName => { const item = document.createElement("div"); item.className = "member-pick-item"; item.innerHTML = `<span><i class="fa-solid fa-user me-2"></i>${memName}</span><i class="fa-regular fa-circle-check check-icon" style="color:#aaa;"></i>`; if (currentPersons.includes(memName)) { item.classList.add("selected"); item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#0072ff"; currentEditingSlot.selectedMembers.push(memName); } item.onclick = function () { if (currentEditingSlot.selectedMembers.includes(memName)) { currentEditingSlot.selectedMembers = currentEditingSlot.selectedMembers.filter(m => m !== memName); item.classList.remove("selected"); item.querySelector(".check-icon").className = "fa-regular fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#aaa"; } else { currentEditingSlot.selectedMembers.push(memName); item.classList.add("selected"); item.querySelector(".check-icon").className = "fa-solid fa-circle-check check-icon"; item.querySelector(".check-icon").style.color = "#0072ff"; } capNhatResultInput(); }; container.appendChild(item); }); } capNhatResultInput(); document.getElementById("modalDutyPick").classList.add("active"); }
         function capNhatResultInput() { document.getElementById("selectedPersonResult").value = currentEditingSlot.selectedMembers.join(" - ") || "Chưa phân công"; }
 
-        function luuPhanCongCaTruc() { const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; const selected = currentEditingSlot.selectedMembers; if (selected.length === 0) { dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = ["Chưa phân công"]; dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = [false]; } else { dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = selected; dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = selected.map(() => false); } db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]); dongModalById("modalDutyPick"); }
+       
+function luuPhanCongCaTruc() {
+    if (!coQuyenChiaPhienTruc()) {
+        alert("Bạn không có quyền lưu phiên trực tuần này!");
+        dongModalById("modalDutyPick");
+        return;
+    }
+ const dutyKey = `lit_w${currentSelectedWeek}_g${currentAssignedGroup}`; const selected = currentEditingSlot.selectedMembers; if (selected.length === 0) { dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = ["Chưa phân công"]; dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = [false]; } else { dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].persons = selected; dutyHistoryData[dutyKey][currentEditingSlot.catIdx].slots[currentEditingSlot.slotIdx].dones = selected.map(() => false); } db.ref(`dutyHistory/${dutyKey}`).set(dutyHistoryData[dutyKey]); dongModalById("modalDutyPick"); }
 
         function moModalAdminChiaNhom() { taiThongTinNhomAdmin(); document.getElementById("modalAdminGroups").classList.add("active"); }
         function taiThongTinNhomAdmin() { const g = document.getElementById("adminSelectGroupTab").value; const currentGroup = groupsData[g] || { groupName: `Nhóm ${g}`, leaderName: "", members: [] }; document.getElementById("adminGroupNameInput").value = currentGroup.groupName || `Nhóm ${g}`; document.getElementById("adminLeaderNameInput").value = currentGroup.leaderName || ""; const listContainer = document.getElementById("adminHTCheckList"); listContainer.innerHTML = ""; danhSachGoc.forEach(ht => { if (!ht.thanhHoTen) return; const parts = ht.thanhHoTen.split(" "); const shortName = parts.length > 2 ? `${parts[parts.length - 2]} ${parts[parts.length - 1]}` : ht.thanhHoTen; const isChecked = currentGroup.members && (currentGroup.members.includes(shortName) || currentGroup.members.includes(ht.thanhHoTen)); const item = document.createElement("label"); item.className = "admin-assign-item"; item.innerHTML = `<input type="checkbox" value="${shortName}" ${isChecked ? "checked" : ""}> <span>${ht.thanhHoTen} (${ht.chucVu})</span>`; listContainer.appendChild(item); }); }
@@ -922,6 +941,20 @@ document.getElementById("btnSaveWeekOverride")
 
 document.getElementById("btnResetWeekOverride")
     .addEventListener("click", khoiPhucNhomTrucMacDinh);
+
+function coQuyenChiaPhienTruc() {
+    if (!auth.currentUser || !weeklyOverridesLoaded) {
+        return false;
+    }
+
+    if (currentUser.role === "admin") {
+        return true;
+    }
+
+    return currentUser.role === "leader" &&
+        Number(currentUser.leaderOfGroup) ===
+        Number(layNhomTrucThucTe(currentSelectedWeek));
+}
 
     </script>
 </body>
